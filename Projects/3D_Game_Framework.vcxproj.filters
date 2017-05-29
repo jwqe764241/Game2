@@ -15,8 +15,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="..\Sources\main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Readme.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\편집시 필수.txt" />
   </ItemGroup>
 </Project>

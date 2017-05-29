@@ -18,6 +18,15 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Sources\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Readme.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\편집시 필수.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{71AD98D0-7119-4B0F-AB1F-13B41C6BB151}</ProjectGuid>
@@ -138,9 +147,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
