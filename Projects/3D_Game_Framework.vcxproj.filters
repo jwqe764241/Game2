@@ -25,9 +25,4 @@
   <ItemGroup>
     <Text Include="..\편집시 필수.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\Sources\dsad.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-  </ItemGroup>
 </Project>

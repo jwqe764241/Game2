@@ -27,9 +27,6 @@
   <ItemGroup>
     <Text Include="..\편집시 필수.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\Sources\dsad.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{71AD98D0-7119-4B0F-AB1F-13B41C6BB151}</ProjectGuid>
