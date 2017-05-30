@@ -1,6 +1,5 @@
-#include <Windows.h>
-
-
+#include <Sources/GameApp.h>
+#include <Sources/Utils/console.h>
 
 
 
@@ -20,6 +19,22 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR IpCmdL
 
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) {
 
+
+	#if defined(_DEBUG)
+		console::STDBUFF consoleBuff = console::openConsole();
+	#endif
+
+
+
+
+	CGameApp pGameApp;
+
+
+
+
+	#if defined(_DEBUG)
+		console::closeConsole(consoleBuff);
+	#endif
 
 }
 
