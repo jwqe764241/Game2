@@ -1,20 +1,20 @@
-1. °ÔÀÓ ±¸µ¿½Ã ÇÊ¿äÇÑ Å¬·¡½ºÀÇ ÆÄÀÏ (ex. App, GUI, Render °ü¸® °°Àº)µéÀº Source ÆÄÀÏ¿¡ ±×´ë·Î ¸¸µé±â
+1. ê²Œìž„ êµ¬ë™ì‹œ í•„ìš”í•œ í´ëž˜ìŠ¤ì˜ íŒŒì¼ (ex. App, GUI, Render ê´€ë¦¬ ê°™ì€)ë“¤ì€ Source íŒŒì¼ì— ê·¸ëŒ€ë¡œ ë§Œë“¤ê¸°
 
-2. °ü¸®¹Þ´Â Å¬·¡½ºµé (ex. NPC, Level, GUI ·»´õ ´ë»ó µî)Àº Source¿¡ Æú´õ¸¦ ¸¸µé¾î¼­ °Å±â¿¡ ³õ±â (ex. NPC¸¦ ¸¸µç´Ù°í Ä¡¸é)
-				¤¤ 1. Source ¹Ø¿¡ NPC Æú´õ »ý¼º
-				¤¤ 2. Source/»ý¼ºµÈ Æú´õ ¿¡ ÆÄÀÏ ÀúÀå
+2. ê´€ë¦¬ë°›ëŠ” í´ëž˜ìŠ¤ë“¤ (ex. NPC, Level, GUI ë Œë” ëŒ€ìƒ ë“±)ì€ Sourceì— í´ë”ë¥¼ ë§Œë“¤ì–´ì„œ ê±°ê¸°ì— ë†“ê¸° (ex. NPCë¥¼ ë§Œë“ ë‹¤ê³  ì¹˜ë©´)
+				ã„´ 1. Source ë°‘ì— NPC í´ë” ìƒì„±
+				ã„´ 2. Source/ìƒì„±ëœ í´ë” ì— íŒŒì¼ ì €ìž¥
 
-3. Å×½ºÆ® Àü¿ë ÄÚµå´Â defineÀ¸·Î Ã³¸®ÇÏ°Å³ª ÁÖ¼®À¸·Î »©³õ°Å³ª ¿µÇâÀ» ÁÖÁö ¾Ê´Â ¼±¿¡¼­ ÇØ°á
+3. í…ŒìŠ¤íŠ¸ ì „ìš© ì½”ë“œëŠ” defineìœ¼ë¡œ ì²˜ë¦¬í•˜ê±°ë‚˜ ì£¼ì„ìœ¼ë¡œ ë¹¼ë†“ê±°ë‚˜ ì˜í–¥ì„ ì£¼ì§€ ì•ŠëŠ” ì„ ì—ì„œ í•´ê²°
 
-4. Àü°ú ¸¶Âù°¡Áö·Î ±ÞÇÏ¹Ç·Î ¹öÀüº°ÀÌ ¾Æ´Ñ ºê·£Ä¡´Â ±×³É ¼öÁ¤ÀÌ³ª Ãß°¡Ç×¸ñ¿¡ ´ëÇØ¼­ µû·Î »ý¼ºÇÒ°Í (ex. ¸ó½ºÅÍ Ãß°¡½Ã, ·¹º§ Ãß°¡½Ã µî)
+4. ë²„ì „ë³„ë¡œ 1ì°¨ ë¸Œëžœì¹˜, ê·¸ ë‹¤ìŒ ê¸°ëŠ¥ë³„ë¡œ ë¸Œëžœì¹˜ë¥¼ ìƒì„±í• ê²ƒ
 
-5. ÄÚµå Á¤¸®´Â ÇÑ¹ø¿¡ ¸ô¾Æ¼­ ÇÒ°Í
+5. ì½”ë“œ ì •ë¦¬ëŠ” í•œë²ˆì— ëª°ì•„ì„œ í• ê²ƒ
 
-6. ÇÁ·ÎÁ§Æ® ¼³Á¤ ÆÄÀÏÀº ÇÊ¿äÇÏÁö ¾Ê´Â ÀÌ»ó Ä¿¹Ô¿¡¼­ Á¦¿ÜÇÒ°Í (ex. ¹®ÀÚÁýÇÕ º¯°æ µî)
-
-
+6. í”„ë¡œì íŠ¸ ì„¤ì • íŒŒì¼ì€ í•„ìš”í•˜ì§€ ì•ŠëŠ” ì´ìƒ ì»¤ë°‹ì—ì„œ ì œì™¸í• ê²ƒ (ex. ë¬¸ìžì§‘í•© ë³€ê²½ ë“±)
 
 
-*->	C:\Program Files (x86)\Microsoft DirectX SDK (February 2010) °æ·Î¿¡ DirectX°¡ ¼³Ä¡µÇ¾îÀÖ´ÂÁö È®ÀÎÇÒ°Í
-																		¤¤ ÇÁ·ÎÁ§Æ® ¼³Á¤ ¿©±â·Î µÇ¾îÀÖÀ½
+
+
+*->	C:\Program Files (x86)\Microsoft DirectX SDK (February 2010) ê²½ë¡œì— DirectXê°€ ì„¤ì¹˜ë˜ì–´ìžˆëŠ”ì§€ í™•ì¸í• ê²ƒ
+																		ã„´ í”„ë¡œì íŠ¸ ì„¤ì • ì—¬ê¸°ë¡œ ë˜ì–´ìžˆìŒ
 
