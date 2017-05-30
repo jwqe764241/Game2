@@ -19,13 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Sources\GameApp.cpp" />
+    <ClCompile Include="..\Sources\GameWindow.cpp" />
     <ClCompile Include="..\Sources\main.cpp" />
+    <ClCompile Include="..\Sources\Utils\console.cpp" />
+    <ClCompile Include="..\Sources\Utils\error.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\편집시 필수.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Sources\GameApp.h" />
+    <ClInclude Include="..\Sources\GameWindow.h" />
+    <ClInclude Include="..\Sources\Utils\console.h" />
+    <ClInclude Include="..\Sources\Utils\error.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -86,6 +96,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IntDir>objects\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)..\Outputs\</OutDir>
+    <TargetName>$(ProjectName)_$(Platform)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -112,12 +123,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28February 2010%29\Include;..\Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28February 2010%29\Include;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28February 2010%29\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11d.lib;D3DCompiler.lib;dxerr.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
