@@ -36,6 +36,7 @@
     <ClInclude Include="..\Sources\GameWindow.h" />
     <ClInclude Include="..\Sources\Utils\console.h" />
     <ClInclude Include="..\Sources\Utils\error.h" />
+    <ClInclude Include="..\Sources\Utils\Release.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

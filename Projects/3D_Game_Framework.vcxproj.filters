@@ -12,6 +12,9 @@
     <Filter Include="소스 파일\Utils">
       <UniqueIdentifier>{6b5adcb6-3701-45dd-b67a-37aaf2981567}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Camera">
+      <UniqueIdentifier>{8110d104-8225-4ac5-a6ca-48dba919ef9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\main.cpp">
@@ -47,6 +50,9 @@
       <Filter>소스 파일\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\error.h">
+      <Filter>소스 파일\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Release.h">
       <Filter>소스 파일\Utils</Filter>
     </ClInclude>
   </ItemGroup>
