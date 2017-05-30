@@ -25,31 +25,32 @@ CGameApp::CGameApp(){
 	);
 
 	if (FAILED(hr)) {
+		GAME_ASSERT(0 != 0, "Failed - D3D11CreateDevice");
 
-		#if defined (_DEBUG)
-			GAME_ASSERT(0 != 0, "Failed - D3D11CreateDevice");
-		#else
-			if (MessageBox(NULL, L"Failed - D3D11CreateDevice", L"ERROR!!", MB_OK) == IDOK) {
-				if (MessageBox(NULL, L"Click OK Button to Shut Down this program", L"Shut Down", MB_OK) == IDOK) {
-					PostQuitMessage(0);
-				}
+		if (MessageBox(NULL, L"Failed - D3D11CreateDevice", L"ERROR!!", MB_OK) == IDOK) {
+			if (MessageBox(NULL, L"Click OK Button to Shut Down this program", L"Shut Down", MB_OK) == IDOK) {
+				PostQuitMessage(0);
 			}
-		#endif
+		}
 	}
 
 	if (m_FeatureLevel != D3D_FEATURE_LEVEL_11_0) {
-		#if defined (_DEBUG)
-			GAME_ASSERT(0 != 0, "Failed - Not Support Directx 11");
-		#else
-			if (MessageBox(NULL, L"Failed - Not Support Directx 11", L"ERROR!!", MB_OK) == IDOK) {
-				if (MessageBox(NULL, L"Click OK Button to Shut Down this program", L"Shut Down", MB_OK) == IDOK) {
-					PostQuitMessage(0);
-				}
+		GAME_ASSERT(0 != 0, "Failed - Not Support Directx 11");
+
+		if (MessageBox(NULL, L"Failed - Not Support Directx 11", L"ERROR!!", MB_OK) == IDOK) {
+			if (MessageBox(NULL, L"Click OK Button to Shut Down this program", L"Shut Down", MB_OK) == IDOK) {
+				PostQuitMessage(0);
 			}
-		#endif
+		}
 	}
 
-	
+	if (m_pD3D11Device != nullptr) {
+		m_pD3D11Device->CheckMultisampleQualityLevels(
+			DXGI_FORMAT_R8G8B8A8_UNORM, 4, &m_MultiSampleQualityLevelVal
+		);
+
+		GAME_ASSERT(m_MultiSampleQualityLevelVal > 0, "Unexpected ERROR");
+	}
 
 }
 

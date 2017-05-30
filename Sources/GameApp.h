@@ -6,14 +6,15 @@
 #include <D3D11.h>
 #include <cassert>
 #include <memory>
+#include <atlbase.h>
 
 #include <Sources/Utils/error.h>
 
 class CGameApp 
 {
 private:
-	ID3D11Device		* m_pD3D11Device;
-	ID3D11DeviceContext * m_pD3D11DeviceContext;
+	CComPtr<ID3D11Device>			m_pD3D11Device			= nullptr;
+	CComPtr<ID3D11DeviceContext>	m_pD3D11DeviceContext	= nullptr;
 
 	D3D_DRIVER_TYPE		m_DriveLevel = D3D_DRIVER_TYPE_HARDWARE;
 	D3D_FEATURE_LEVEL	m_FeatureLevel;
