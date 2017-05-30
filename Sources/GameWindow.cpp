@@ -45,7 +45,8 @@ CGameWindow::~CGameWindow()
 }
 
 
-void CGameWindow::StartWindow() {
+void CGameWindow::StartWindow() 
+{
 	ShowWindow(m_hWnd, SW_SHOW);
 	SetForegroundWindow(m_hWnd);
 	SetFocus(m_hWnd);
@@ -53,17 +54,29 @@ void CGameWindow::StartWindow() {
 	UpdateWindow(m_hWnd);
 }
 
-int CGameWindow::GetWidth() {
+int CGameWindow::GetWidth() 
+{
 	return m_sizeWindow.width;
 }
 
-int CGameWindow::GetHeight() {
+int CGameWindow::GetHeight() 
+{
 	return m_sizeWindow.height;
 }
 
-LRESULT CALLBACK CGameWindow::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam){
+HWND CGameWindow::GetHwnd()
+{
+	return m_hWnd;
+}
+
+
+LRESULT CALLBACK CGameWindow::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
+{
 	switch (umessage)
 	{
+		case WM_LBUTTONUP:
+			MessageBox(hwnd, L"dsfdsf", L"dsfdsf", MB_OK);
+			break;
 		
 	}
 

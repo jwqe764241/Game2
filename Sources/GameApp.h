@@ -16,7 +16,8 @@ private:
 	CComPtr<ID3D11Device>			m_pD3D11Device;
 	CComPtr<ID3D11DeviceContext>	m_pD3D11DeviceContext;
 	CGameWindow*					m_pGameWindow;
-	IDXGISwapChain*					m_pDxgiSwapChain;
+	IDXGISwapChain*					m_pSwapChain;
+	ID3D11RenderTargetView*			m_pRenderTargetView;
 
 	//--Settings
 	D3D_DRIVER_TYPE		m_DriverType;

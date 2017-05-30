@@ -5,7 +5,7 @@
 HRESULT hr;
 
 CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height)
-	: m_pD3D11Device(nullptr), m_pD3D11DeviceContext(nullptr), m_pGameWindow(nullptr), m_pDxgiSwapChain(nullptr),
+	: m_pD3D11Device(nullptr), m_pD3D11DeviceContext(nullptr), m_pGameWindow(nullptr), m_pSwapChain(nullptr),
 	m_DriverType(D3D_DRIVER_TYPE_HARDWARE),m_SDKVersion(D3D11_SDK_VERSION), m_MultiSampleQualityLevel(NULL)
 {
 
@@ -59,13 +59,13 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
-	swapChainDesc.BufferDesc.Width						= m_pGameWindow->GetWidth();
-	swapChainDesc.BufferDesc.Height						= m_pGameWindow->GetHeight();
-	swapChainDesc.BufferDesc.RefreshRate.Numerator		= 60;
-	swapChainDesc.BufferDesc.RefreshRate.Denominator	= 1;
-	swapChainDesc.BufferDesc.Format						= DXGI_FORMAT_R8G8B8A8_UNORM;
-	swapChainDesc.BufferDesc.ScanlineOrdering			= DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	swapChainDesc.BufferDesc.Scaling					= DXGI_MODE_SCALING_UNSPECIFIED;
+	swapChainDesc.BufferDesc.Width					 = m_pGameWindow->GetWidth();
+	swapChainDesc.BufferDesc.Height					 = m_pGameWindow->GetHeight();
+	swapChainDesc.BufferDesc.RefreshRate.Numerator	 = 60;
+	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+	swapChainDesc.BufferDesc.Format					 = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferDesc.ScanlineOrdering		 = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	swapChainDesc.BufferDesc.Scaling				 = DXGI_MODE_SCALING_UNSPECIFIED;
 	
 	if (m_MultiSampleQualityLevel) {
 		swapChainDesc.SampleDesc.Count = 4;
@@ -76,42 +76,51 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		swapChainDesc.SampleDesc.Quality = 0;
 	}
 
-
 	IDXGIDevice * dxgiDevice = nullptr;
-	m_pD3D11Device->QueryInterface(
-		__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice)
-	);
+	m_pD3D11Device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice));
 	IDXGIAdapter * dxgiAdapter = nullptr;
-	dxgiDevice->GetParent(
-		__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&dxgiAdapter)
-	);
+	dxgiDevice->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&dxgiAdapter));
 	IDXGIFactory * dxgiFactory = nullptr;
-	dxgiAdapter->GetParent(
-		__uuidof(IDXGIFactory), reinterpret_cast<void**>(&dxgiFactory)
-	);
-	dxgiFactory->QueryInterface(
-		__uuidof(IDXGISwapChain), reinterpret_cast<void**>(&m_pDxgiSwapChain)
-	);
-
-	dxgiFactory->CreateSwapChain(
-		m_pD3D11Device, &swapChainDesc, &m_pDxgiSwapChain
-	);
-
+	dxgiAdapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&dxgiFactory));
+	dxgiFactory->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void**>(&m_pSwapChain));
+	dxgiFactory->CreateSwapChain(m_pD3D11Device, &swapChainDesc, &m_pSwapChain);
+	
 	ReleaseCOM(&dxgiDevice);
 	ReleaseCOM(&dxgiAdapter);
 	ReleaseCOM(&dxgiFactory);
+
+	ID3D11Texture2D* dxgiTextureBuff;
+	//m_pSwapChain->GetBuffer(NULL, __uuidof(), );
+
+
 }
 
 
 CGameApp::~CGameApp()
 {
 	delete m_pGameWindow;
-	ReleaseCOM(&m_pDxgiSwapChain);
+	ReleaseCOM(&m_pSwapChain);
 }
 
 
 void CGameApp::Launch() {
 	
 	m_pGameWindow->StartWindow();
+
+	MSG msg;
+	bool bIsRunning = true;
+
+	while (bIsRunning)
+	{
+		while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		{
+			if (msg.message == WM_QUIT) {
+				bIsRunning = false;
+				break;
+			}
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	}
 
 }

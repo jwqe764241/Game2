@@ -25,9 +25,9 @@ private:
 
 public:
 	void StartWindow();
-	int GetWidth();
-	int GetHeight();
-
+	int  GetWidth();
+	int  GetHeight();
+	HWND GetHwnd();
 public:
 	CGameWindow() {};
 	CGameWindow(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass, int nCmdShow, int width, int height);
