@@ -25,14 +25,12 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 	#endif
 
 
-
-
-	CGameApp pGameApp;
-
-
+	CGameApp pGameApp(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 0, 0);
+	pGameApp.Launch();
 
 
 	#if defined(_DEBUG)
+		system("pause");
 		console::closeConsole(consoleBuff);
 	#endif
 

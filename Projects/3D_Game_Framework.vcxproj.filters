@@ -49,5 +49,8 @@
     <ClInclude Include="..\Sources\Utils\error.h">
       <Filter>소스 파일\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Release.h">
+      <Filter>소스 파일\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
