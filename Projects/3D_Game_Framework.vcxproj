@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\GameApp.cpp" />
+    <ClCompile Include="..\Sources\GameSettings.cpp" />
     <ClCompile Include="..\Sources\GameTimer.cpp" />
     <ClCompile Include="..\Sources\GameWindow.cpp" />
     <ClCompile Include="..\Sources\main.cpp" />
@@ -34,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\GameApp.h" />
+    <ClInclude Include="..\Sources\GameSettings.h" />
     <ClInclude Include="..\Sources\GameTimer.h" />
     <ClInclude Include="..\Sources\GameWindow.h" />
     <ClInclude Include="..\Sources\Utils\console.h" />

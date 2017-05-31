@@ -28,7 +28,7 @@ private:
 	ID3D11RenderTargetView*	m_pRenderTargetView;
 	ID3D11Texture2D*		m_pDepthStencilBuffer;
 	ID3D11DepthStencilView*	m_pDepthStencilView;
-	CGameWindow*					m_pGameWindow;
+	//CGameWindow*					m_pGameWindow;
 	CGameTimer						m_GameTimer;
 
 	//--Settings
@@ -39,6 +39,15 @@ private:
 	D3D11_VIEWPORT		m_ViewportSettings;
 	//Settings--
 
+	//--Window Val
+	HWND		m_hWnd;
+	HINSTANCE	m_hInstance;
+	wchar_t *	m_pstrFrameTitle;
+	wchar_t *	m_pstrWndClassName;
+	int			m_iCmdShow;
+	WINDOWSIZE  m_sizeWindow;
+	//Window Val--
+
 private:
 	void CalculateFrameStatus();
 public:
@@ -47,6 +56,9 @@ public:
 	void Render();
 
 	void onResize();
+	void onShowWindow();
+
+	static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 public:
 	CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height);

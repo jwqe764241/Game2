@@ -7,13 +7,59 @@
 
 HRESULT hr;
 
+LRESULT CALLBACK CGameApp::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	switch (msg)
+	{
+		case WM_LBUTTONUP:
+			PostQuitMessage(0);
+			break;
+	}
+
+	return DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
 CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height)
-	: m_pD3D11Device(nullptr), m_pD3D11DeviceContext(nullptr), m_pGameWindow(nullptr), m_pSwapChain(nullptr),
+	: m_pD3D11Device(nullptr), m_pD3D11DeviceContext(nullptr), m_pSwapChain(nullptr),
 	m_pRenderTargetView(nullptr), m_pDepthStencilBuffer(nullptr), m_pDepthStencilView(nullptr),
-	m_DriverType(D3D_DRIVER_TYPE_HARDWARE),m_SDKVersion(D3D11_SDK_VERSION), m_MultiSampleQualityLevel(NULL)
+	m_DriverType(D3D_DRIVER_TYPE_HARDWARE),m_SDKVersion(D3D11_SDK_VERSION), m_MultiSampleQualityLevel(NULL),
+	m_hInstance(hInstance), m_pstrFrameTitle(frameTitle), m_pstrWndClassName(wndClassName), m_iCmdShow(nCmdShow),
+	m_sizeWindow({width, height})
 {
 
-	m_pGameWindow = new CGameWindow(hInstance, frameTitle, wndClassName, nCmdShow, width, height);
+	//--Window Startup
+	WNDCLASSEX wndClass;
+	ZeroMemory(&wndClass, sizeof(WNDCLASSEX));
+	wndClass.cbSize = sizeof(WNDCLASSEX);
+	wndClass.style = CS_HREDRAW | CS_VREDRAW;
+	wndClass.lpfnWndProc = CGameApp::WndProc;
+	wndClass.cbClsExtra = 0;
+	wndClass.cbClsExtra = sizeof(CGameWindow*);
+	wndClass.hInstance = m_hInstance;
+	wndClass.lpszMenuName = nullptr;
+	wndClass.hIcon = LoadIcon(NULL, IDI_WINLOGO);
+	wndClass.lpszClassName = m_pstrWndClassName;
+	wndClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	RegisterClassEx(&wndClass);
+
+	if (width == 0 || height == 0) {
+		m_sizeWindow = { GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
+	}
+
+	m_hWnd = CreateWindowEx(
+		WS_EX_APPWINDOW,
+		m_pstrWndClassName,
+		m_pstrFrameTitle,
+		WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		m_sizeWindow.width,
+		m_sizeWindow.height,
+		NULL,
+		NULL,
+		m_hInstance,
+		this);
+	//Window Startup--
 
 	UINT createFlags = 0;
 #if defined(_DEBUG)
@@ -60,8 +106,8 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	}
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
-	swapChainDesc.BufferDesc.Width					 = m_pGameWindow->GetWidth();
-	swapChainDesc.BufferDesc.Height					 = m_pGameWindow->GetHeight();
+	swapChainDesc.BufferDesc.Width					 = m_sizeWindow.width;
+	swapChainDesc.BufferDesc.Height					 = m_sizeWindow.height;
 	swapChainDesc.BufferDesc.RefreshRate.Numerator	 = 60;
 	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
 	swapChainDesc.BufferDesc.Format					 = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -79,7 +125,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.BufferCount = 1;
-	swapChainDesc.OutputWindow = m_pGameWindow->GetHwnd();
+	swapChainDesc.OutputWindow = m_hWnd;
 	swapChainDesc.Windowed = true;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	swapChainDesc.Flags = 0;
@@ -92,6 +138,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	CHECK_HR(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&dxgiFactory)));
 	//dxgiFactory->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void**>(&m_pSwapChain));
 	CHECK_HR(dxgiFactory->CreateSwapChain(m_pD3D11Device, &swapChainDesc, &m_pSwapChain));
+	dxgiFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_WINDOW_CHANGES);
 		ReleaseCOM(&dxgiDevice);
 		ReleaseCOM(&dxgiAdapter);
 		ReleaseCOM(&dxgiFactory);
@@ -99,10 +146,9 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	onResize();
 }
 
-
 CGameApp::~CGameApp()
 {
-	delete m_pGameWindow;
+	CloseWindow(m_hWnd);
 	ReleaseCOM(&m_pD3D11Device);
 	ReleaseCOM(&m_pD3D11DeviceContext);
 	ReleaseCOM(&m_pSwapChain);
@@ -110,7 +156,6 @@ CGameApp::~CGameApp()
 	ReleaseCOM(&m_pDepthStencilBuffer);
 	ReleaseCOM(&m_pDepthStencilView);
 }
-
 
 void CGameApp::CalculateFrameStatus()
 {
@@ -126,10 +171,10 @@ void CGameApp::CalculateFrameStatus()
 
 		std::wostringstream outs;
 		outs.precision(6);
-		outs << L"    "
+		outs << m_pstrFrameTitle << L"    "
 			<< L"FPS: " << fps << L"    "
 			<< L"Frame Time: " << mspf << L" (ms)";
-		SetWindowText(m_pGameWindow->GetHwnd(), outs.str().c_str());
+		SetWindowText(m_hWnd, outs.str().c_str());
 
 		frameCnt = 0;
 		timeElapsed += 1.0f;
@@ -139,7 +184,8 @@ void CGameApp::CalculateFrameStatus()
 
 void CGameApp::Launch() 
 {
-	m_pGameWindow->StartWindow();
+	
+	onShowWindow();
 
 	m_GameTimer.Reset();
 
@@ -158,7 +204,6 @@ void CGameApp::Launch()
 		{
 			CalculateFrameStatus();
 			m_GameTimer.Tick();
-			printf("%f \n", m_GameTimer.DeltaTime());
 
 			m_pD3D11DeviceContext->ClearRenderTargetView(m_pRenderTargetView,
 				reinterpret_cast<const float *>(&BLUE)
@@ -173,19 +218,18 @@ void CGameApp::Launch()
 		}
 	}
 
-	//m_GameTimer.Stop();
 	std::cout << m_GameTimer.TotalTime() << std::endl;
 
 }
 
 void CGameApp::Update()
 {
-
+	
 }
 
 void CGameApp::Render()
 {
-	
+
 }
 
 void CGameApp::onResize()
@@ -198,15 +242,15 @@ void CGameApp::onResize()
 	ReleaseCOM(&m_pDepthStencilView);
 	ReleaseCOM(&m_pDepthStencilBuffer);
 
-	CHECK_HR(m_pSwapChain->ResizeBuffers(1, m_pGameWindow->GetWidth(), m_pGameWindow->GetHeight(), DXGI_FORMAT_R8G8B8A8_UNORM, 0))
+	CHECK_HR(m_pSwapChain->ResizeBuffers(1, m_sizeWindow.width, m_sizeWindow.height, DXGI_FORMAT_R8G8B8A8_UNORM, 0))
 	ID3D11Texture2D* dxgiTextureBuffer;
 	CHECK_HR(m_pSwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&dxgiTextureBuffer)));
 	CHECK_HR(m_pD3D11Device->CreateRenderTargetView(dxgiTextureBuffer, 0, &m_pRenderTargetView));
 	ReleaseCOM(&dxgiTextureBuffer);
 
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
-	depthStencilDesc.Width = m_pGameWindow->GetWidth();
-	depthStencilDesc.Height = m_pGameWindow->GetHeight();
+	depthStencilDesc.Width = m_sizeWindow.width;
+	depthStencilDesc.Height = m_sizeWindow.height;
 	depthStencilDesc.MipLevels = 1;
 	depthStencilDesc.ArraySize = 1;
 	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -229,14 +273,23 @@ void CGameApp::onResize()
 	CHECK_HR(m_pD3D11Device->CreateTexture2D(&depthStencilDesc, NULL, &m_pDepthStencilBuffer));
 	CHECK_HR(m_pD3D11Device->CreateDepthStencilView(m_pDepthStencilBuffer, NULL, &m_pDepthStencilView));
 
+	m_pD3D11DeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
+
 	m_ViewportSettings.TopLeftX = 0.0f;
 	m_ViewportSettings.TopLeftY = 0.0f;
-	m_ViewportSettings.Width = static_cast<float>(m_pGameWindow->GetWidth());
-	m_ViewportSettings.Height = static_cast<float>(m_pGameWindow->GetHeight());
+	m_ViewportSettings.Width = static_cast<float>(m_sizeWindow.width);
+	m_ViewportSettings.Height = static_cast<float>(m_sizeWindow.height);
 	m_ViewportSettings.MinDepth = 0.0f;
 	m_ViewportSettings.MaxDepth = 1.0f;
 
-	m_pD3D11DeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
 	m_pD3D11DeviceContext->RSSetViewports(1, &m_ViewportSettings);
+}
 
+void CGameApp::onShowWindow()
+{
+	ShowWindow(m_hWnd, SW_SHOW);
+	SetForegroundWindow(m_hWnd);
+	SetFocus(m_hWnd);
+	ShowCursor(false);
+	UpdateWindow(m_hWnd);
 }

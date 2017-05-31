@@ -30,7 +30,7 @@ void __cdecl ErrorHandler(
 		{																	\
 			HRESULT hr = (expression);										\
 			if (FAILED(hr)) {												\
-				abort();														\
+				abort();													\
 			}																\
 		}																	\
 
