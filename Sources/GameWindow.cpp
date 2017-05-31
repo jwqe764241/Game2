@@ -28,7 +28,7 @@ CGameWindow::CGameWindow(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wn
 		WS_EX_APPWINDOW,
 		m_pstrWndClassName,
 		m_pstrFrameTitle,
-		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
+		WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		m_sizeWindow.width,
@@ -72,12 +72,11 @@ HWND CGameWindow::GetHwnd()
 
 LRESULT CALLBACK CGameWindow::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {
-	switch (umessage)
-	{
+	switch (umessage){
 		case WM_LBUTTONUP:
-			MessageBox(hwnd, L"dsfdsf", L"dsfdsf", MB_OK);
+			PostQuitMessage(0);
+			//MessageBox(hwnd, L"dsfdsf", L"dsfdsf", MB_OK);
 			break;
-		
 	}
 
 	return DefWindowProc(hwnd, umessage, wparam, lparam);

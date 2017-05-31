@@ -26,7 +26,13 @@ void __cdecl ErrorHandler(
 	_In_	char const * const	message
 );
 
-
+#define HR(expression)														\
+		{																	\
+			HRESULT hr = (expression);										\
+			if (FAILED(hr)) {												\
+				abort();														\
+			}																\
+		}																	\
 
 #define CUSTOM_ASSERT(condition, message)														\
 	if (!(condition)) {																			\
@@ -42,9 +48,11 @@ void __cdecl ErrorHandler(
 #ifdef ERROR_TEST_ENABLE
 	#define GAME_ASSERT(condition, message) CUSTOM_ASSERT(condition, message)
 	#define GAME_TEST_TEST_PRINT(message) TEST____(message)
+	#define CHECK_HR(expression) HR(expression)
 #else	//디버그 모드가 아니면 아무 동작 하지 않음
 	#define GAME_ASSERT(condition, message)
 	#define GAME_TEST_TEST_PRINT(message)
+	#define CHECK_HR(expression)
 #endif
 
 
