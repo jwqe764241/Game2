@@ -3,7 +3,8 @@
 #include <Windows.h>
 
 
-typedef struct _WINDOWSIZE {
+typedef struct _WINDOWSIZE 
+{
 	int width;
 	int height;
 } WINDOWSIZE, * LPWINDOWSIZE;

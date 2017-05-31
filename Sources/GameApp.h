@@ -6,31 +6,47 @@
 #include <cassert>
 #include <memory>
 #include <atlbase.h>
+#include <xnamath.h>
 
 #include <Sources/GameWindow.h>
+#include <Sources/GameTimer.h>
 #include <Sources/Utils/error.h>
 
 class CGameApp
 {
 private:
-	CComPtr<ID3D11Device>			m_pD3D11Device;
-	CComPtr<ID3D11DeviceContext>	m_pD3D11DeviceContext;
+	///CComPtr<ID3D11Device>			m_pD3D11Device;
+	///CComPtr<ID3D11DeviceContext>	m_pD3D11DeviceContext;
+	///CComPtr<IDXGISwapChain>			m_pSwapChain;
+	///CComPtr<ID3D11RenderTargetView> m_pRenderTargetView;
+	///CComPtr<ID3D11Texture2D>		m_pDepthStencilBuffer;
+	///CComPtr<ID3D11DepthStencilView>	m_pDepthStencilView;
+
+	ID3D11Device*			m_pD3D11Device;
+	ID3D11DeviceContext*	m_pD3D11DeviceContext;
+	IDXGISwapChain*			m_pSwapChain;
+	ID3D11RenderTargetView*	m_pRenderTargetView;
+	ID3D11Texture2D*		m_pDepthStencilBuffer;
+	ID3D11DepthStencilView*	m_pDepthStencilView;
 	CGameWindow*					m_pGameWindow;
-	IDXGISwapChain*					m_pSwapChain;
-	ID3D11RenderTargetView*			m_pRenderTargetView;
+	CGameTimer						m_GameTimer;
 
 	//--Settings
 	D3D_DRIVER_TYPE		m_DriverType;
 	D3D_FEATURE_LEVEL	m_FeatureLevel;
 	UINT				m_SDKVersion;
 	UINT				m_MultiSampleQualityLevel;
+	D3D11_VIEWPORT		m_ViewportSettings;
 	//Settings--
 
 private:
-
-
+	void CalculateFrameStatus();
 public:
 	void Launch();
+	void Update();
+	void Render();
+
+	void onResize();
 
 public:
 	CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height);
