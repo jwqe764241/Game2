@@ -19,6 +19,7 @@
 typedef LONG ERROR__;
 
 void __cdecl ErrorHandler(
+	_In_	HRESULT				hr,
 	_In_	char const * const	fileName,
 	_In_	const unsigned		lineNumber,
 	_In_	char const * const	condition
@@ -38,7 +39,9 @@ void __cdecl ErrorHandler2(
 		{																	\
 			HRESULT hr = (expression);										\
 			if (FAILED(hr)) {												\
-				ErrorHandler(__FILE__, __LINE__, #expression);				\
+				ErrorHandler(hr, __FILE__, __LINE__, #expression);			\
+			}else{															\
+				printf("SUCCESS--->hr : %d, in %s\n", hr, #expression);		\
 			}																\
 		}																	\
 

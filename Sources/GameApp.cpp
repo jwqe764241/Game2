@@ -21,9 +21,9 @@ LRESULT CALLBACK CGameApp::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 }
 
 CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height)
-	: m_pD3D11Device(nullptr), m_pD3D11DeviceContext(nullptr), m_pSwapChain(nullptr),
+	: m_pD3D11Device(nullptr), m_pD3D11DeviceContext(nullptr), m_pSwapChain(nullptr), m_vAdapters(),
 	m_pRenderTargetView(nullptr), m_pDepthStencilBuffer(nullptr), m_pDepthStencilView(nullptr),
-	m_DriverType(D3D_DRIVER_TYPE_HARDWARE),m_SDKVersion(D3D11_SDK_VERSION), m_MultiSampleQualityLevel(NULL),
+	m_DriverType(D3D_DRIVER_TYPE_HARDWARE),m_SDKVersion(D3D11_SDK_VERSION), m_MultiSampleQualityLevel(NULL), m_FeatureLevel(),
 	m_hInstance(hInstance), m_pstrFrameTitle(frameTitle), m_pstrWndClassName(wndClassName), m_iCmdShow(nCmdShow),
 	m_sizeWindow({width, height})
 {
@@ -52,7 +52,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	IDXGIFactory * pFactory = nullptr;
 	CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&pFactory);
 	UINT i = 0;
-	IDXGIAdapter * pAdapter;
+	IDXGIAdapter * pAdapter = nullptr;
 	while (pFactory->EnumAdapters(i, &pAdapter) != DXGI_ERROR_NOT_FOUND)
 	{
 		m_vAdapters.push_back(pAdapter);
@@ -80,17 +80,8 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	createFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-	CHECK_HR(D3D11CreateDevice(
-			0,
-			m_DriverType,
-			0,
-			createFlags,
-			NULL, NULL,
-			m_SDKVersion,
-			&m_pD3D11Device,
-			&m_FeatureLevel,
-			&m_pD3D11DeviceContext
-		));
+	//pAdapter != null 시 드라이버 타입은 -> D3D_DRIVER_TYPE_UNKNOWN
+	D3D11CreateDevice(m_vAdapters.at(1),D3D_DRIVER_TYPE_UNKNOWN,0,createFlags,NULL,NULL,m_SDKVersion,&m_pD3D11Device,&m_FeatureLevel,&m_pD3D11DeviceContext);
 
 	if (FAILED(hr)) {
 		GAME_ASSERT(0 != 0, "Failed - D3D11CreateDevice");
@@ -101,16 +92,16 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 			}
 		}
 	}
+	
 	if (m_FeatureLevel != D3D_FEATURE_LEVEL_11_0) {
 		GAME_ASSERT(0 != 0, "Failed - Not Support Directx 11");
 
-		if (MessageBox(NULL, L"Failed - Not Support Directx 11", L"ERROR!!", MB_OK) == IDOK) {
+		if (MessageBox(NULL, L"Failed - Not Support Directx 11", L"Error!!", MB_OK) == IDOK) {
 			if (MessageBox(NULL, L"Click OK Button to Shut Down this program", L"Shut Down", MB_OK) == IDOK) {
 				PostQuitMessage(0);
 			}
 		}
 	}
-
 
 	if (m_pD3D11Device != nullptr) {
 		CHECK_HR(m_pD3D11Device->CheckMultisampleQualityLevels(
@@ -145,14 +136,14 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	swapChainDesc.Flags = 0;
 	
 	IDXGIDevice * dxgiDevice = nullptr;
-	CHECK_HR(m_pD3D11Device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice)));
+	m_pD3D11Device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice));
 	IDXGIAdapter * dxgiAdapter = nullptr;
-	CHECK_HR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&dxgiAdapter)));
+	dxgiDevice->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&dxgiAdapter));
 	IDXGIFactory * dxgiFactory = nullptr;
-	CHECK_HR(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&dxgiFactory)));
+	dxgiAdapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&dxgiFactory));
 	//dxgiFactory->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void**>(&m_pSwapChain));
-	CHECK_HR(dxgiFactory->CreateSwapChain(m_pD3D11Device, &swapChainDesc, &m_pSwapChain));
-	dxgiFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_WINDOW_CHANGES);
+	dxgiFactory->CreateSwapChain(m_pD3D11Device, &swapChainDesc, &m_pSwapChain);
+	//dxgiFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_WINDOW_CHANGES);
 		ReleaseCOM(&dxgiDevice);
 		ReleaseCOM(&dxgiAdapter);
 		ReleaseCOM(&dxgiFactory);
@@ -259,10 +250,10 @@ void CGameApp::onResize()
 	ReleaseCOM(&m_pDepthStencilView);
 	ReleaseCOM(&m_pDepthStencilBuffer);
 
-	CHECK_HR(m_pSwapChain->ResizeBuffers(1, m_sizeWindow.width, m_sizeWindow.height, DXGI_FORMAT_R8G8B8A8_UNORM, 0))
-	ID3D11Texture2D* dxgiTextureBuffer;
-	CHECK_HR(m_pSwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&dxgiTextureBuffer)));
-	CHECK_HR(m_pD3D11Device->CreateRenderTargetView(dxgiTextureBuffer, 0, &m_pRenderTargetView));
+	m_pSwapChain->ResizeBuffers(1, m_sizeWindow.width, m_sizeWindow.height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+	ID3D11Texture2D* dxgiTextureBuffer = nullptr;
+	m_pSwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&dxgiTextureBuffer));
+	m_pD3D11Device->CreateRenderTargetView(dxgiTextureBuffer, 0, &m_pRenderTargetView);
 	ReleaseCOM(&dxgiTextureBuffer);
 
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
@@ -287,8 +278,8 @@ void CGameApp::onResize()
 	depthStencilDesc.CPUAccessFlags = NULL;
 	depthStencilDesc.MiscFlags = NULL;
 
-	CHECK_HR(m_pD3D11Device->CreateTexture2D(&depthStencilDesc, NULL, &m_pDepthStencilBuffer));
-	CHECK_HR(m_pD3D11Device->CreateDepthStencilView(m_pDepthStencilBuffer, NULL, &m_pDepthStencilView));
+	m_pD3D11Device->CreateTexture2D(&depthStencilDesc, NULL, &m_pDepthStencilBuffer);
+	m_pD3D11Device->CreateDepthStencilView(m_pDepthStencilBuffer, NULL, &m_pDepthStencilView);
 
 	m_pD3D11DeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
 
