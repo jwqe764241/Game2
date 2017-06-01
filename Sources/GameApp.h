@@ -7,6 +7,7 @@
 #include <memory>
 #include <atlbase.h>
 #include <xnamath.h>
+#include <vector>
 
 #include <Sources/GameWindow.h>
 #include <Sources/GameTimer.h>
@@ -22,6 +23,7 @@ private:
 	///CComPtr<ID3D11Texture2D>		m_pDepthStencilBuffer;
 	///CComPtr<ID3D11DepthStencilView>	m_pDepthStencilView;
 
+	//--Components
 	ID3D11Device*			m_pD3D11Device;
 	ID3D11DeviceContext*	m_pD3D11DeviceContext;
 	IDXGISwapChain*			m_pSwapChain;
@@ -30,6 +32,8 @@ private:
 	ID3D11DepthStencilView*	m_pDepthStencilView;
 	//CGameWindow*					m_pGameWindow;
 	CGameTimer						m_GameTimer;
+	std::vector <IDXGIAdapter*> m_vAdapters;
+	//--Compoenents
 
 	//--Settings
 	D3D_DRIVER_TYPE		m_DriverType;

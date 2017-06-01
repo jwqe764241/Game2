@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 
+#define ENABLE_PRINT_ADAPTER_NAME
 
 HRESULT hr;
 
@@ -12,7 +13,7 @@ LRESULT CALLBACK CGameApp::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 	switch (msg)
 	{
 		case WM_LBUTTONUP:
-			PostQuitMessage(0);
+			//PostQuitMessage(0);
 			break;
 	}
 
@@ -27,24 +28,37 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	m_sizeWindow({width, height})
 {
 
+	m_vAdapters.reserve(10);
+
 	//--Window Startup
 	WNDCLASSEX wndClass;
 	ZeroMemory(&wndClass, sizeof(WNDCLASSEX));
-	wndClass.cbSize = sizeof(WNDCLASSEX);
-	wndClass.style = CS_HREDRAW | CS_VREDRAW;
-	wndClass.lpfnWndProc = CGameApp::WndProc;
-	wndClass.cbClsExtra = 0;
-	wndClass.cbClsExtra = sizeof(CGameWindow*);
-	wndClass.hInstance = m_hInstance;
-	wndClass.lpszMenuName = nullptr;
-	wndClass.hIcon = LoadIcon(NULL, IDI_WINLOGO);
-	wndClass.lpszClassName = m_pstrWndClassName;
-	wndClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+		wndClass.cbSize			= sizeof(WNDCLASSEX);
+		wndClass.style			= CS_HREDRAW | CS_VREDRAW;
+		wndClass.lpfnWndProc	= CGameApp::WndProc;
+		wndClass.cbClsExtra		= 0;
+		wndClass.cbClsExtra		= sizeof(CGameWindow*);
+		wndClass.hInstance		= m_hInstance;
+		wndClass.lpszMenuName	= nullptr;
+		wndClass.hIcon			= LoadIcon(NULL, IDI_WINLOGO);
+		wndClass.lpszClassName	= m_pstrWndClassName;
+		wndClass.hbrBackground	= (HBRUSH)GetStockObject(BLACK_BRUSH);
 	RegisterClassEx(&wndClass);
 
 	if (width == 0 || height == 0) {
 		m_sizeWindow = { GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
 	}
+
+	IDXGIFactory * pFactory = nullptr;
+	CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&pFactory);
+	UINT i = 0;
+	IDXGIAdapter * pAdapter;
+	while (pFactory->EnumAdapters(i, &pAdapter) != DXGI_ERROR_NOT_FOUND)
+	{
+		m_vAdapters.push_back(pAdapter);
+		++i;
+	}
+	ReleaseCOM(&pFactory);
 
 	m_hWnd = CreateWindowEx(
 		WS_EX_APPWINDOW,
@@ -67,16 +81,16 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 #endif
 
 	CHECK_HR(D3D11CreateDevice(
-		0,
-		m_DriverType,
-		0,
-		createFlags,
-		NULL, NULL,
-		m_SDKVersion,
-		&m_pD3D11Device,
-		&m_FeatureLevel,
-		&m_pD3D11DeviceContext
-	));
+			0,
+			m_DriverType,
+			0,
+			createFlags,
+			NULL, NULL,
+			m_SDKVersion,
+			&m_pD3D11Device,
+			&m_FeatureLevel,
+			&m_pD3D11DeviceContext
+		));
 
 	if (FAILED(hr)) {
 		GAME_ASSERT(0 != 0, "Failed - D3D11CreateDevice");
@@ -159,7 +173,6 @@ CGameApp::~CGameApp()
 
 void CGameApp::CalculateFrameStatus()
 {
-	
 	static int frameCnt = 0;
 	static float timeElapsed = 0.0f;
 
@@ -179,21 +192,28 @@ void CGameApp::CalculateFrameStatus()
 		frameCnt = 0;
 		timeElapsed += 1.0f;
 	}
-	
 }
 
 void CGameApp::Launch() 
 {
-	
 	onShowWindow();
 
 	m_GameTimer.Reset();
 
 	MSG msg = { 0 };
 	bool bIsRunning = true;
-	const XMVECTORF32 BLUE = { 0.0f, 0.0f, 1.0f, 1.0f };
+	const XMVECTORF32 Blue = { 0.5f, 0.2f, 1.0f, 1.0f };
+	const float * BLUE = reinterpret_cast<const float *>(&Blue);
 
 	m_GameTimer.Start();
+
+#if defined(_DEBUG) && defined(ENABLE_PRINT_ADAPTER_NAME)
+	for (IDXGIAdapter * adapter : m_vAdapters) {
+		DXGI_ADAPTER_DESC adapterDesc;
+		adapter->GetDesc(&adapterDesc);
+		wprintf(L"%s \n", adapterDesc.Description);
+	}
+#endif
 
 	while (msg.message != WM_QUIT) {
 		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE)) {
@@ -202,11 +222,11 @@ void CGameApp::Launch()
 		}
 		else
 		{
-			CalculateFrameStatus();
 			m_GameTimer.Tick();
+			CalculateFrameStatus();
 
 			m_pD3D11DeviceContext->ClearRenderTargetView(m_pRenderTargetView,
-				reinterpret_cast<const float *>(&BLUE)
+				BLUE
 			);
 
 			m_pD3D11DeviceContext->ClearDepthStencilView(
@@ -219,17 +239,14 @@ void CGameApp::Launch()
 	}
 
 	std::cout << m_GameTimer.TotalTime() << std::endl;
-
 }
 
 void CGameApp::Update()
 {
-	
 }
 
 void CGameApp::Render()
 {
-
 }
 
 void CGameApp::onResize()

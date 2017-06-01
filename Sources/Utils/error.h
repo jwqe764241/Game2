@@ -20,23 +20,33 @@ typedef LONG ERROR__;
 
 void __cdecl ErrorHandler(
 	_In_	char const * const	fileName,
+	_In_	const unsigned		lineNumber,
+	_In_	char const * const	condition
+);
+
+void __cdecl ErrorHandler2(
+	_In_	char const * const	fileName,
 	_In_	char const * const	funcName,
 	_In_	const unsigned		lineNumber,
 	_In_	char const * const	condition,
 	_In_	char const * const	message
 );
 
+
+
 #define HR(expression)														\
 		{																	\
 			HRESULT hr = (expression);										\
 			if (FAILED(hr)) {												\
-				abort();													\
+				ErrorHandler(__FILE__, __LINE__, #expression);				\
 			}																\
 		}																	\
 
+
+
 #define CUSTOM_ASSERT(condition, message)														\
 	if (!(condition)) {																			\
-		ErrorHandler(__FILE__, __FUNCTION__, __LINE__, #condition, message);	\
+		ErrorHandler2(__FILE__, __FUNCTION__, __LINE__, #condition, message);	\
 	}																							\
 
 #define TEST____(message)					\
