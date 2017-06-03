@@ -20,9 +20,6 @@
     <ClCompile Include="..\Sources\main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\GameApp.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\GameWindow.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -35,6 +32,12 @@
     <ClCompile Include="..\Sources\GameTimer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\GameSettings.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\GameApp.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
@@ -43,9 +46,6 @@
     <Text Include="..\편집시 필수.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Sources\GameApp.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\console.h">
       <Filter>소스 파일\Utils</Filter>
     </ClInclude>
@@ -59,6 +59,12 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\GameTimer.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\GameSettings.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\GameApp.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
