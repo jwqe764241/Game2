@@ -4,7 +4,7 @@
 #include <crtdbg.h>
 
 #ifdef _DEBUG
-#define new new(_CLIENT_BLOCK,__FILE__,__LINE)
+#define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 #endif
 
 
@@ -26,19 +26,20 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
+	//디버그 모드일 때 콘솔 열기
 	#if defined(_DEBUG)
 		console::STDBUFF consoleBuff = console::openConsole();
 	#endif
 
-	CGameApp pGameApp(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 0, 0);
+
+
+	CGameApp pGameApp(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 800, 600);
 	pGameApp.Launch();
 
 	#if defined(_DEBUG)
 		system("pause");
 		console::closeConsole(consoleBuff);
 	#endif
-
-
 }
 
 #else
