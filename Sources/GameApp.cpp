@@ -20,11 +20,8 @@ LRESULT CALLBACK CGameApp::MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
 {
 	switch (msg)
 	{
-	case WM_LBUTTONUP:
-		//PostQuitMessage(0);
-		break;
-	case WM_CHAR:
-		MessageBox(NULL, L"Test!!", L"Alert", MB_OK);
+	case WM_CLOSE:
+		PostQuitMessage(0);
 		break;
 	}
 
@@ -259,13 +256,16 @@ void CGameApp::Launch()
 	std::cout << m_GameTimer.TotalTime() << std::endl;
 }
 
+
 void CGameApp::Update()
 {
 }
 
+
 void CGameApp::Render()
 {
 }
+
 
 void CGameApp::onResize()
 {

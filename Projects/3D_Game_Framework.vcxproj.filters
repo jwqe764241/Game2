@@ -15,6 +15,12 @@
     <Filter Include="소스 파일\Camera">
       <UniqueIdentifier>{8110d104-8225-4ac5-a6ca-48dba919ef9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Geometries">
+      <UniqueIdentifier>{b82daa17-d840-4b4b-a603-5d8fc111a99c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\shaders">
+      <UniqueIdentifier>{81359a10-d6cd-4eb9-9700-abeff35c5149}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\main.cpp">
@@ -37,6 +43,12 @@
     </ClCompile>
     <ClCompile Include="..\Sources\GameApp.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Camera\GameCamera.cpp">
+      <Filter>소스 파일\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Geometries\TestGeometry.cpp">
+      <Filter>소스 파일\Geometries</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +78,12 @@
     </ClInclude>
     <ClInclude Include="..\Sources\GameApp.h">
       <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Camera\GameCamera.h">
+      <Filter>소스 파일\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Geometries\TestGeometry.h">
+      <Filter>소스 파일\Geometries</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
