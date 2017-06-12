@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Sources\Camera\GameCamera.cpp" />
     <ClCompile Include="..\Sources\GameApp.cpp" />
     <ClCompile Include="..\Sources\GameSettings.cpp" />
     <ClCompile Include="..\Sources\GameTimer.cpp" />
     <ClCompile Include="..\Sources\GameWindow.cpp" />
+    <ClCompile Include="..\Sources\Geometries\TestGeometry.cpp" />
     <ClCompile Include="..\Sources\main.cpp" />
     <ClCompile Include="..\Sources\Utils\console.cpp" />
     <ClCompile Include="..\Sources\Utils\error.cpp" />
@@ -34,10 +36,12 @@
     <Text Include="..\편집시 필수.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Sources\Camera\GameCamera.h" />
     <ClInclude Include="..\Sources\GameApp.h" />
     <ClInclude Include="..\Sources\GameSettings.h" />
     <ClInclude Include="..\Sources\GameTimer.h" />
     <ClInclude Include="..\Sources\GameWindow.h" />
+    <ClInclude Include="..\Sources\Geometries\TestGeometry.h" />
     <ClInclude Include="..\Sources\Utils\console.h" />
     <ClInclude Include="..\Sources\Utils\error.h" />
     <ClInclude Include="..\Sources\Utils\Release.h" />

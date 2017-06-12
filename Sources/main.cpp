@@ -2,6 +2,14 @@
 #include <Sources/Utils/console.h>
 
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
+#ifdef _DEBUG
+#define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
+#endif
+
 
 #if defined(_MBCS)
 
@@ -19,21 +27,22 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR IpCmdL
 
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) {
 
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
+	//디버그 모드일 때 콘솔 열기
 	#if defined(_DEBUG)
 		console::STDBUFF consoleBuff = console::openConsole();
 	#endif
 
 
-	CGameApp pGameApp(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 0, 0);
-	pGameApp.Launch();
 
+	CGameApp pGameApp(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 800, 600);
+	pGameApp.Launch();
 
 	#if defined(_DEBUG)
 		system("pause");
 		console::closeConsole(consoleBuff);
 	#endif
-
 }
 
 #else
