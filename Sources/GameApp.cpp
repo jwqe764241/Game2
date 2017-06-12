@@ -207,26 +207,25 @@ void CGameApp::Launch()
 #endif
 
 	while (msg.message != WM_QUIT) {
+
 		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		else
-		{
-			m_GameTimer.Tick();
-			CalculateFrameStatus();
 
-			m_pD3D11DeviceContext->ClearRenderTargetView(m_pRenderTargetView,
-				BLUE
-			);
+		m_GameTimer.Tick();
+		CalculateFrameStatus();
 
-			m_pD3D11DeviceContext->ClearDepthStencilView(
-				m_pDepthStencilView,
-				D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0
-			);
+		m_pD3D11DeviceContext->ClearRenderTargetView(m_pRenderTargetView,
+			BLUE
+		);
 
-			m_pSwapChain->Present(0, 0);
-		}
+		m_pD3D11DeviceContext->ClearDepthStencilView(
+			m_pDepthStencilView,
+			D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0
+		);
+
+		m_pSwapChain->Present(0, 0);
 	}
 
 	std::cout << m_GameTimer.TotalTime() << std::endl;
