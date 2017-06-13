@@ -13,13 +13,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	CGameApp * pGame = reinterpret_cast<CGameApp *>(GetWindowLongPtr(hWnd, 0));
 
-	return pGame->MainProc(hWnd, msg, wParam, lParam);
+	if (pGame)
+		return pGame->MainProc(hWnd, msg, wParam, lParam);
+	else
+		return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
 LRESULT CALLBACK CGameApp::MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+	case WM_KEYDOWN:
+		if (wParam == VK_ESCAPE) {
+			PostMessage(hWnd, WM_DESTROY, 0L, 0L);
+		}
+		break;
+	case WM_DESTROY:
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		break;
@@ -45,7 +54,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		wndClass.style			= CS_HREDRAW | CS_VREDRAW;
 		wndClass.lpfnWndProc	= WndProc;
 		wndClass.cbClsExtra		= 0;
-		wndClass.cbClsExtra		= sizeof(CGameWindow*);
+		wndClass.cbWndExtra		= sizeof(CGameApp*);
 		wndClass.hInstance		= m_hInstance;
 		wndClass.lpszMenuName	= nullptr;
 		wndClass.hIcon			= LoadIcon(NULL, IDI_WINLOGO);
@@ -54,7 +63,6 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	RegisterClassEx(&wndClass);
 
 	//윈도우 임시 셋팅 공간에 포인터 저장 --> 멤버 프로시저로 넘기기 위함
-	SetWindowLongPtr(m_hWnd, 0, reinterpret_cast<LONG_PTR>(this));
 
 	//0일 경우 기본 크기로 지정
 	if (width == 0 || height == 0) {
@@ -89,7 +97,8 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		m_hInstance,
 		this);
 
-	
+	SetWindowLongPtr(m_hWnd, 0, reinterpret_cast<LONG_PTR>(this));
+
 	//디버그 전용 플래그
 	UINT createFlags = 0;
 #if defined(_DEBUG)
@@ -176,6 +185,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 
 CGameApp::~CGameApp()
 {
+	UnregisterClass(m_pstrWndClassName, m_hInstance);
 	CloseWindow(m_hWnd);
 	ReleaseCOM(&m_pD3D11Device);
 	ReleaseCOM(&m_pD3D11DeviceContext);
@@ -216,8 +226,6 @@ void CGameApp::Launch()
 
 	MSG msg = { 0 };
 	bool bIsRunning = true;
-	const XMVECTORF32 Blue = { 0.5f, 0.2f, 1.0f, 1.0f };
-	const float * BLUE = reinterpret_cast<const float *>(&Blue);
 
 	m_GameTimer.Start();
 
@@ -238,32 +246,37 @@ void CGameApp::Launch()
 			DispatchMessage(&msg);
 		}
 
-		m_GameTimer.Tick();
-		CalculateFrameStatus();
-
-		m_pD3D11DeviceContext->ClearRenderTargetView(m_pRenderTargetView,
-			BLUE
-		);
-
-		m_pD3D11DeviceContext->ClearDepthStencilView(
-			m_pDepthStencilView,
-			D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0
-		);
+		Update();
+		Render();
 
 		m_pSwapChain->Present(0, 0);
 	}
 
-	std::cout << m_GameTimer.TotalTime() << std::endl;
+	//std::cout << m_GameTimer.TotalTime() << std::endl;
 }
 
 
 void CGameApp::Update()
 {
+	m_GameTimer.Tick();
+	CalculateFrameStatus();
 }
 
 
 void CGameApp::Render()
 {
+	static const float * RED	= reinterpret_cast<const float *>(&CUSTOM_COLOR::RED);
+	static const float * GREEN	= reinterpret_cast<const float *>(&CUSTOM_COLOR::GREEN);
+	static const float * BLUE	= reinterpret_cast<const float *>(&CUSTOM_COLOR::BLUE);
+
+	m_pD3D11DeviceContext->ClearRenderTargetView(m_pRenderTargetView,
+		GREEN
+	);
+
+	m_pD3D11DeviceContext->ClearDepthStencilView(
+		m_pDepthStencilView,
+		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0
+	);
 }
 
 
