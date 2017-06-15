@@ -179,6 +179,9 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		ReleaseCOM(&dxgiAdapter);
 		ReleaseCOM(&dxgiFactory);
 
+	m_pD3D11DeviceContext->IASetPrimitiveTopology(
+		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
+	);
 
 	onResize();
 }
