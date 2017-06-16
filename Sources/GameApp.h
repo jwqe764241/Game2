@@ -17,7 +17,6 @@ namespace CUSTOM_COLOR {
 	const XMVECTORF32 RED	= { 1.0f, 0.0f, 0.0f, 1.0f };
 	const XMVECTORF32 GREEN = { 0.0f, 1.0f, 0.0f, 1.0f };
 	const XMVECTORF32 BLUE	= { 0.0f, 0.0f, 1.0f, 1.0f };
-
 }
 
 class CGameApp
@@ -37,8 +36,7 @@ private:
 	ID3D11RenderTargetView*	m_pRenderTargetView;
 	ID3D11Texture2D*		m_pDepthStencilBuffer;
 	ID3D11DepthStencilView*	m_pDepthStencilView;
-	//CGameWindow*					m_pGameWindow;
-	CGameTimer						m_GameTimer;
+	CGameTimer				m_GameTimer;
 	std::vector <IDXGIAdapter*> m_vAdapters;
 	//--Compoenents
 
