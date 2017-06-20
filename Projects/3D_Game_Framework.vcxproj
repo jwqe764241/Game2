@@ -37,8 +37,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Camera\GameCamera.h" />
-    <ClInclude Include="..\Sources\Draws\GameDefs.h" />
     <ClInclude Include="..\Sources\GameApp.h" />
+    <ClInclude Include="..\Sources\GameDefs.h" />
     <ClInclude Include="..\Sources\GameSettings.h" />
     <ClInclude Include="..\Sources\GameTimer.h" />
     <ClInclude Include="..\Sources\GameWindow.h" />

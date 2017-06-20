@@ -269,9 +269,10 @@ void CGameApp::Render()
 	static const float * RED	= reinterpret_cast<const float *>(&CUSTOM_COLOR::RED);
 	static const float * GREEN	= reinterpret_cast<const float *>(&CUSTOM_COLOR::GREEN);
 	static const float * BLUE	= reinterpret_cast<const float *>(&CUSTOM_COLOR::BLUE);
+	static const float * BLACK = reinterpret_cast<const float *>(&CUSTOM_COLOR::BLACK);
 
 	m_pD3D11DeviceContext->ClearRenderTargetView(m_pRenderTargetView,
-		GREEN
+		BLACK
 	);
 
 	m_pD3D11DeviceContext->ClearDepthStencilView(

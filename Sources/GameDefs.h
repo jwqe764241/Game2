@@ -5,6 +5,7 @@
 #include <D3D11.h>
 #include <xnamath.h>
 
+
 namespace VertexShader {
 	struct Vertex1 {
 		XMFLOAT3 Position;

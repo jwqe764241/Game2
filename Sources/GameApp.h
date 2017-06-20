@@ -17,6 +17,7 @@ namespace CUSTOM_COLOR {
 	const XMVECTORF32 RED	= { 1.0f, 0.0f, 0.0f, 1.0f };
 	const XMVECTORF32 GREEN = { 0.0f, 1.0f, 0.0f, 1.0f };
 	const XMVECTORF32 BLUE	= { 0.0f, 0.0f, 1.0f, 1.0f };
+	const XMVECTORF32 BLACK = { 0.0f, 0.0f, 0.0f, 1.0f };
 }
 
 class CGameApp
