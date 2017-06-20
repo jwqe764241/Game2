@@ -13,10 +13,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	CGameApp * pGame = reinterpret_cast<CGameApp *>(GetWindowLongPtr(hWnd, 0));
 
-	if (pGame)
-		return pGame->MainProc(hWnd, msg, wParam, lParam);
-	else
-		return DefWindowProc(hWnd, msg, wParam, lParam);
+	if (pGame) return pGame->MainProc(hWnd, msg, wParam, lParam);
+	else return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
 LRESULT CALLBACK CGameApp::MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -79,7 +77,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		m_vAdapters.push_back(pAdapter);
 		++i;
 	}
-	ReleaseCOM(&pFactory);
+	ReleaseCOM(&pFactory); 
 
 
 	//윈도우 생성

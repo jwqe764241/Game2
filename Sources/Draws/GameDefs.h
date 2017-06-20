@@ -1,16 +1,32 @@
 #pragma once
 
 #include <Windows.h>
+#include <D3DX11.h>
+#include <D3D11.h>
 #include <xnamath.h>
 
-struct Vertex1 {
-	XMFLOAT3 Position;
-	XMFLOAT4 Color;
-};
+namespace VertexShader {
+	struct Vertex1 {
+		XMFLOAT3 Position;
+		XMFLOAT4 Color;
+	};
 
-struct Vertex2 {
-	XMFLOAT3 Position;
-	XMFLOAT3 Normal;
-	XMFLOAT2 Texture0;
-	XMFLOAT2 Texture1;
-};
+	struct Vertex2 {
+		XMFLOAT3 Position;
+		XMFLOAT3 Normal;
+		XMFLOAT2 Texture0;
+		XMFLOAT2 Texture1;
+	};
+
+	D3D11_INPUT_ELEMENT_DESC Desc1[] = {
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+
+	D3D11_INPUT_ELEMENT_DESC Desc2[] = {
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+}
