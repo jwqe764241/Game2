@@ -1,8 +1,4 @@
 #include <Sources/GameApp.h>
-#include <Sources/Utils/Release.h>
-
-#include <iostream>
-#include <sstream>
 
 #define ENABLE_PRINT_ADAPTER_NAME
 
@@ -331,7 +327,7 @@ void CGameApp::onResize()
 	//ºäÆ÷Æ® ¼ÂÆÃ
 	m_ViewportSettings.TopLeftX = 0.0f;
 	m_ViewportSettings.TopLeftY = 0.0f;
-	m_ViewportSettings.Width = static_cast<float>(m_sizeWindow.width);
+	m_ViewportSettings.Width  = static_cast<float>(m_sizeWindow.width);
 	m_ViewportSettings.Height = static_cast<float>(m_sizeWindow.height);
 	m_ViewportSettings.MinDepth = 0.0f;
 	m_ViewportSettings.MaxDepth = 1.0f;

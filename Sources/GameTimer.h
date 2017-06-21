@@ -1,4 +1,9 @@
-#pragma once
+/*
+	jwqe764241 ¿€º∫
+*/
+
+#ifndef __GAMETIMER_H
+#define __GAMETIMER_H
 
 #include <Windows.h>
 
@@ -38,3 +43,4 @@ private:
 	bool m_bIsStopped;
 };
 
+#endif

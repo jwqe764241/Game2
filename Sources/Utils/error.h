@@ -4,8 +4,8 @@
 
 //TODO: C, C++ 둘다 사용 가능? __cplusplus
 
-#ifndef ERROR_H
-#define ERROR_H
+#ifndef __ERROR_H
+#define __ERROR_H
 
 
 #include <Sources/GameApp.h>
