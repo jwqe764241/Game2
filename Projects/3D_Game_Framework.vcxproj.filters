@@ -85,7 +85,7 @@
     <ClInclude Include="..\Sources\Geometries\TestGeometry.h">
       <Filter>소스 파일\Geometries</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Draws\GameDefs.h">
+    <ClInclude Include="..\Sources\GameDefs.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,14 +2,12 @@
 	jwqe764241 ¿€º∫
 */
 
-#ifndef CONSOLE_H
-#define CONSOLE_H
+#ifndef __CONSOLE_H
+#define __CONSOLE_H
 
 
 #include <Sources/GameApp.h>
 #include <string>
-
-
 
 
 namespace console {

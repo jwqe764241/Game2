@@ -1,4 +1,9 @@
-#pragma once
+/*
+	jwqe764241 ¿€º∫
+*/
+
+#ifndef __GAMESETTINGS_H
+#define __GAMESETTINGS_H
 
 #include <D3DX11.h>
 #include <D3D11.h>
@@ -13,3 +18,5 @@ struct CGameSettings {
 	D3D11_VIEWPORT		 ViewportSettings;
 	DXGI_SWAP_CHAIN_DESC SwapChainDescribe;
 };
+
+#endif

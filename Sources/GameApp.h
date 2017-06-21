@@ -1,4 +1,9 @@
-#pragma once
+/*
+	jwqe764241 ¿€º∫
+*/
+
+#ifndef __GAMEAPP_H
+#define __GAMEAPP_H
 
 #include <Windows.h>
 #include <D3DX11.h>
@@ -9,15 +14,15 @@
 #include <xnamath.h>
 #include <vector>
 
+#include <iostream>
+#include <sstream>
+
+#include <Sources/GameDefs.h>
 #include <Sources/GameWindow.h>
 #include <Sources/GameTimer.h>
 #include <Sources/Utils/error.h>
+#include <Sources/Utils/Release.h>
 
-namespace CUSTOM_COLOR {
-	const XMVECTORF32 RED	= { 1.0f, 0.0f, 0.0f, 1.0f };
-	const XMVECTORF32 GREEN = { 0.0f, 1.0f, 0.0f, 1.0f };
-	const XMVECTORF32 BLUE	= { 0.0f, 0.0f, 1.0f, 1.0f };
-}
 
 class CGameApp
 {
@@ -74,3 +79,5 @@ public:
 	~CGameApp();
 
 };
+
+#endif
