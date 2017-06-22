@@ -8,6 +8,7 @@
 #include <Windows.h>
 #include <D3DX11.h>
 #include <D3D11.h>
+#include <D3dx11effect.h>
 #include <cassert>
 #include <memory>
 #include <atlbase.h>
@@ -61,6 +62,14 @@ private:
 	int			m_iCmdShow;
 	WINDOWSIZE  m_sizeWindow;
 	//Window Val--
+
+	//--Render Input
+	ID3D11InputLayout * m_pVertex1InputLayout;
+	ID3D11InputLayout * m_pVertex2InputLayout;
+	
+	D3DX11_PASS_DESC passDesc1;
+	D3DX11_PASS_DESC passDesc2;
+	//Render Input--
 
 private:
 	void CalculateFrameStatus();

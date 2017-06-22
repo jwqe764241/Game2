@@ -36,9 +36,8 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	m_pRenderTargetView(nullptr), m_pDepthStencilBuffer(nullptr), m_pDepthStencilView(nullptr),
 	m_DriverType(D3D_DRIVER_TYPE_HARDWARE),m_SDKVersion(D3D11_SDK_VERSION), m_MultiSampleQualityLevel(NULL), m_FeatureLevel(),
 	m_hInstance(hInstance), m_pstrFrameTitle(frameTitle), m_pstrWndClassName(wndClassName), m_iCmdShow(nCmdShow),
-	m_sizeWindow({width, height})
+	m_sizeWindow({width, height}), m_pVertex1InputLayout(nullptr), m_pVertex2InputLayout(nullptr)
 {
-
 	m_vAdapters.reserve(10);
 
 	//윈도우 클래스 정의
@@ -177,6 +176,20 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 	);
 
+	/*
+	m_pD3D11Device->CreateInputLayout(
+		VertexShader::Desc1,
+		2,
+		VertexShade
+	)
+	*/
+
+	m_pD3D11Device->CreateInputLayout(
+		VertexShader::Desc1,
+		4,
+
+	)
+
 	onResize();
 }
 
@@ -248,8 +261,6 @@ void CGameApp::Launch()
 
 		m_pSwapChain->Present(0, 0);
 	}
-
-	//std::cout << m_GameTimer.TotalTime() << std::endl;
 }
 
 
@@ -265,7 +276,7 @@ void CGameApp::Render()
 	static const float * RED	= reinterpret_cast<const float *>(&CUSTOM_COLOR::RED);
 	static const float * GREEN	= reinterpret_cast<const float *>(&CUSTOM_COLOR::GREEN);
 	static const float * BLUE	= reinterpret_cast<const float *>(&CUSTOM_COLOR::BLUE);
-	static const float * BLACK = reinterpret_cast<const float *>(&CUSTOM_COLOR::BLACK);
+	static const float * BLACK  = reinterpret_cast<const float *>(&CUSTOM_COLOR::BLACK);
 
 	m_pD3D11DeviceContext->ClearRenderTargetView(m_pRenderTargetView,
 		BLACK
