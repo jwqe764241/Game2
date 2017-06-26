@@ -18,7 +18,7 @@ namespace CUSTOM_COLOR {
 	const XMVECTORF32 DARKBLUE	= { 0.0f, 0.0f, 1.0f, 1.0f };
 }
 
-namespace VertexShader {
+namespace Vertex {
 	struct Vertex1 {
 		XMFLOAT3 Position;
 		XMFLOAT4 Color;
@@ -42,6 +42,9 @@ namespace VertexShader {
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT   , 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT   , 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
+
+
+
 }
 
 #endif

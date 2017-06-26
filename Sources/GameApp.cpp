@@ -176,19 +176,18 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 	);
 
-	/*
-	m_pD3D11Device->CreateInputLayout(
-		VertexShader::Desc1,
-		2,
-		VertexShade
-	)
-	*/
 
-	m_pD3D11Device->CreateInputLayout(
-		VertexShader::Desc1,
-		4,
+	//m_pD3D11Device->CreateInputLayout(
+	//	VertexShader::Desc1,
+	//	2,
+	//	VertexShade
+	//)
+	
 
-	)
+	//m_pD3D11Device->CreateInputLayout(
+	//	VertexShader::Desc1,
+	//	4,
+	//)
 
 	onResize();
 }
