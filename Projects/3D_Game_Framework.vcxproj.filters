@@ -89,4 +89,9 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Sources\Shaders\Shader.fx">
+      <Filter>소스 파일\shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>
