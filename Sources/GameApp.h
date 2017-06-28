@@ -73,6 +73,9 @@ private:
 	
 	D3DX11_PASS_DESC passDesc1;
 	D3DX11_PASS_DESC passDesc2;
+
+	ID3DX11Effect* m_pFX;
+	ID3DX11EffectTechnique* m_pTech;
 	//Render Input--
 
 private:
