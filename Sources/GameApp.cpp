@@ -176,18 +176,6 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 	); 
 
-	//m_pD3D11Device->CreateInputLayout(
-	//	VertexShader::Desc1,
-	//	2,
-	//	VertexShade
-	//)
-	
-
-	//m_pD3D11Device->CreateInputLayout(
-	//	VertexShader::Desc1,
-	//	4,
-	//)
-
 #ifdef TEST_RENDER_BOX
 	BuildBox();
 #endif
@@ -235,11 +223,10 @@ void CGameApp::Launch()
 	onShowWindow();
 
 	m_GameTimer.Reset();
+	m_GameTimer.Start();
 
 	MSG msg = { 0 };
 	bool bIsRunning = true;
-
-	m_GameTimer.Start();
 
 	//디버그 모드에다 어댑터 이름 출력 온일 때 출력해줌
 #if defined(_DEBUG) && defined(ENABLE_PRINT_ADAPTER_NAME)
@@ -248,6 +235,12 @@ void CGameApp::Launch()
 		adapter->GetDesc(&adapterDesc);
 		wprintf(L"%s \n", adapterDesc.Description);
 	}
+#endif
+
+#ifdef TEST_RENDER_BOX
+	BuildBox();
+	BuildShader();
+	BuildVertexLayout();
 #endif
 
 	//메시지 루프
@@ -360,6 +353,12 @@ void CGameApp::onShowWindow()
 
 void CGameApp::BuildShader()
 {
+
+}
+
+void CGameApp::BuildVertexLayout()
+{
+
 }
 
 #ifdef TEST_RENDER_BOX

@@ -74,13 +74,14 @@ private:
 	D3DX11_PASS_DESC passDesc1;
 	D3DX11_PASS_DESC passDesc2;
 
-	ID3DX11Effect* m_pFX;
-	ID3DX11EffectTechnique* m_pTech;
+	ID3DX11Effect* m_pEffectFX;
+	ID3DX11EffectTechnique* m_pEffectTech;
 	//Render Input--
 
 private:
 	void CalculateFrameStatus();
 	void BuildShader();
+	void BuildVertexLayout();
 public:
 	void Launch();
 	void Update();
@@ -100,10 +101,7 @@ private:
 	ID3D11Buffer* m_pBoxVertexBuffer;
 	ID3D11Buffer* m_pBoxIndexBuffer;
 	void BuildBox();
-	
 #endif
-
-
 };
 
 #endif
