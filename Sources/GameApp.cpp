@@ -62,19 +62,6 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		m_sizeWindow = { GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
 	}
 
-	//어댑터 구해서 리스트에 저장
-	IDXGIFactory * pFactory = nullptr;
-	CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&pFactory);
-	UINT i = 0;
-	IDXGIAdapter * pAdapter = nullptr;
-	while (pFactory->EnumAdapters(i, &pAdapter) != DXGI_ERROR_NOT_FOUND)
-	{
-		m_vAdapters.push_back(pAdapter);
-		++i;
-	}
-	ReleaseCOM(&pFactory); 
-
-
 	//윈도우 생성
 	m_hWnd = CreateWindowEx(
 		WS_EX_APPWINDOW,
@@ -91,6 +78,97 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		this);
 
 	SetWindowLongPtr(m_hWnd, 0, reinterpret_cast<LONG_PTR>(this));
+	
+
+
+	//-- HRESULT 체킹 안함 --//
+	//팩토리 생성
+	IDXGIFactory* l_pFactory = nullptr;
+	CreateDXGIFactory(__uuidof(IDXGIFactory), reinterpret_cast<void **>(&l_pFactory));
+	
+	//어댑터 나열
+	IDXGIAdapter*  l_pAdapter = nullptr;
+	std::vector<IDXGIAdapter *> l_pAdapterList;
+
+	//어댑터 벡터에 푸쉬
+	for (int i = 0; l_pFactory->EnumAdapters(i, &l_pAdapter) != DXGI_ERROR_NOT_FOUND; ++i) {
+		l_pAdapterList.push_back(l_pAdapter);
+	}
+
+	IDXGIOutput* l_pAdapterOutput = nullptr;
+	l_pAdapterList.at(0)->EnumOutputs(NULL, &l_pAdapterOutput);
+
+	//리스트 갯수 얻기 위함
+	unsigned int l_uiModes = 0;
+	l_pAdapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &l_uiModes, NULL);
+
+	//갯수대로 생성 후, 속성 얻기
+	DXGI_MODE_DESC * l_pModeList = new DXGI_MODE_DESC[l_uiModes];
+	l_pAdapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &l_uiModes, l_pModeList);
+
+	//새로고침 비율 분자 분모 얻기
+	//60hrz -> msi 노트북
+	int l_iNumerator, l_iDenominator;
+	for (int i = 0; i < l_uiModes; ++i) {
+		if ((l_pModeList[i].Width == m_sizeWindow.width) &&
+			(l_pModeList[i].Height == m_sizeWindow.height)) {
+			l_iNumerator	= l_pModeList[i].RefreshRate.Numerator;
+			l_iDenominator	= l_pModeList[i].RefreshRate.Denominator;
+		}
+	}
+
+	//어댑터 데이터 얻기
+	for (int i = 0; i < l_pAdapterList.size(); ++i){
+		DXGI_ADAPTER_DESC l_pAdapterDesc;
+		l_pAdapterList.at(i)->GetDesc(&l_pAdapterDesc);
+
+		ADAPTERINFO adapterInfo;
+		adapterInfo.Description = l_pAdapterDesc.Description;
+		adapterInfo.ID = l_pAdapterDesc.AdapterLuid;
+
+		m_AdapterInfoList.push_back(adapterInfo);
+	}
+	
+
+	///
+
+	DXGI_SWAP_CHAIN_DESC swapChainDesc;
+	swapChainDesc.BufferDesc.Width	= m_sizeWindow.width;
+	swapChainDesc.BufferDesc.Height = m_sizeWindow.height;
+	swapChainDesc.BufferDesc.RefreshRate.Numerator   = l_iNumerator;
+	swapChainDesc.BufferDesc.RefreshRate.Denominator = l_iDenominator;
+	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	if (m_MultiSampleQualityLevel) {
+		swapChainDesc.SampleDesc.Count = 4;
+		swapChainDesc.SampleDesc.Quality = m_MultiSampleQualityLevel - 1;
+	}
+	else {
+		swapChainDesc.SampleDesc.Count = 1;
+		swapChainDesc.SampleDesc.Quality = 0;
+	}
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.BufferCount = 1;
+	swapChainDesc.OutputWindow = m_hWnd;
+	swapChainDesc.Windowed = true;
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	swapChainDesc.Flags = 0;
+
+
+
+	/*
+	//어댑터 구해서 리스트에 저장
+	IDXGIFactory * pFactory = nullptr;
+	CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&pFactory);
+	UINT i = 0;
+	IDXGIAdapter * pAdapter = nullptr;
+	while (pFactory->EnumAdapters(i, &pAdapter) != DXGI_ERROR_NOT_FOUND)
+	{
+		m_vAdapters.push_back(pAdapter);
+		++i;
+	}
+	ReleaseCOM(&pFactory);
 
 	//디버그 전용 플래그
 	UINT createFlags = 0;
@@ -181,6 +259,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 #endif
 
 	onResize();
+	*/
 }
 
 CGameApp::~CGameApp()

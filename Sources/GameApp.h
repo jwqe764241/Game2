@@ -14,6 +14,7 @@
 #include <atlbase.h>
 #include <xnamath.h>
 #include <vector>
+#include <cstring>
 
 #include <iostream>
 #include <sstream>
@@ -28,6 +29,13 @@
 
 //#define TEST_RENDER_BOX
 
+typedef struct __ADAPTERINFO {
+	LUID ID;
+	std::wstring Description;
+	//int Numerator;
+	//int Denominator;
+}ADAPTERINFO, *LPADAPTERINFO;
+
 
 class CGameApp
 {
@@ -41,7 +49,7 @@ private:
 	ID3D11DepthStencilView*	m_pDepthStencilView;
 	CGameTimer				m_GameTimer;
 	std::vector <IDXGIAdapter*> m_vAdapters;
-	//--Compoenents
+	//Compoenents--
 
 	//--Settings
 	D3D_DRIVER_TYPE		m_DriverType;
@@ -60,10 +68,12 @@ private:
 	WINDOWSIZE  m_sizeWindow;
 	//Window Val--
 
+	//--Info Val
+	std::vector<ADAPTERINFO> m_AdapterInfoList;
+	//Info Val--
 private:
 	void CalculateFrameStatus();
-	//void BuildShader();
-	//void BuildVertexLayout();
+
 public:
 	void Launch();
 	void Update();
