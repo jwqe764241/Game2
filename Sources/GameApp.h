@@ -26,19 +26,12 @@
 
 
 
-#define TEST_RENDER_BOX
+//#define TEST_RENDER_BOX
 
 
 class CGameApp
 {
 private:
-	///CComPtr<ID3D11Device>			m_pD3D11Device;
-	///CComPtr<ID3D11DeviceContext>	m_pD3D11DeviceContext;
-	///CComPtr<IDXGISwapChain>			m_pSwapChain;
-	///CComPtr<ID3D11RenderTargetView> m_pRenderTargetView;
-	///CComPtr<ID3D11Texture2D>		m_pDepthStencilBuffer;
-	///CComPtr<ID3D11DepthStencilView>	m_pDepthStencilView;
-
 	//--Components
 	ID3D11Device*			m_pD3D11Device;
 	ID3D11DeviceContext*	m_pD3D11DeviceContext;
@@ -67,21 +60,10 @@ private:
 	WINDOWSIZE  m_sizeWindow;
 	//Window Val--
 
-	//--Render Input
-	ID3D11InputLayout* m_pVertex1InputLayout;
-	ID3D11InputLayout* m_pVertex2InputLayout;
-	
-	D3DX11_PASS_DESC passDesc1;
-	D3DX11_PASS_DESC passDesc2;
-
-	ID3DX11Effect* m_pEffectFX;
-	ID3DX11EffectTechnique* m_pEffectTech;
-	//Render Input--
-
 private:
 	void CalculateFrameStatus();
-	void BuildShader();
-	void BuildVertexLayout();
+	//void BuildShader();
+	//void BuildVertexLayout();
 public:
 	void Launch();
 	void Update();
@@ -96,12 +78,12 @@ public:
 	CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height);
 	~CGameApp();
 
-#ifdef TEST_RENDER_BOX
-private:
-	ID3D11Buffer* m_pBoxVertexBuffer;
-	ID3D11Buffer* m_pBoxIndexBuffer;
-	void BuildBox();
-#endif
+//#ifdef TEST_RENDER_BOX
+//private:
+//	ID3D11Buffer* m_pBoxVertexBuffer;
+//	ID3D11Buffer* m_pBoxIndexBuffer;
+//	void BuildBox();
+//#endif
 };
 
 #endif
