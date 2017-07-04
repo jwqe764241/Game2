@@ -37,16 +37,21 @@ typedef struct __ADAPTERINFO {
 }ADAPTERINFO, *LPADAPTERINFO;
 
 
+typedef struct __APPINFO {
+	ID3D11Device*			 pD3D11Device;
+	ID3D11DeviceContext*	 pD3D11DeviceContext;
+	IDXGISwapChain*			 pSwapChain;
+	ID3D11RenderTargetView*  pRenderTargetView;
+	ID3D11Texture2D*		 pBackBuffer;
+	ID3D11DepthStencilState* pDepthStencilState;
+	ID3D11DepthStencilView*	 pDepthStencilView;
+}APPINFO, *LPAPPINFO;
+
 class CGameApp
 {
 private:
 	//--Components
-	ID3D11Device*			m_pD3D11Device;
-	ID3D11DeviceContext*	m_pD3D11DeviceContext;
-	IDXGISwapChain*			m_pSwapChain;
-	ID3D11RenderTargetView*	m_pRenderTargetView;
-	ID3D11Texture2D*		m_pBackBuffer;
-	ID3D11DepthStencilView*	m_pDepthStencilView;
+	APPINFO					m_AppInfo;
 	CGameTimer				m_GameTimer;
 	std::vector <IDXGIAdapter*> m_vAdapters;
 	//Compoenents--
@@ -56,7 +61,6 @@ private:
 	D3D_FEATURE_LEVEL	m_FeatureLevel;
 	UINT				m_SDKVersion;
 	UINT				m_MultiSampleQualityLevel;
-	D3D11_VIEWPORT		m_ViewportSettings;
 	//Settings--
 
 	//--Window Val
