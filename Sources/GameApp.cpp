@@ -33,7 +33,7 @@ LRESULT CALLBACK CGameApp::MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
 
 CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height)
 	: m_pD3D11Device(nullptr), m_pD3D11DeviceContext(nullptr), m_pSwapChain(nullptr), m_vAdapters(),
-	m_pRenderTargetView(nullptr), m_pDepthStencilBuffer(nullptr), m_pDepthStencilView(nullptr),
+	m_pRenderTargetView(nullptr), m_pBackBuffer(nullptr), m_pDepthStencilView(nullptr),
 	m_DriverType(D3D_DRIVER_TYPE_HARDWARE),m_SDKVersion(D3D11_SDK_VERSION), m_MultiSampleQualityLevel(NULL), m_FeatureLevel(),
 	m_hInstance(hInstance), m_pstrFrameTitle(frameTitle), m_pstrWndClassName(wndClassName), m_iCmdShow(nCmdShow),
 	m_sizeWindow({width, height})
@@ -117,10 +117,10 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		}
 	}
 
-	//어댑터 데이터 얻기
+	//어댑터 데이터 벡터에 추가
 	for (int i = 0; i < l_pAdapterList.size(); ++i){
 		DXGI_ADAPTER_DESC l_pAdapterDesc;
-		l_pAdapterList.at(i)->GetDesc(&l_pAdapterDesc);
+		l_pAdapterList[i]->GetDesc(&l_pAdapterDesc);
 
 		ADAPTERINFO adapterInfo;
 		adapterInfo.Description = l_pAdapterDesc.Description;
@@ -128,11 +128,17 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 
 		m_AdapterInfoList.push_back(adapterInfo);
 	}
-	
 
-	///
+	//해제
+	delete[] l_pModeList;
+	ReleaseCOM(&l_pAdapterOutput);
+	for (IDXGIAdapter* adapter : l_pAdapterList)
+		ReleaseCOM(&adapter);
+	ReleaseCOM(&l_pFactory);
 
-	DXGI_SWAP_CHAIN_DESC swapChainDesc;
+	//스왑체인 설정
+	DXGI_SWAP_CHAIN_DESC swapChainDesc; 
+	ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
 	swapChainDesc.BufferDesc.Width	= m_sizeWindow.width;
 	swapChainDesc.BufferDesc.Height = m_sizeWindow.height;
 	swapChainDesc.BufferDesc.RefreshRate.Numerator   = l_iNumerator;
@@ -155,7 +161,17 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	swapChainDesc.Flags = 0;
 
+	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
+	UINT createFlags = 0;
+#if defined(_DEBUG)
+	createFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+	D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, 0, createFlags, &featureLevel, 1, D3D11_SDK_VERSION, 
+		&swapChainDesc, &m_pSwapChain, &m_pD3D11Device, NULL, &m_pD3D11DeviceContext);
+	m_pSwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&m_pBackBuffer));
+	m_pD3D11Device->CreateRenderTargetView(m_pBackBuffer, NULL, &m_pRenderTargetView);
 
+	onResize();
 
 	/*
 	//어댑터 구해서 리스트에 저장
@@ -270,7 +286,7 @@ CGameApp::~CGameApp()
 	ReleaseCOM(&m_pD3D11DeviceContext);
 	ReleaseCOM(&m_pSwapChain);
 	ReleaseCOM(&m_pRenderTargetView);
-	ReleaseCOM(&m_pDepthStencilBuffer);
+	ReleaseCOM(&m_pBackBuffer);
 	ReleaseCOM(&m_pDepthStencilView);
 }
 
@@ -372,7 +388,7 @@ void CGameApp::onResize()
 	//이전에 사용하던것 해제
 	ReleaseCOM(&m_pRenderTargetView);
 	ReleaseCOM(&m_pDepthStencilView);
-	ReleaseCOM(&m_pDepthStencilBuffer);
+	ReleaseCOM(&m_pBackBuffer);
 
 	//버퍼 리사이즈 후 렌더타겟뷰 재생성
 	m_pSwapChain->ResizeBuffers(1, m_sizeWindow.width, m_sizeWindow.height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
@@ -403,8 +419,8 @@ void CGameApp::onResize()
 	depthStencilDesc.MiscFlags = NULL;
 
 	//버퍼 생성 빛 버퍼뷰 생성
-	m_pD3D11Device->CreateTexture2D(&depthStencilDesc, NULL, &m_pDepthStencilBuffer);
-	m_pD3D11Device->CreateDepthStencilView(m_pDepthStencilBuffer, NULL, &m_pDepthStencilView);
+	m_pD3D11Device->CreateTexture2D(&depthStencilDesc, NULL, &m_pBackBuffer);
+	m_pD3D11Device->CreateDepthStencilView(m_pBackBuffer, NULL, &m_pDepthStencilView);
 
 	//버퍼와 버퍼뷰 설정
 	m_pD3D11DeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);

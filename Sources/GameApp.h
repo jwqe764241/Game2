@@ -45,7 +45,7 @@ private:
 	ID3D11DeviceContext*	m_pD3D11DeviceContext;
 	IDXGISwapChain*			m_pSwapChain;
 	ID3D11RenderTargetView*	m_pRenderTargetView;
-	ID3D11Texture2D*		m_pDepthStencilBuffer;
+	ID3D11Texture2D*		m_pBackBuffer;
 	ID3D11DepthStencilView*	m_pDepthStencilView;
 	CGameTimer				m_GameTimer;
 	std::vector <IDXGIAdapter*> m_vAdapters;
@@ -85,6 +85,7 @@ public:
 	LRESULT CALLBACK MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 public:
+	CGameApp() = delete;
 	CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height);
 	~CGameApp();
 
