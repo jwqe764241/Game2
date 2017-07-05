@@ -28,6 +28,7 @@
     <ClCompile Include="..\Sources\main.cpp" />
     <ClCompile Include="..\Sources\Utils\console.cpp" />
     <ClCompile Include="..\Sources\Utils\error.cpp" />
+    <ClCompile Include="TestService.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
@@ -46,6 +47,7 @@
     <ClInclude Include="..\Sources\Utils\console.h" />
     <ClInclude Include="..\Sources\Utils\error.h" />
     <ClInclude Include="..\Sources\Utils\Release.h" />
+    <ClInclude Include="TestService.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -50,6 +50,9 @@
     <ClCompile Include="..\Sources\Geometries\TestGeometry.cpp">
       <Filter>소스 파일\Geometries</Filter>
     </ClCompile>
+    <ClCompile Include="TestService.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
@@ -88,5 +91,6 @@
     <ClInclude Include="..\Sources\GameDefs.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="TestService.h" />
   </ItemGroup>
 </Project>
