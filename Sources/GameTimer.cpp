@@ -1,7 +1,5 @@
 #include <Sources/GameTimer.h>
 
-
-
 CGameTimer::CGameTimer()
 	: m_dSecPerCount(0.0), m_dDeltaTime(-1.0), m_iBaseTime(0), m_iPausedTime(0),
 	m_iStopTime(0), m_iPrevTime(0), m_iCurTime(0), m_bIsStopped(false)

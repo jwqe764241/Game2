@@ -1,7 +1,5 @@
 #include <Sources/GameWindow.h>
 
-
-
 CGameWindow::CGameWindow(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height)
 	:m_hWnd(NULL), m_hInstance(NULL), m_pstrFrameTitle(frameTitle), m_pstrWndClassName(wndClassName),
 	m_inCmdShow(nCmdShow), m_sizeWindow(WINDOWSIZE{width, height})

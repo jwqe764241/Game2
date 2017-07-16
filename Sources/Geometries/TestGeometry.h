@@ -1,7 +1,3 @@
-/*
-	jwqe764241 ¿€º∫
-*/
-
 #ifndef __TESTGEOMETRY_H
 #define __TESTGEOMETRY_H
 

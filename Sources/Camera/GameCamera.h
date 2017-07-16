@@ -1,7 +1,3 @@
-/*
-	jwqe764241 ¿€º∫
-*/
-
 #ifndef __GAMECAMERA_H
 #define __GAMECAMERA_H
 
