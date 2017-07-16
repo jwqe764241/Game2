@@ -1,7 +1,3 @@
-/*
-	jwqe764241 ¿€º∫
-*/
-
 #ifndef __GAMEDEFS_H
 #define __GAMEDEFS_H
 

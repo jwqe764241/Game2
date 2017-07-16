@@ -2,8 +2,6 @@
 
 #define ENABLE_PRINT_ADAPTER_NAME
 
-HRESULT hr;
-
 //윈도우 프로시저
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -127,7 +125,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 
 		ADAPTERINFO adapterInfo;
 		adapterInfo.Description = l_pAdapterDesc.Description;
-		adapterInfo.ID = l_pAdapterDesc.AdapterLuid;
+		adapterInfo.ID          = l_pAdapterDesc.AdapterLuid;
 
 		m_AdapterInfoList.push_back(adapterInfo);
 	}
@@ -142,33 +140,34 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	//스왑체인 설정
 	DXGI_SWAP_CHAIN_DESC swapChainDesc; 
 	ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
-	swapChainDesc.BufferDesc.Width	= m_sizeWindow.width;
-	swapChainDesc.BufferDesc.Height = m_sizeWindow.height;
+	swapChainDesc.BufferDesc.Width	                 = m_sizeWindow.width;
+	swapChainDesc.BufferDesc.Height                  = m_sizeWindow.height;
 	swapChainDesc.BufferDesc.RefreshRate.Numerator   = l_iNumerator;
 	swapChainDesc.BufferDesc.RefreshRate.Denominator = l_iDenominator;
-	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	swapChainDesc.BufferDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferDesc.ScanlineOrdering        = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	swapChainDesc.BufferDesc.Scaling                 = DXGI_MODE_SCALING_UNSPECIFIED;
 	if (m_MultiSampleQualityLevel) {
-		swapChainDesc.SampleDesc.Count = 4;
+		swapChainDesc.SampleDesc.Count   = 4;
 		swapChainDesc.SampleDesc.Quality = m_MultiSampleQualityLevel - 1;
 	}
 	else {
-		swapChainDesc.SampleDesc.Count = 1;
+		swapChainDesc.SampleDesc.Count   = 1;
 		swapChainDesc.SampleDesc.Quality = 0;
 	}
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.BufferCount = 1;
+	swapChainDesc.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.BufferCount  = 1;
 	swapChainDesc.OutputWindow = m_hWnd;
-	swapChainDesc.Windowed = true;
-	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	swapChainDesc.Flags = 0;
+	swapChainDesc.Windowed     = true;
+	swapChainDesc.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
+	swapChainDesc.Flags        = 0;
 
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
 	UINT createFlags = 0;
 #if defined(_DEBUG)
 	createFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
+
 	D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, 0, createFlags, &featureLevel, 1, D3D11_SDK_VERSION, 
 		&swapChainDesc, &m_AppInfo.pSwapChain, &m_AppInfo.pD3D11Device, NULL, &m_AppInfo.pD3D11DeviceContext);
 	m_AppInfo.pSwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&m_AppInfo.pBackBuffer));
@@ -303,7 +302,7 @@ void CGameApp::CalculateFrameStatus()
 	if (m_GameTimer.TotalTime() - timeElapsed >= 1.0f) {
 		float fps = (float)frameCnt;
 		float mspf = 1000.0f / fps;
-
+	
 		std::wostringstream outs;
 		outs.precision(6);
 		outs << m_pstrFrameTitle << L"  Adapter: "<< m_AdapterInfoList[1].Description << L"    "
@@ -314,6 +313,11 @@ void CGameApp::CalculateFrameStatus()
 		frameCnt = 0;
 		timeElapsed += 1.0f;
 	}
+}
+
+void CGameApp::LoadAssets() 
+{
+
 }
 
 void CGameApp::Launch() 
@@ -333,12 +337,6 @@ void CGameApp::Launch()
 		adapter->GetDesc(&adapterDesc);
 		wprintf(L"%s \n", adapterDesc.Description);
 	}
-#endif
-
-#ifdef TEST_RENDER_BOX
-	BuildBox();
-	BuildShader();
-	BuildVertexLayout();
 #endif
 
 	//메시지 루프
@@ -394,7 +392,7 @@ void CGameApp::onResize()
 	ReleaseCOM(&m_AppInfo.pBackBuffer);
 
 	RECT rect; GetWindowRect(m_hWnd, &rect);
-	m_sizeWindow.width = rect.right - rect.left;
+	m_sizeWindow.width  = rect.right - rect.left;
 	m_sizeWindow.height = rect.bottom - rect.top;
 
 	//버퍼 리사이즈 후 렌더타겟뷰 재생성
@@ -406,46 +404,46 @@ void CGameApp::onResize()
 
 	//스텐실 버퍼 생성
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
-	depthBufferDesc.Width = m_sizeWindow.width;
-	depthBufferDesc.Height = m_sizeWindow.height;
+	depthBufferDesc.Width     = m_sizeWindow.width;
+	depthBufferDesc.Height    = m_sizeWindow.height;
 	depthBufferDesc.MipLevels = 1;
 	depthBufferDesc.ArraySize = 1;
-	depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthBufferDesc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	if (m_MultiSampleQualityLevel) {
-		depthBufferDesc.SampleDesc.Count = 4;
+		depthBufferDesc.SampleDesc.Count   = 4;
 		depthBufferDesc.SampleDesc.Quality = m_MultiSampleQualityLevel - 1;
 	}
 	else {
-		depthBufferDesc.SampleDesc.Count = 1;
+		depthBufferDesc.SampleDesc.Count   = 1;
 		depthBufferDesc.SampleDesc.Quality = 0;
 	}
-	depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthBufferDesc.Usage          = D3D11_USAGE_DEFAULT;
+	depthBufferDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
 	depthBufferDesc.CPUAccessFlags = NULL;
-	depthBufferDesc.MiscFlags = NULL;
+	depthBufferDesc.MiscFlags      = NULL;
 	//버퍼 생성
 	m_AppInfo.pD3D11Device->CreateTexture2D(&depthBufferDesc, NULL, &m_AppInfo.pBackBuffer);
 	
 	//스텐실 생성
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	ZeroMemory(&depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
-	depthStencilDesc.DepthEnable = false;
+	depthStencilDesc.DepthEnable    = false;
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	depthStencilDesc.DepthFunc      = D3D11_COMPARISON_LESS;
 ///
-	depthStencilDesc.StencilEnable = true;
+	depthStencilDesc.StencilEnable    = true;
 	depthStencilDesc.StencilWriteMask = 0xFF;
 	depthStencilDesc.StencilReadMask  = 0xFF;
 ///
-	depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.FrontFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
 	depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-	depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-	depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	depthStencilDesc.FrontFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.FrontFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
 ///
-	depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.BackFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
 	depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-	depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-	depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	depthStencilDesc.BackFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.BackFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
 ///
 	m_AppInfo.pD3D11Device->CreateDepthStencilState(&depthStencilDesc, &m_AppInfo.pDepthStencilState);
 	m_AppInfo.pD3D11DeviceContext->OMSetDepthStencilState(m_AppInfo.pDepthStencilState, 1);
@@ -453,8 +451,8 @@ void CGameApp::onResize()
 	//깊이 스텐실 뷰 생성
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	ZeroMemory(&depthStencilViewDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
-	depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthStencilViewDesc.Format             = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilViewDesc.ViewDimension      = D3D11_DSV_DIMENSION_TEXTURE2D;
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 	m_AppInfo.pD3D11Device->CreateDepthStencilView(m_AppInfo.pBackBuffer, &depthStencilViewDesc, &m_AppInfo.pDepthStencilView);
 	
@@ -465,8 +463,8 @@ void CGameApp::onResize()
 	D3D11_VIEWPORT viewportSettings;
 	viewportSettings.TopLeftX = 0.0f;
 	viewportSettings.TopLeftY = 0.0f;
-	viewportSettings.Width  = static_cast<float>(m_sizeWindow.width);
-	viewportSettings.Height = static_cast<float>(m_sizeWindow.height);
+	viewportSettings.Width    = static_cast<float>(m_sizeWindow.width);
+	viewportSettings.Height   = static_cast<float>(m_sizeWindow.height);
 	viewportSettings.MinDepth = 0.0f;
 	viewportSettings.MaxDepth = 1.0f;
 

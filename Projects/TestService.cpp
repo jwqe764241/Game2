@@ -1,12 +1,9 @@
 #include "TestService.h"
 
-
-
 TestService::TestService()
 {
 	bIsRunning = false;
 }
-
 
 TestService::~TestService()
 {

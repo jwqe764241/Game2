@@ -47,7 +47,6 @@
     <ClInclude Include="..\Sources\Utils\console.h" />
     <ClInclude Include="..\Sources\Utils\error.h" />
     <ClInclude Include="..\Sources\Utils\Release.h" />
-    <ClInclude Include="TestService.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -27,8 +27,6 @@
 
 #include <Projects\TestService.h>
 
-
-
 //#define TEST_RENDER_BOX
 
 typedef struct __ADAPTERINFO {
@@ -79,6 +77,7 @@ private:
 	//Info Val--
 private:
 	void CalculateFrameStatus();
+	void LoadAssets();
 
 public:
 	void Launch();

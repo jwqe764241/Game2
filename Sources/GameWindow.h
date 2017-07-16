@@ -1,12 +1,7 @@
-/*
-	jwqe764241 ¿€º∫
-*/
-
 #ifndef __GAMEWINDOW_H
 #define __GAMEWINDOW_H
 
 #include <Windows.h>
-
 
 typedef struct _WINDOWSIZE 
 {

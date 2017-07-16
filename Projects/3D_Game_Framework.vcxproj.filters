@@ -91,6 +91,5 @@
     <ClInclude Include="..\Sources\GameDefs.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TestService.h" />
   </ItemGroup>
 </Project>
