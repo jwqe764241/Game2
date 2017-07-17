@@ -25,8 +25,6 @@
 #include <Sources/Utils/error.h>
 #include <Sources/Utils/Release.h>
 
-#include <Projects\TestService.h>
-
 //#define TEST_RENDER_BOX
 
 typedef struct __ADAPTERINFO {

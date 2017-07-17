@@ -28,7 +28,6 @@
     <ClCompile Include="..\Sources\main.cpp" />
     <ClCompile Include="..\Sources\Utils\console.cpp" />
     <ClCompile Include="..\Sources\Utils\error.cpp" />
-    <ClCompile Include="TestService.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />

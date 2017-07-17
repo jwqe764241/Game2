@@ -7,8 +7,8 @@
 
 
 
-console::STDBUFF console::openConsole(void) {
-	STDBUFF fdBuff = new FILE*[3];
+console::ConsoleBuffer console::openConsole(void) {
+	ConsoleBuffer fdBuff = new FILE*[3];
 
 	if (AllocConsole()) {
 		freopen_s(&fdBuff[0], "CONIN$", "rb", stdin);
@@ -21,7 +21,7 @@ console::STDBUFF console::openConsole(void) {
 
 
 int	console::closeConsole(
-	_In_ STDBUFF fdBuff
+	_In_ ConsoleBuffer fdBuff
 ) {
 	fclose(fdBuff[0]);
 	fclose(fdBuff[1]);

@@ -13,15 +13,15 @@
 namespace console {
 
 	//--typedef
-	typedef FILE**				STDBUFF;
+	typedef FILE**				ConsoleBuffer;
 	typedef const char* const	COLOR__;
 	//typedef--
 	
-	STDBUFF openConsole		(void);
+	ConsoleBuffer openConsole		(void);
 
 
 	int		closeConsole	(
-		_In_ STDBUFF fdBuff
+		_In_ ConsoleBuffer fdBuff
 	);
 
 

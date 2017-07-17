@@ -1,3 +1,8 @@
+/*
+	사용안함
+	GameApp 클래스로 병합됨
+*/
+
 #ifndef __GAMEWINDOW_H
 #define __GAMEWINDOW_H
 

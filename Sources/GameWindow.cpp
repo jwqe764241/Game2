@@ -1,3 +1,8 @@
+/*
+	사용안함
+	GameApp 클래스로 병합됨
+*/
+
 #include <Sources/GameWindow.h>
 
 CGameWindow::CGameWindow(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height)

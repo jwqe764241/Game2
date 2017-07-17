@@ -480,80 +480,81 @@ void CGameApp::onShowWindow()
 	ShowCursor(true);
 	UpdateWindow(m_hWnd);
 }
+/*
+void CGameApp::BuildShader()
+{
 
-//void CGameApp::BuildShader()
-//{
-//
-//}
-//
-//void CGameApp::BuildVertexLayout()
-//{
-//
-//}
-//
-//#ifdef TEST_RENDER_BOX
-//void CGameApp::BuildBox() 
-//{
-//	//정점 데이터 설정
-//	Vertex::Vertex1 vertices[] = {
-//		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::BLACK)	},
-//		{ XMFLOAT3(-1.0f, +1.0f, -1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::BLUE)	},
-//		{ XMFLOAT3(+1.0f, +1.0f, -1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::CYAN)	},
-//		{ XMFLOAT3(+1.0f, -1.0f, -1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::GREEN)	},
-//		{ XMFLOAT3(-1.0f, -1.0f, +1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::MAGENTA) },
-//		{ XMFLOAT3(-1.0f, +1.0f, +1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::RED)		},
-//		{ XMFLOAT3(+1.0f, +1.0f, +1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::WHITE)	},
-//		{ XMFLOAT3(+1.0f, -1.0f, +1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::YELLOW)	},
-//	};
-//
-//	//정점 버퍼 설정 서술
-//	D3D11_BUFFER_DESC vbd;
-//	vbd.Usage = D3D11_USAGE_IMMUTABLE;
-//	vbd.ByteWidth = sizeof(Vertex::Vertex1) * 8;
-//	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-//	vbd.CPUAccessFlags = 0;
-//	vbd.MiscFlags = 0;
-//	vbd.StructureByteStride = 0;
-//	//정점 버퍼 서브소스 서술
-//	D3D11_SUBRESOURCE_DATA vinitdata;
-//	vinitdata.pSysMem = vertices;
-//	//정점 버퍼 생성
-//	m_pD3D11Device->CreateBuffer(&vbd, &vinitdata, &m_pBoxVertexBuffer);
-//
-//	
-//	//색인 데이터 설정
-//	UINT indices[] = {
-//		0, 1, 2,
-//		0, 2, 3,
-//
-//		4, 6, 5,
-//		4, 7, 6,
-//
-//		4, 5, 1,
-//		4, 1, 0,
-//
-//		3, 2, 6,
-//		3, 6, 7,
-//
-//		1, 5, 6,
-//		1, 6, 2,
-//
-//		4, 0, 3,
-//		4, 3, 7
-//	};
-//
-//	//색인 버퍼 설정 서술
-//	D3D11_BUFFER_DESC ibd;
-//	ibd.Usage = D3D11_USAGE_IMMUTABLE;
-//	ibd.ByteWidth = sizeof(UINT) * 36;
-//	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-//	ibd.CPUAccessFlags = 0;
-//	ibd.MiscFlags = 0;
-//	ibd.StructureByteStride = 0;
-//	//색인 버퍼 서브소스 서술
-//	D3D11_SUBRESOURCE_DATA iinitdata;
-//	iinitdata.pSysMem = indices;
-//	//색인 버퍼 생성
-//	m_pD3D11Device->CreateBuffer(&ibd, &iinitdata, &m_pBoxIndexBuffer);
-//}
-//#endif
+}
+
+void CGameApp::BuildVertexLayout()
+{
+
+}
+
+#ifdef TEST_RENDER_BOX
+void CGameApp::BuildBox() 
+{
+	//정점 데이터 설정
+	Vertex::Vertex1 vertices[] = {
+		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::BLACK)	},
+		{ XMFLOAT3(-1.0f, +1.0f, -1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::BLUE)	},
+		{ XMFLOAT3(+1.0f, +1.0f, -1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::CYAN)	},
+		{ XMFLOAT3(+1.0f, -1.0f, -1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::GREEN)	},
+		{ XMFLOAT3(-1.0f, -1.0f, +1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::MAGENTA) },
+		{ XMFLOAT3(-1.0f, +1.0f, +1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::RED)		},
+		{ XMFLOAT3(+1.0f, +1.0f, +1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::WHITE)	},
+		{ XMFLOAT3(+1.0f, -1.0f, +1.0f), reinterpret_cast<const float*>(&CUSTOM_COLOR::YELLOW)	},
+	};
+
+	//정점 버퍼 설정 서술
+	D3D11_BUFFER_DESC vbd;
+	vbd.Usage = D3D11_USAGE_IMMUTABLE;
+	vbd.ByteWidth = sizeof(Vertex::Vertex1) * 8;
+	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vbd.CPUAccessFlags = 0;
+	vbd.MiscFlags = 0;
+	vbd.StructureByteStride = 0;
+	//정점 버퍼 서브소스 서술
+	D3D11_SUBRESOURCE_DATA vinitdata;
+	vinitdata.pSysMem = vertices;
+	//정점 버퍼 생성
+	m_pD3D11Device->CreateBuffer(&vbd, &vinitdata, &m_pBoxVertexBuffer);
+
+	
+	//색인 데이터 설정
+	UINT indices[] = {
+		0, 1, 2,
+		0, 2, 3,
+
+		4, 6, 5,
+		4, 7, 6,
+
+		4, 5, 1,
+		4, 1, 0,
+
+		3, 2, 6,
+		3, 6, 7,
+
+		1, 5, 6,
+		1, 6, 2,
+
+		4, 0, 3,
+		4, 3, 7
+	};
+
+	//색인 버퍼 설정 서술
+	D3D11_BUFFER_DESC ibd;
+	ibd.Usage = D3D11_USAGE_IMMUTABLE;
+	ibd.ByteWidth = sizeof(UINT) * 36;
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	ibd.CPUAccessFlags = 0;
+	ibd.MiscFlags = 0;
+	ibd.StructureByteStride = 0;
+	//색인 버퍼 서브소스 서술
+	D3D11_SUBRESOURCE_DATA iinitdata;
+	iinitdata.pSysMem = indices;
+	//색인 버퍼 생성
+	m_pD3D11Device->CreateBuffer(&ibd, &iinitdata, &m_pBoxIndexBuffer);
+}
+#endif
+*/
