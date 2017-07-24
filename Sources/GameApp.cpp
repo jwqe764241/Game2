@@ -21,6 +21,7 @@ LRESULT CALLBACK CGameApp::MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
 		}
 		break;
 	case WM_SIZE:
+		std::cout << "width : " << LOWORD(lParam) << " height : " << HIWORD(lParam) << std::endl;
 		onResize();
 		break;
 	case WM_DESTROY:
@@ -34,7 +35,6 @@ LRESULT CALLBACK CGameApp::MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
 
 CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height)
 	: m_AppInfo({nullptr}), m_vAdapters(),
-	m_DriverType(D3D_DRIVER_TYPE_HARDWARE),m_SDKVersion(D3D11_SDK_VERSION), m_MultiSampleQualityLevel(NULL), m_FeatureLevel(),
 	m_hInstance(hInstance), m_pstrFrameTitle(frameTitle), m_pstrWndClassName(wndClassName), m_iCmdShow(nCmdShow)
 {
 	m_vAdapters.reserve(10);
@@ -53,7 +53,6 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		wndClass.lpszClassName	= m_pstrWndClassName;
 		wndClass.hbrBackground	= (HBRUSH)GetStockObject(BLACK_BRUSH);
 	RegisterClassEx(&wndClass);
-
 	//윈도우 임시 셋팅 공간에 포인터 저장 --> 멤버 프로시저로 넘기기 위함
 
 	//0일 경우 기본 크기로 지정
@@ -70,7 +69,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		WS_EX_APPWINDOW ,
 		m_pstrWndClassName,
 		m_pstrFrameTitle,
-		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_MAXIMIZEBOX | WS_MINIMIZEBOX,
+		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		m_sizeWindow.width,
@@ -82,30 +81,55 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 
 	SetWindowLongPtr(m_hWnd, 0, reinterpret_cast<LONG_PTR>(this));
 
+
 	//-- HRESULT 체킹 안함 --//
 	//팩토리 생성
 	IDXGIFactory* l_pFactory = nullptr;
 	CreateDXGIFactory(__uuidof(IDXGIFactory), reinterpret_cast<void **>(&l_pFactory));
 	
 	//어댑터 나열
-	IDXGIAdapter*  l_pAdapter = nullptr;
-	std::vector<IDXGIAdapter *> l_pAdapterList;
+	IDXGIAdapter* l_pAdapter = nullptr;
+	IDXGIOutput * l_pOutput = nullptr;
 
 	//어댑터 벡터에 푸쉬
 	for (int i = 0; l_pFactory->EnumAdapters(i, &l_pAdapter) != DXGI_ERROR_NOT_FOUND; ++i) {
-		l_pAdapterList.push_back(l_pAdapter);
+		m_vAdapters.push_back(l_pAdapter);
 	}
+	
+	std::cout << "-----------------------인식된 어댑터 정보-----------------------" << std::endl;
+	for (int i = 0; i < m_vAdapters.size(); i++) {
+		DXGI_ADAPTER_DESC desc;
+		m_vAdapters[i]->GetDesc(&desc);
 
-	IDXGIOutput* l_pAdapterOutput = nullptr;
-	l_pAdapterList.at(0)->EnumOutputs(NULL, &l_pAdapterOutput);
+		std::wcout << "\nGPU : " << desc.Description << std::endl;
+		std::cout << "DedicatedVideoMemory  : " << desc.DedicatedVideoMemory << std::endl;
+		std::cout << "DedicatedSystemMemory : " << desc.DedicatedSystemMemory << std::endl;
+		std::cout << "SharedSystemMemory	: " << desc.SharedSystemMemory << "\n" << std::endl;
+	
+		int iOutput = 0;
+		while (m_vAdapters[i]->EnumOutputs(iOutput++, &l_pOutput) != DXGI_ERROR_NOT_FOUND) {
+			m_vAdaptersOutputs.push_back(l_pOutput);
+		}
+
+	}
+	std::cout << "----------------------------------------------------------------" << std::endl;
+
 
 	//리스트 갯수 얻기 위함
 	unsigned int l_uiModes = 0;
-	l_pAdapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &l_uiModes, NULL);
-
+	m_vAdaptersOutputs[0]->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &l_uiModes, NULL);
 	//갯수대로 생성 후, 속성 얻기
 	DXGI_MODE_DESC * l_pModeList = new DXGI_MODE_DESC[l_uiModes];
-	l_pAdapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &l_uiModes, l_pModeList);
+	m_vAdaptersOutputs[0]->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &l_uiModes, l_pModeList);
+
+	std::cout << "-----------------------인식된 모니터 정보-----------------------" << std::endl;
+	for (int i = 0; i < l_uiModes; i++) {
+		std::cout << "\n" << i << "번 모니터 해상도 (width X height)" << l_pModeList[i].Width << "X" << l_pModeList[i].Height << std::endl;
+		std::cout << "포맷 : " << l_pModeList[i].Format << std::endl;
+		std::cout << "보고율 : " << l_pModeList[i].RefreshRate.Denominator << "/" << l_pModeList[i].RefreshRate.Numerator << std::endl;
+	}
+	std::cout << "----------------------------------------------------------------" << std::endl;
+
 
 	//새로고침 비율 분자 분모 얻기
 	//60hrz -> msi 노트북
@@ -118,24 +142,23 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		}
 	}
 
+	
 	//어댑터 데이터 벡터에 추가
-	for (int i = 0; i < l_pAdapterList.size(); ++i){
+	for (int i = 0; i < m_vAdapters.size(); ++i){
 		DXGI_ADAPTER_DESC l_pAdapterDesc;
-		l_pAdapterList[i]->GetDesc(&l_pAdapterDesc);
+		m_vAdapters[i]->GetDesc(&l_pAdapterDesc);
 
 		ADAPTERINFO adapterInfo;
 		adapterInfo.Description = l_pAdapterDesc.Description;
 		adapterInfo.ID          = l_pAdapterDesc.AdapterLuid;
 
-		m_AdapterInfoList.push_back(adapterInfo);
+		m_vAdapterInfoList.push_back(adapterInfo);
 	}
+	
 
 	//해제
 	delete[] l_pModeList;
-	ReleaseCOM(&l_pAdapterOutput);
-	for (IDXGIAdapter* adapter : l_pAdapterList)
-		ReleaseCOM(&adapter);
-	ReleaseCOM(&l_pFactory);
+	Utils::Release(&l_pFactory);
 
 	//스왑체인 설정
 	DXGI_SWAP_CHAIN_DESC swapChainDesc; 
@@ -186,7 +209,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		m_vAdapters.push_back(pAdapter);
 		++i;
 	}
-	ReleaseCOM(&pFactory);
+	Utils::Release(&pFactory);
 
 	//디버그 전용 플래그
 	UINT createFlags = 0;
@@ -264,9 +287,9 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	//dxgiFactory->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void**>(&m_pSwapChain));
 	dxgiFactory->CreateSwapChain(m_pD3D11Device, &swapChainDesc, &m_pSwapChain);
 	//dxgiFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_WINDOW_CHANGES);
-		ReleaseCOM(&dxgiDevice);
-		ReleaseCOM(&dxgiAdapter);
-		ReleaseCOM(&dxgiFactory);;
+		Utils::Release(&dxgiDevice);
+		Utils::Release(&dxgiAdapter);
+		Utils::Release(&dxgiFactory);;
 
 	m_pD3D11DeviceContext->IASetPrimitiveTopology(
 		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
@@ -284,12 +307,20 @@ CGameApp::~CGameApp()
 {
 	UnregisterClass(m_pstrWndClassName, m_hInstance);
 	CloseWindow(m_hWnd);
-	ReleaseCOM(&m_AppInfo.pD3D11Device);
-	ReleaseCOM(&m_AppInfo.pD3D11DeviceContext);
-	ReleaseCOM(&m_AppInfo.pSwapChain);
-	ReleaseCOM(&m_AppInfo.pRenderTargetView);
-	ReleaseCOM(&m_AppInfo.pBackBuffer);
-	ReleaseCOM(&m_AppInfo.pDepthStencilView);
+	Utils::Release(&m_AppInfo.pD3D11Device);
+	Utils::Release(&m_AppInfo.pD3D11DeviceContext);
+	Utils::Release(&m_AppInfo.pSwapChain);
+	Utils::Release(&m_AppInfo.pRenderTargetView);
+	Utils::Release(&m_AppInfo.pBackBuffer);
+	Utils::Release(&m_AppInfo.pDepthStencilView);
+
+	for (IDXGIAdapter* adapter : m_vAdapters) {
+		Utils::Release(&adapter);
+	}
+
+	for (IDXGIOutput* output : m_vAdaptersOutputs) {
+		Utils::Release(&output);
+	}
 }
 
 void CGameApp::CalculateFrameStatus()
@@ -305,7 +336,7 @@ void CGameApp::CalculateFrameStatus()
 	
 		std::wostringstream outs;
 		outs.precision(6);
-		outs << m_pstrFrameTitle << L"  Adapter: "<< m_AdapterInfoList[1].Description << L"    "
+		outs << m_pstrFrameTitle << L"  Adapter: "<< m_vAdapterInfoList[1].Description << L"    "
 			<< L"FPS: " << fps << L"    "
 			<< L"Frame Time: " << mspf << L" (ms)";
 		SetWindowText(m_hWnd, outs.str().c_str());
@@ -387,9 +418,9 @@ void CGameApp::onResize()
 	GAME_ASSERT(m_AppInfo.pSwapChain, "SwapChain is nullptr");
 
 	//이전에 사용하던것 해제
-	ReleaseCOM(&m_AppInfo.pRenderTargetView);
-	ReleaseCOM(&m_AppInfo.pDepthStencilView);
-	ReleaseCOM(&m_AppInfo.pBackBuffer);
+	Utils::Release(&m_AppInfo.pRenderTargetView);
+	Utils::Release(&m_AppInfo.pDepthStencilView);
+	Utils::Release(&m_AppInfo.pBackBuffer);
 
 	RECT rect; GetWindowRect(m_hWnd, &rect);
 	m_sizeWindow.width  = rect.right - rect.left;
@@ -400,7 +431,7 @@ void CGameApp::onResize()
 	ID3D11Texture2D* dxgiTextureBuffer = nullptr;
 	m_AppInfo.pSwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&dxgiTextureBuffer));
 	m_AppInfo.pD3D11Device->CreateRenderTargetView(dxgiTextureBuffer, 0, &m_AppInfo.pRenderTargetView);
-	ReleaseCOM(&dxgiTextureBuffer);
+	Utils::Release(&dxgiTextureBuffer);
 
 	//스텐실 버퍼 생성
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
@@ -427,7 +458,7 @@ void CGameApp::onResize()
 	//스텐실 생성
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	ZeroMemory(&depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
-	depthStencilDesc.DepthEnable    = false;
+	depthStencilDesc.DepthEnable    = true;
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc      = D3D11_COMPARISON_LESS;
 ///
@@ -441,7 +472,7 @@ void CGameApp::onResize()
 	depthStencilDesc.FrontFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
 ///
 	depthStencilDesc.BackFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
-	depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
 	depthStencilDesc.BackFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
 	depthStencilDesc.BackFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
 ///
@@ -455,9 +486,23 @@ void CGameApp::onResize()
 	depthStencilViewDesc.ViewDimension      = D3D11_DSV_DIMENSION_TEXTURE2D;
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 	m_AppInfo.pD3D11Device->CreateDepthStencilView(m_AppInfo.pBackBuffer, &depthStencilViewDesc, &m_AppInfo.pDepthStencilView);
-	
 	//버퍼와 버퍼뷰 설정
 	m_AppInfo.pD3D11DeviceContext->OMSetRenderTargets(1, &m_AppInfo.pRenderTargetView, m_AppInfo.pDepthStencilView);
+
+	D3D11_RASTERIZER_DESC rasterDesc;
+	rasterDesc.AntialiasedLineEnable = false;
+	rasterDesc.CullMode = D3D11_CULL_BACK;
+	rasterDesc.DepthBias = 0;
+	rasterDesc.DepthBiasClamp = 0.0f;
+	rasterDesc.DepthClipEnable = true;
+	rasterDesc.FillMode = D3D11_FILL_SOLID;
+	rasterDesc.FrontCounterClockwise = false;
+	rasterDesc.MultisampleEnable = false;
+	rasterDesc.ScissorEnable = false;
+	rasterDesc.SlopeScaledDepthBias = 0.0f;
+
+	m_AppInfo.pD3D11Device->CreateRasterizerState(&rasterDesc, &m_AppInfo.pRasterizeState);
+	m_AppInfo.pD3D11DeviceContext->RSSetState(m_AppInfo.pRasterizeState);
 
 	//뷰포트 셋팅
 	D3D11_VIEWPORT viewportSettings;
@@ -467,9 +512,30 @@ void CGameApp::onResize()
 	viewportSettings.Height   = static_cast<float>(m_sizeWindow.height);
 	viewportSettings.MinDepth = 0.0f;
 	viewportSettings.MaxDepth = 1.0f;
-
 	//뷰표트 설정
 	m_AppInfo.pD3D11DeviceContext->RSSetViewports(1, &viewportSettings);
+
+	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
+	ZeroMemory(&depthDisabledStencilDesc, sizeof(depthDisabledStencilDesc));
+	depthDisabledStencilDesc.DepthEnable    = true;
+	depthDisabledStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthDisabledStencilDesc.DepthFunc      = D3D11_COMPARISON_LESS;
+	///
+	depthDisabledStencilDesc.StencilEnable    = true;
+	depthDisabledStencilDesc.StencilWriteMask = 0xFF;
+	depthDisabledStencilDesc.StencilReadMask  = 0xFF;
+	///
+	depthDisabledStencilDesc.FrontFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
+	depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	depthDisabledStencilDesc.FrontFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
+	depthDisabledStencilDesc.FrontFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
+	///
+	depthDisabledStencilDesc.BackFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
+	depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	depthDisabledStencilDesc.BackFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
+	depthDisabledStencilDesc.BackFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
+
+	m_AppInfo.pD3D11Device->CreateDepthStencilState(&depthDisabledStencilDesc, &m_AppInfo.pDepthDisableStencilState);
 }
 
 void CGameApp::onShowWindow()

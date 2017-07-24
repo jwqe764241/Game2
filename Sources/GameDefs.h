@@ -41,9 +41,16 @@ namespace Vertex {
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT   , 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT   , 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
+}
 
-
-
+namespace Utils {
+	template <typename T>
+	void Release(T ** pTy) {
+		if ((*pTy)) {
+			(*pTy)->Release();
+			(*pTy) = nullptr;
+		}
+	}
 }
 
 #endif

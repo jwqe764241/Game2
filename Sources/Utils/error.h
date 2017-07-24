@@ -1,14 +1,10 @@
-/*
-	jwqe764241 작성
-*/
-
-//TODO: C, C++ 둘다 사용 가능? __cplusplus
-
 #ifndef __ERROR_H
 #define __ERROR_H
 
-
-#include <Sources/GameApp.h>
+#include <Windows.h>
+#include <cstdio>
+#include <iostream>
+#include <string>
 
 //디버그 모드일때
 #ifndef NDEBUG
@@ -31,6 +27,14 @@ void __cdecl ErrorHandler2(
 	_In_	const unsigned		lineNumber,
 	_In_	char const * const	condition,
 	_In_	char const * const	message
+);
+
+void __cdecl ErrorHandler2(
+	_In_	char const * const	fileName,
+	_In_	char const * const	funcName,
+	_In_	const unsigned		lineNumber,
+	_In_	char const * const	condition,
+	_In_	std::string			message
 );
 
 

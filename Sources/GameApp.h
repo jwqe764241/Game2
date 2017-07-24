@@ -23,27 +23,30 @@
 #include <Sources/GameWindow.h>
 #include <Sources/GameTimer.h>
 #include <Sources/Utils/error.h>
-#include <Sources/Utils/Release.h>
 
 //#define TEST_RENDER_BOX
 
-typedef struct __ADAPTERINFO {
+struct __ADAPTERINFO {
 	LUID ID;
 	std::wstring Description;
 	//int Numerator;
 	//int Denominator;
-}ADAPTERINFO, *LPADAPTERINFO;
+};
 
-
-typedef struct __APPINFO {
+struct __APPINFO {
 	ID3D11Device*			 pD3D11Device;
 	ID3D11DeviceContext*	 pD3D11DeviceContext;
 	IDXGISwapChain*			 pSwapChain;
 	ID3D11RenderTargetView*  pRenderTargetView;
 	ID3D11Texture2D*		 pBackBuffer;
 	ID3D11DepthStencilState* pDepthStencilState;
+	ID3D11DepthStencilState* pDepthDisableStencilState;
 	ID3D11DepthStencilView*	 pDepthStencilView;
-}APPINFO, *LPAPPINFO;
+	ID3D11RasterizerState*	 pRasterizeState;
+};
+
+using ADAPTERINFO = __ADAPTERINFO;
+using APPINFO = __APPINFO;
 
 class CGameApp
 {
@@ -52,13 +55,17 @@ private:
 	APPINFO					m_AppInfo;
 	CGameTimer				m_GameTimer;
 	std::vector <IDXGIAdapter*> m_vAdapters;
+	std::vector <IDXGIOutput *> m_vAdaptersOutputs;
 	//Compoenents--
 
 	//--Settings
-	D3D_DRIVER_TYPE		m_DriverType;
-	D3D_FEATURE_LEVEL	m_FeatureLevel;
-	UINT				m_SDKVersion;
-	UINT				m_MultiSampleQualityLevel;
+	D3D_DRIVER_TYPE		m_DriverType   = D3D_DRIVER_TYPE_HARDWARE;
+	D3D_FEATURE_LEVEL	m_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
+	UINT				m_SDKVersion = D3D11_SDK_VERSION;
+	UINT				m_MultiSampleQualityLevel = 0;
+
+	bool				m_isVsync    = false;
+	bool				m_isWindowed = false;
 	//Settings--
 
 	//--Window Val
@@ -71,7 +78,7 @@ private:
 	//Window Val--
 
 	//--Info Val
-	std::vector<ADAPTERINFO> m_AdapterInfoList;
+	std::vector<ADAPTERINFO> m_vAdapterInfoList;
 	//Info Val--
 private:
 	void CalculateFrameStatus();

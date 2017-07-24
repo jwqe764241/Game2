@@ -47,8 +47,14 @@
     <ClCompile Include="..\Sources\Camera\GameCamera.cpp">
       <Filter>소스 파일\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Geometries\TestGeometry.cpp">
+    <ClCompile Include="..\Sources\Shaders\ColorShader.cpp">
+      <Filter>소스 파일\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Geometries\GameBitmap.cpp">
       <Filter>소스 파일\Geometries</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Shaders\GameTexture.cpp">
+      <Filter>소스 파일\shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,9 +68,6 @@
       <Filter>소스 파일\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\error.h">
-      <Filter>소스 파일\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Release.h">
       <Filter>소스 파일\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\GameWindow.h">
@@ -82,11 +85,25 @@
     <ClInclude Include="..\Sources\Camera\GameCamera.h">
       <Filter>소스 파일\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Geometries\TestGeometry.h">
-      <Filter>소스 파일\Geometries</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\GameDefs.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Shaders\ColorShader.h">
+      <Filter>소스 파일\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Geometries\GameBitmap.h">
+      <Filter>소스 파일\Geometries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Shaders\GameTexture.h">
+      <Filter>소스 파일\shaders</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Sources\Shaders\texture_ps.ps">
+      <Filter>소스 파일\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Sources\Shaders\texture_vs.vs">
+      <Filter>소스 파일\shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
