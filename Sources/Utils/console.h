@@ -1,7 +1,3 @@
-/*
-	jwqe764241 ¿€º∫
-*/
-
 #ifndef __CONSOLE_H
 #define __CONSOLE_H
 
@@ -12,10 +8,8 @@
 
 namespace console {
 
-	//--typedef
-	typedef FILE**				ConsoleBuffer;
-	typedef const char* const	COLOR__;
-	//typedef--
+	using ConsoleBuffer = FILE**;
+	using COLOR__ = const char* const;
 	
 	ConsoleBuffer openConsole		(void);
 

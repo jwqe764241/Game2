@@ -14,10 +14,20 @@
 
 class GameBitmap {
 private:
-	struct VertexType {
+	struct _VertexType {
 		D3DXVECTOR3 position;
 		D3DXVECTOR2 texture;
 	};
+
+	struct _RECT_F {
+		float left;
+		float right;
+		float top;
+		float bottom;
+	};
+
+	using VertexType = _VertexType;
+	using Rect_F     = _RECT_F;
 
 public:
 	GameBitmap();

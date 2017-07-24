@@ -29,9 +29,6 @@
     <ClCompile Include="..\Sources\GameWindow.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Utils\console.cpp">
-      <Filter>소스 파일\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Utils\error.cpp">
       <Filter>소스 파일\Utils</Filter>
     </ClCompile>
@@ -55,6 +52,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Shaders\GameTexture.cpp">
       <Filter>소스 파일\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\console.cpp">
+      <Filter>소스 파일\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

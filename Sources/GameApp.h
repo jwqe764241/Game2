@@ -26,30 +26,38 @@
 
 //#define TEST_RENDER_BOX
 
-struct __ADAPTERINFO {
-	LUID ID;
-	std::wstring Description;
-	//int Numerator;
-	//int Denominator;
-};
-
-struct __APPINFO {
-	ID3D11Device*			 pD3D11Device;
-	ID3D11DeviceContext*	 pD3D11DeviceContext;
-	IDXGISwapChain*			 pSwapChain;
-	ID3D11RenderTargetView*  pRenderTargetView;
-	ID3D11Texture2D*		 pBackBuffer;
-	ID3D11DepthStencilState* pDepthStencilState;
-	ID3D11DepthStencilState* pDepthDisableStencilState;
-	ID3D11DepthStencilView*	 pDepthStencilView;
-	ID3D11RasterizerState*	 pRasterizeState;
-};
-
-using ADAPTERINFO = __ADAPTERINFO;
-using APPINFO = __APPINFO;
-
 class CGameApp
 {
+private:
+	struct _ADAPTERINFO {
+		LUID ID;
+		std::wstring Description;
+		//int Numerator;
+		//int Denominator;
+	};
+
+	struct _APPINFO {
+		ID3D11Device			*pD3D11Device;
+		ID3D11DeviceContext		*pD3D11DeviceContext;
+		IDXGISwapChain			*pSwapChain;
+		ID3D11RenderTargetView	*pRenderTargetView;
+		ID3D11Texture2D			*pBackBuffer;
+		ID3D11DepthStencilState *pDepthStencilState;
+		ID3D11DepthStencilState *pDepthDisableStencilState;
+		ID3D11DepthStencilView	*pDepthStencilView;
+		ID3D11RasterizerState	*pRasterizeState;
+	};
+
+	struct _WINDOWSIZE
+	{
+		int width;
+		int height;
+	};
+
+	using ADAPTERINFO = _ADAPTERINFO;
+	using APPINFO     = _APPINFO;
+	using WINDOWSIZE  = _WINDOWSIZE;
+
 private:
 	//--Components
 	APPINFO					m_AppInfo;
@@ -99,12 +107,6 @@ public:
 	CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height);
 	~CGameApp();
 
-//#ifdef TEST_RENDER_BOX
-//private:
-//	ID3D11Buffer* m_pBoxVertexBuffer;
-//	ID3D11Buffer* m_pBoxIndexBuffer;
-//	void BuildBox();
-//#endif
 };
 
 #endif
