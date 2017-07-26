@@ -387,7 +387,7 @@ void CGameApp::Launch()
 		}
 
 		m_AppInfo.pD3D11DeviceContext->ClearRenderTargetView(m_AppInfo.pRenderTargetView,
-			GameColors::BLACK
+			GameColors::BLUE
 		);
 
 		m_AppInfo.pD3D11DeviceContext->ClearDepthStencilView(
@@ -415,7 +415,9 @@ void CGameApp::Render()
 {
 	TurnOffZBuffer();
 
-	if (!m_Bitmap->Render(m_AppInfo.pD3D11DeviceContext, 100, 100)) 
+	m_Camera->Render();
+
+	if (!m_Bitmap->Render(m_AppInfo.pD3D11DeviceContext, 0, 0)) 
 	{
 		MessageBox(m_hWnd, L"dsfsd", L"Bitmapsad", MB_OK);
 	}
@@ -574,7 +576,7 @@ void CGameApp::onResize()
 	}
 
 	m_Bitmap = new GameBitmap();
-	if (!m_Bitmap->Initialize(m_AppInfo.pD3D11Device, m_sizeWindow.width, m_sizeWindow.height, L"..\\Sources\\Geometries\\seafloor.dds", 256, 256))
+	if (!m_Bitmap->Initialize(m_AppInfo.pD3D11Device, m_sizeWindow.width, m_sizeWindow.height, L"..\\Resources\\test.bmp", 1280, 720))
 	{
 		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Bitmap", MB_OK);
 		return;

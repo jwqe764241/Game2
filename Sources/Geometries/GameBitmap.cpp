@@ -162,7 +162,7 @@ bool GameBitmap::UpdateBuffers(ID3D11DeviceContext *deviceContext, int posX, int
 
 	rect.left   = static_cast<float>((m_screenWidth / 2) * -1) + static_cast<float>(posX);
 	rect.right  = rect.left + static_cast<float>(m_bitmapWidth);
-	rect.top    = static_cast<float>((m_screenHeight / 2) * -1) + static_cast<float>(posY);
+	rect.top    = static_cast<float>(m_screenHeight / 2) - static_cast<float>(posY);
 	rect.bottom = rect.top - static_cast<float>(m_bitmapHeight);
 
 	vertices = new VertexType[m_vertexCount];
