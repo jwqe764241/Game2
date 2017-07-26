@@ -81,6 +81,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 
 	SetWindowLongPtr(m_hWnd, 0, reinterpret_cast<LONG_PTR>(this));
 
+	m_Input = new GameInput;
 
 	//-- HRESULT 체킹 안함 --//
 	//팩토리 생성
@@ -355,6 +356,8 @@ void CGameApp::Launch()
 {
 	onShowWindow();
 
+	m_Input->Initialize(m_hInstance, m_hWnd, m_sizeWindow.width, m_sizeWindow.height);
+
 	m_GameTimer.Reset();
 	m_GameTimer.Start();
 
@@ -389,6 +392,7 @@ void CGameApp::Launch()
 void CGameApp::Update()
 {
 	m_GameTimer.Tick();
+	m_Input->Frame();
 	CalculateFrameStatus();
 }
 
@@ -425,6 +429,9 @@ void CGameApp::onResize()
 	RECT rect; GetWindowRect(m_hWnd, &rect);
 	m_sizeWindow.width  = rect.right - rect.left;
 	m_sizeWindow.height = rect.bottom - rect.top;
+
+	m_Input->Shutdown();
+	m_Input->Initialize(m_hInstance, m_hWnd, m_sizeWindow.width, m_sizeWindow.height);
 
 	//버퍼 리사이즈 후 렌더타겟뷰 재생성
 	m_AppInfo.pSwapChain->ResizeBuffers(1, m_sizeWindow.width, m_sizeWindow.height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);

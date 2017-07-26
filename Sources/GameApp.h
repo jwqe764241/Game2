@@ -23,6 +23,7 @@
 #include <Sources/GameWindow.h>
 #include <Sources/GameTimer.h>
 #include <Sources/Utils/error.h>
+#include <Sources/Input/GameInput.h>
 
 //#define TEST_RENDER_BOX
 
@@ -56,6 +57,7 @@ private:
 	CGameTimer				m_GameTimer;
 	std::vector <IDXGIAdapter*> m_vAdapters;
 	std::vector <IDXGIOutput *> m_vAdaptersOutputs;
+	GameInput*				m_Input;
 	//Compoenents--
 
 	//--Settings
