@@ -1,14 +1,10 @@
-/*
-	jwqe764241 작성
-*/
-
-//TODO: C, C++ 둘다 사용 가능? __cplusplus
-
 #ifndef __ERROR_H
 #define __ERROR_H
 
-
-#include <Sources/GameApp.h>
+#include <Windows.h>
+#include <cstdio>
+#include <iostream>
+#include <string>
 
 //디버그 모드일때
 #ifndef NDEBUG
@@ -16,7 +12,7 @@
 #endif
 
 
-typedef LONG ERROR__;
+using ERROR__ = LONG;
 
 void __cdecl ErrorHandler(
 	_In_	HRESULT				hr,
@@ -33,6 +29,13 @@ void __cdecl ErrorHandler2(
 	_In_	char const * const	message
 );
 
+void __cdecl ErrorHandler2(
+	_In_	char const * const	fileName,
+	_In_	char const * const	funcName,
+	_In_	const unsigned		lineNumber,
+	_In_	char const * const	condition,
+	_In_	std::string			message
+);
 
 
 #define HR(expression)														\
@@ -47,10 +50,10 @@ void __cdecl ErrorHandler2(
 
 
 
-#define CUSTOM_ASSERT(condition, message)														\
-	if (!(condition)) {																			\
+#define CUSTOM_ASSERT(condition, message)										\
+	if (!(condition)) {															\
 		ErrorHandler2(__FILE__, __FUNCTION__, __LINE__, #condition, message);	\
-	}																							\
+	}																			\
 
 #define TEST____(message)					\
 	{										\

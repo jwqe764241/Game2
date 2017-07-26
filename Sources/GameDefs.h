@@ -4,46 +4,53 @@
 #include <Windows.h>
 #include <D3DX11.h>
 #include <D3D11.h>
-#include <xnamath.h>
 
-namespace CUSTOM_COLOR {
-	const XMVECTORF32 RED		= { 1.0f, 0.0f, 0.0f, 1.0f };
-	const XMVECTORF32 GREEN		= { 0.0f, 1.0f, 0.0f, 1.0f };
-	const XMVECTORF32 BLUE		= { 0.0f, 0.0f, 1.0f, 1.0f };
-	const XMVECTORF32 BLACK		= { 0.0f, 0.0f, 0.0f, 1.0f };
-	const XMVECTORF32 WHITE		= { 1.0f, 1.0f, 1.0f, 1.0f };
-	const XMVECTORF32 YELLOW	= { 1.0f, 1.0f, 0.0f, 1.0f };
-	const XMVECTORF32 CYAN		= { 0.0f, 1.0f, 1.0f, 1.0f };
-	const XMVECTORF32 MAGENTA	= { 1.0f, 0.0f, 1.0f, 1.0f };
+namespace GameColors {
+	static const FLOAT RED[4]     = {1.0f, 0.0f, 0.0f, 1.0f};
+	static const FLOAT GREEN[4]   = {0.0f, 1.0f, 0.0f, 1.0f};
+	static const FLOAT BLUE[4]    = {0.0f, 0.0f, 1.0f, 1.0f};
+	static const FLOAT BLACK[4]   = {0.0f, 0.0f, 0.0f, 1.0f};
+	static const FLOAT WHITE[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
+	static const FLOAT YELLOW[4]  = {1.0f, 1.0f, 0.0f, 1.0f};
+	static const FLOAT CYAN[4]    = {0.0f, 1.0f, 1.0f, 1.0f};
+	static const FLOAT MAGENTA[4] = {1.0f, 0.0f, 1.0f, 1.0f};
 }
 
-namespace Vertex {
-	struct Vertex1 {
-		XMFLOAT3 Position;
-		XMFLOAT4 Color;
-	};
+//이제 사용안함
+//namespace Vertex {
+//	struct Vertex1 {
+//		XMFLOAT3 Position;
+//		XMFLOAT4 Color;
+//	};
+//
+//	struct Vertex2 {
+//		XMFLOAT3 Position;
+//		XMFLOAT3 Normal;
+//		XMFLOAT2 Texture0;
+//		XMFLOAT2 Texture1;
+//	};
+//
+//	const D3D11_INPUT_ELEMENT_DESC Desc1[] = {
+//		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0 , D3D11_INPUT_PER_VERTEX_DATA, 0 },
+//		{ "COLOR"   , 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+//	};
+//
+//	const D3D11_INPUT_ELEMENT_DESC Desc2[] = {
+//		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0 , D3D11_INPUT_PER_VERTEX_DATA, 0 },
+//		{ "COLOR"   , 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+//		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT   , 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+//		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT   , 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+//	};
+//}
 
-	struct Vertex2 {
-		XMFLOAT3 Position;
-		XMFLOAT3 Normal;
-		XMFLOAT2 Texture0;
-		XMFLOAT2 Texture1;
-	};
-
-	const D3D11_INPUT_ELEMENT_DESC Desc1[] = {
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0 , D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR"   , 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	};
-
-	const D3D11_INPUT_ELEMENT_DESC Desc2[] = {
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0 , D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR"   , 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT   , 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT   , 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	};
-
-
-
+namespace Utils {
+	template <typename T>
+	void Release(T ** pTy) {
+		if ((*pTy)) {
+			(*pTy)->Release();
+			(*pTy) = nullptr;
+		}
+	}
 }
 
 #endif

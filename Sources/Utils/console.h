@@ -1,27 +1,19 @@
-/*
-	jwqe764241 ¿€º∫
-*/
-
 #ifndef __CONSOLE_H
 #define __CONSOLE_H
-
 
 #include <Sources/GameApp.h>
 #include <string>
 
-
 namespace console {
 
-	//--typedef
-	typedef FILE**				STDBUFF;
-	typedef const char* const	COLOR__;
-	//typedef--
+	using ConsoleBuffer = FILE**;
+	using COLOR__ = const char* const;
 	
-	STDBUFF openConsole		(void);
+	ConsoleBuffer openConsole		(void);
 
 
 	int		closeConsole	(
-		_In_ STDBUFF fdBuff
+		_In_ ConsoleBuffer fdBuff
 	);
 
 

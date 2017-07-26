@@ -21,6 +21,9 @@
     <Filter Include="소스 파일\shaders">
       <UniqueIdentifier>{81359a10-d6cd-4eb9-9700-abeff35c5149}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Input">
+      <UniqueIdentifier>{fd4260d5-682f-4a31-8588-d4eaa7c18200}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\main.cpp">
@@ -28,9 +31,6 @@
     </ClCompile>
     <ClCompile Include="..\Sources\GameWindow.cpp">
       <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\console.cpp">
-      <Filter>소스 파일\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\error.cpp">
       <Filter>소스 파일\Utils</Filter>
@@ -47,15 +47,30 @@
     <ClCompile Include="..\Sources\Camera\GameCamera.cpp">
       <Filter>소스 파일\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Geometries\TestGeometry.cpp">
+    <ClCompile Include="..\Sources\Shaders\ColorShader.cpp">
+      <Filter>소스 파일\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Geometries\GameBitmap.cpp">
       <Filter>소스 파일\Geometries</Filter>
     </ClCompile>
-    <ClCompile Include="TestService.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="..\Sources\Shaders\GameTexture.cpp">
+      <Filter>소스 파일\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\console.cpp">
+      <Filter>소스 파일\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Shaders\TextureShader.cpp">
+      <Filter>소스 파일\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Input\GameInput.cpp">
+      <Filter>소스 파일\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
+    <None Include="..\Sources\Shaders\texture_ps.ps">
+      <Filter>소스 파일\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\편집시 필수.txt" />
@@ -65,9 +80,6 @@
       <Filter>소스 파일\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\error.h">
-      <Filter>소스 파일\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Release.h">
       <Filter>소스 파일\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\GameWindow.h">
@@ -85,11 +97,28 @@
     <ClInclude Include="..\Sources\Camera\GameCamera.h">
       <Filter>소스 파일\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Geometries\TestGeometry.h">
-      <Filter>소스 파일\Geometries</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\GameDefs.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Shaders\ColorShader.h">
+      <Filter>소스 파일\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Geometries\GameBitmap.h">
+      <Filter>소스 파일\Geometries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Shaders\GameTexture.h">
+      <Filter>소스 파일\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Shaders\TextureShader.h">
+      <Filter>소스 파일\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Input\GameInput.h">
+      <Filter>소스 파일\Input</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Sources\Shaders\texture_vs.vs">
+      <Filter>소스 파일\shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

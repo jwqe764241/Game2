@@ -1,17 +1,10 @@
-/*
-	jwqe764241 작성
-*/
-
 #include <Sources/Utils/console.h>
 
-
-
-
-console::STDBUFF console::openConsole(void) {
-	STDBUFF fdBuff = new FILE*[3];
+console::ConsoleBuffer console::openConsole(void) {
+	ConsoleBuffer fdBuff = new FILE*[3];
 
 	if (AllocConsole()) {
-		freopen_s(&fdBuff[0], "CONIN$", "rb", stdin);
+		freopen_s(&fdBuff[0], "CONIN$" , "rb", stdin);
 		freopen_s(&fdBuff[1], "CONOUT$", "wb", stdout);
 		freopen_s(&fdBuff[2], "CONOUT$", "wb", stderr);
 	}
@@ -19,27 +12,21 @@ console::STDBUFF console::openConsole(void) {
 	return fdBuff;
 }
 
-
 int	console::closeConsole(
-	_In_ STDBUFF fdBuff
+	_In_ ConsoleBuffer fdBuff
 ) {
-	fclose(fdBuff[0]);
-	fclose(fdBuff[1]);
-	fclose(fdBuff[2]);
+	for (int i = 0; i < 3; ++i)
+	{
+		fclose(fdBuff[i]);
+	}
 
 	return FreeConsole();
 }
-
 
 void console::changeColor(
 	_In_ COLOR__ background,
 	_In_ COLOR__ text
 ) {
-
-	//TODO: 값 입력 제한둘것
-
-
-
 	char command[10] = "Color ";
 
 	strcat_s(command, sizeof(command), background);
@@ -47,9 +34,6 @@ void console::changeColor(
 
 	system(command);
 }
-
-
-
 
 //TODO: 특정 공간에 윈도우 핸들값, 콘솔의 DC를 얻은 후
 //TODO: pixelAt 다수콜 시 오버헤드 -> startDraw, endDraw로
@@ -68,13 +52,11 @@ LSTATUS console::Painter::startDraw(void) {
 	return ERROR_OK;
 }
 
-
 LSTATUS console::Painter::endDraw(void) {
 	ReleaseDC(m_hConWnd, m_hConDC);
 	
 	return ERROR_OK;
 }
-
 
 LSTATUS console::Painter::pixelAt(
 	_In_ const int x,
@@ -83,7 +65,6 @@ LSTATUS console::Painter::pixelAt(
 ) {
 	return SetPixel(m_hConDC, x, y, color);
 }
-
 
 /*
 //--Test

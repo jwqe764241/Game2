@@ -1,13 +1,7 @@
-/*
-	jwqe764241 작성
-*/
-
 #include <Sources/Utils/error.h>
 
 #include <iostream>
 #include <stdlib.h>
-
-
 
 void __cdecl ErrorHandler(
 	_In_	HRESULT				hr,
@@ -46,4 +40,14 @@ void __cdecl ErrorHandler2(
 
 	//강제종료 -> abort() 호출
 	std::abort();
+}
+
+void __cdecl ErrorHandler2(
+	_In_	char const * const	fileName,
+	_In_	char const * const	funcName,
+	_In_	const unsigned		lineNumber,
+	_In_	char const * const	condition,
+	_In_	std::string			message
+) {
+	ErrorHandler2(fileName, funcName, lineNumber, condition, message.c_str());
 }
