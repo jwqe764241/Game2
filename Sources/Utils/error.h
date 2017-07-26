@@ -38,7 +38,6 @@ void __cdecl ErrorHandler2(
 );
 
 
-
 #define HR(expression)														\
 		{																	\
 			HRESULT hr = (expression);										\
@@ -51,10 +50,10 @@ void __cdecl ErrorHandler2(
 
 
 
-#define CUSTOM_ASSERT(condition, message)														\
-	if (!(condition)) {																			\
+#define CUSTOM_ASSERT(condition, message)										\
+	if (!(condition)) {															\
 		ErrorHandler2(__FILE__, __FUNCTION__, __LINE__, #condition, message);	\
-	}																							\
+	}																			\
 
 #define TEST____(message)					\
 	{										\

@@ -14,10 +14,20 @@
 
 class GameBitmap {
 private:
-	struct VertexType {
+	struct _VertexType {
 		D3DXVECTOR3 position;
 		D3DXVECTOR2 texture;
 	};
+
+	struct _RECT_F {
+		float left;
+		float right;
+		float top;
+		float bottom;
+	};
+
+	using VertexType = _VertexType;
+	using Rect_F     = _RECT_F;
 
 public:
 	GameBitmap();
@@ -42,11 +52,11 @@ private:
 private:
 	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
 	int m_vertexCount, m_indexCount;
-	GameTexture* m_Texture;
+	GameTexture *m_Texture;
 
 	int m_screenWidth, m_screenHeight;
 	int m_bitmapWidth, m_bitmapHeight;
-	int m_prevPosX, m_prevPosY;
+	int m_prevPosX   , m_prevPosY;
 };
 
 #endif

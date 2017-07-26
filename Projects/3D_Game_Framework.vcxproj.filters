@@ -35,9 +35,6 @@
     <ClCompile Include="..\Sources\GameWindow.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Utils\console.cpp">
-      <Filter>소스 파일\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Utils\error.cpp">
       <Filter>소스 파일\Utils</Filter>
     </ClCompile>
@@ -65,9 +62,18 @@
     <ClCompile Include="..\Sources\Input\GameInput.cpp">
       <Filter>소스 파일\Input</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Utils\console.cpp">
+      <Filter>소스 파일\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Shaders\TextureShader.cpp">
+      <Filter>소스 파일\shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
+    <None Include="..\Sources\Shaders\texture_ps.ps">
+      <Filter>소스 파일\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\편집시 필수.txt" />
@@ -118,11 +124,11 @@
     <ClInclude Include="..\Sources\Objects\ICharacter.h">
       <Filter>소스 파일\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Shaders\TextureShader.h">
+      <Filter>소스 파일\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Sources\Shaders\texture_ps.ps">
-      <Filter>소스 파일\shaders</Filter>
-    </FxCompile>
     <FxCompile Include="..\Sources\Shaders\texture_vs.vs">
       <Filter>소스 파일\shaders</Filter>
     </FxCompile>

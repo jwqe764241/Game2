@@ -1,7 +1,6 @@
 #include <Sources/GameApp.h>
 #include <Sources/Utils/console.h>
 
-
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
@@ -25,7 +24,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR IpCmdL
 
 	//For Unicode	->	Use this
 
-int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) {
+int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) 
+{
 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_REPORT_FLAG);
 
@@ -34,7 +34,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 		console::ConsoleBuffer consoleBuff = console::openConsole();
 	#endif
 
-	CGameApp * pGameApp = new CGameApp(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 800, 600);
+	CGameApp * pGameApp = new CGameApp(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 1920, 1080, 1000.0f, 0.1f);
 	pGameApp->Launch();
 
 	delete pGameApp;
@@ -43,6 +43,8 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 		system("pause");
 		console::closeConsole(consoleBuff);
 	#endif
+
+	return 0;
 }
 
 #else

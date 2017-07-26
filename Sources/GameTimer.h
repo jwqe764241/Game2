@@ -3,17 +3,19 @@
 
 #include <Windows.h>
 
-//Performance??
-typedef struct _TIME_ELEMENTS {
-	__int64 m_iBaseTime;
-	__int64 m_iPausedTime;
-	__int64 m_iStopTime;
-	__int64 m_iPrevTime;
-	__int64 m_iCurTime;
-}TIME_ELEMENTS, * LPTIMTE_ELEMENTS;
-
 class CGameTimer
 {
+private:
+	//Not User Yet
+	struct _TIME_ELEMENTS {
+		__int64 m_iBaseTime;
+		__int64 m_iPausedTime;
+		__int64 m_iStopTime;
+		__int64 m_iPrevTime;
+		__int64 m_iCurTime;
+	};
+	using TIME_ELEMENTS = _TIME_ELEMENTS;
+	//---------------
 
 public:
 	CGameTimer();

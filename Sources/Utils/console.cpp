@@ -1,17 +1,11 @@
-/*
-	jwqe764241 작성
-*/
-
 #include <Sources/Utils/console.h>
-
-
 
 
 console::ConsoleBuffer console::openConsole(void) {
 	ConsoleBuffer fdBuff = new FILE*[3];
 
 	if (AllocConsole()) {
-		freopen_s(&fdBuff[0], "CONIN$", "rb", stdin);
+		freopen_s(&fdBuff[0], "CONIN$" , "rb", stdin);
 		freopen_s(&fdBuff[1], "CONOUT$", "wb", stdout);
 		freopen_s(&fdBuff[2], "CONOUT$", "wb", stderr);
 	}
@@ -23,9 +17,10 @@ console::ConsoleBuffer console::openConsole(void) {
 int	console::closeConsole(
 	_In_ ConsoleBuffer fdBuff
 ) {
-	fclose(fdBuff[0]);
-	fclose(fdBuff[1]);
-	fclose(fdBuff[2]);
+	for (int i = 0; i < 3; ++i)
+	{
+		fclose(fdBuff[i]);
+	}
 
 	return FreeConsole();
 }
@@ -35,11 +30,6 @@ void console::changeColor(
 	_In_ COLOR__ background,
 	_In_ COLOR__ text
 ) {
-
-	//TODO: 값 입력 제한둘것
-
-
-
 	char command[10] = "Color ";
 
 	strcat_s(command, sizeof(command), background);
