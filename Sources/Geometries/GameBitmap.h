@@ -52,11 +52,11 @@ private:
 private:
 	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
 	int m_vertexCount, m_indexCount;
-	GameTexture* m_Texture;
+	GameTexture *m_Texture;
 
 	int m_screenWidth, m_screenHeight;
 	int m_bitmapWidth, m_bitmapHeight;
-	int m_prevPosX, m_prevPosY;
+	int m_prevPosX   , m_prevPosY;
 };
 
 #endif

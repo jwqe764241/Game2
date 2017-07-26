@@ -34,7 +34,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 		console::ConsoleBuffer consoleBuff = console::openConsole();
 	#endif
 
-	CGameApp * pGameApp = new CGameApp(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 800, 600);
+	CGameApp * pGameApp = new CGameApp(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 1920, 1080, 1000.0f, 0.1f);
 	pGameApp->Launch();
 
 	delete pGameApp;
@@ -43,6 +43,8 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 		system("pause");
 		console::closeConsole(consoleBuff);
 	#endif
+
+	return 0;
 }
 
 #else

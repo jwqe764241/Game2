@@ -56,9 +56,15 @@
     <ClCompile Include="..\Sources\Utils\console.cpp">
       <Filter>소스 파일\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Shaders\TextureShader.cpp">
+      <Filter>소스 파일\shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
+    <None Include="..\Sources\Shaders\texture_ps.ps">
+      <Filter>소스 파일\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\편집시 필수.txt" />
@@ -97,11 +103,11 @@
     <ClInclude Include="..\Sources\Shaders\GameTexture.h">
       <Filter>소스 파일\shaders</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Shaders\TextureShader.h">
+      <Filter>소스 파일\shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Sources\Shaders\texture_ps.ps">
-      <Filter>소스 파일\shaders</Filter>
-    </FxCompile>
     <FxCompile Include="..\Sources\Shaders\texture_vs.vs">
       <Filter>소스 파일\shaders</Filter>
     </FxCompile>

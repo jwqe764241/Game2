@@ -8,11 +8,11 @@
 //
 //#include <Windows.h>
 //
-//typedef struct _WINDOWSIZE 
+//typedef struct _WindowSize 
 //{
 //	int width;
 //	int height;
-//} WINDOWSIZE, * LPWINDOWSIZE;
+//} WindowSize, * LPWINDOWSIZE;
 //
 //
 //class CGameWindow
@@ -24,7 +24,7 @@
 //	wchar_t *	m_pstrFrameTitle;
 //	wchar_t *	m_pstrWndClassName;
 //	int			m_inCmdShow;
-//	WINDOWSIZE  m_sizeWindow;
+//	WindowSize  m_sizeWindow;
 //	//Window Val
 //private:
 //	static LRESULT CALLBACK WndProc(HWND hWnd, UINT umessage, WPARAM wParam, LPARAM lParam);

@@ -33,9 +33,10 @@ LRESULT CALLBACK CGameApp::MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height)
-	: m_AppInfo({nullptr}), m_vAdapters(),
-	m_hInstance(hInstance), m_pstrFrameTitle(frameTitle), m_pstrWndClassName(wndClassName), m_iCmdShow(nCmdShow)
+CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height, float screenDepth, float screenNear)
+	: m_AppInfo({nullptr}), m_vAdapters(), m_screenDepth(screenDepth), m_screenNear(screenNear),
+	m_hInstance(hInstance), m_pstrFrameTitle(frameTitle), m_pstrWndClassName(wndClassName), m_iCmdShow(nCmdShow),
+	m_TextureShader(nullptr), m_Bitmap(nullptr)
 {
 	m_vAdapters.reserve(10);
 
@@ -80,7 +81,6 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		this);
 
 	SetWindowLongPtr(m_hWnd, 0, reinterpret_cast<LONG_PTR>(this));
-
 
 	//-- HRESULT 체킹 안함 --//
 	//팩토리 생성
@@ -148,7 +148,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		DXGI_ADAPTER_DESC l_pAdapterDesc;
 		m_vAdapters[i]->GetDesc(&l_pAdapterDesc);
 
-		ADAPTERINFO adapterInfo;
+		AdapterInfo adapterInfo;
 		adapterInfo.Description = l_pAdapterDesc.Description;
 		adapterInfo.ID          = l_pAdapterDesc.AdapterLuid;
 
@@ -186,12 +186,8 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	swapChainDesc.Flags        = 0;
 
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
-	UINT createFlags = 0;
-#if defined(_DEBUG)
-	createFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
 
-	D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, 0, createFlags, &featureLevel, 1, D3D11_SDK_VERSION, 
+	D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, 0, 0, &featureLevel, 1, D3D11_SDK_VERSION, 
 		&swapChainDesc, &m_AppInfo.pSwapChain, &m_AppInfo.pD3D11Device, NULL, &m_AppInfo.pD3D11DeviceContext);
 	m_AppInfo.pSwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&m_AppInfo.pBackBuffer));
 	m_AppInfo.pD3D11Device->CreateRenderTargetView(m_AppInfo.pBackBuffer, NULL, &m_AppInfo.pRenderTargetView);
@@ -307,12 +303,17 @@ CGameApp::~CGameApp()
 {
 	UnregisterClass(m_pstrWndClassName, m_hInstance);
 	CloseWindow(m_hWnd);
-	Utils::Release(&m_AppInfo.pD3D11Device);
-	Utils::Release(&m_AppInfo.pD3D11DeviceContext);
-	Utils::Release(&m_AppInfo.pSwapChain);
-	Utils::Release(&m_AppInfo.pRenderTargetView);
-	Utils::Release(&m_AppInfo.pBackBuffer);
+	Utils::Release(&m_TextureShader);
+	Utils::Release(&m_Bitmap);
+	Utils::Release(&m_AppInfo.pRasterizeState);
 	Utils::Release(&m_AppInfo.pDepthStencilView);
+	Utils::Release(&m_AppInfo.pDepthDisableStencilState);
+	Utils::Release(&m_AppInfo.pDepthStencilState);
+	Utils::Release(&m_AppInfo.pBackBuffer);
+	Utils::Release(&m_AppInfo.pRenderTargetView);
+	Utils::Release(&m_AppInfo.pSwapChain);
+	Utils::Release(&m_AppInfo.pD3D11DeviceContext);
+	Utils::Release(&m_AppInfo.pD3D11Device);
 
 	for (IDXGIAdapter* adapter : m_vAdapters) {
 		Utils::Release(&adapter);
@@ -321,6 +322,9 @@ CGameApp::~CGameApp()
 	for (IDXGIOutput* output : m_vAdaptersOutputs) {
 		Utils::Release(&output);
 	}
+
+	delete m_Camera;
+	m_Camera = nullptr;
 }
 
 void CGameApp::CalculateFrameStatus()
@@ -378,6 +382,15 @@ void CGameApp::Launch()
 			DispatchMessage(&msg);
 		}
 
+		m_AppInfo.pD3D11DeviceContext->ClearRenderTargetView(m_AppInfo.pRenderTargetView,
+			GameColors::BLACK
+		);
+
+		m_AppInfo.pD3D11DeviceContext->ClearDepthStencilView(
+			m_AppInfo.pDepthStencilView,
+			D3D11_CLEAR_DEPTH, 1.0f, 0
+		);
+
 		Update();
 		Render();
 
@@ -395,19 +408,20 @@ void CGameApp::Update()
 
 void CGameApp::Render()
 {
-	static const float * RED	= reinterpret_cast<const float *>(&CUSTOM_COLOR::RED);
-	static const float * GREEN	= reinterpret_cast<const float *>(&CUSTOM_COLOR::GREEN);
-	static const float * BLUE	= reinterpret_cast<const float *>(&CUSTOM_COLOR::BLUE);
-	static const float * BLACK  = reinterpret_cast<const float *>(&CUSTOM_COLOR::BLACK);
+	TurnOffZBuffer();
 
-	m_AppInfo.pD3D11DeviceContext->ClearRenderTargetView(m_AppInfo.pRenderTargetView,
-		BLACK
-	);
+	if (!m_Bitmap->Render(m_AppInfo.pD3D11DeviceContext, 100, 100)) 
+	{
+		MessageBox(m_hWnd, L"dsfsd", L"Bitmapsad", MB_OK);
+	}
 
-	m_AppInfo.pD3D11DeviceContext->ClearDepthStencilView(
-		m_AppInfo.pDepthStencilView,
-		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0
-	);
+	if (!m_TextureShader->Render(m_AppInfo.pD3D11DeviceContext, m_Bitmap->GetIndexCount(),
+		m_Matrix.worldMatrix, m_Camera->GetViewMatrix(), m_Matrix.orthMatrix, m_Bitmap->GetTexture()))
+	{
+		MessageBox(m_hWnd, L"dsfsd", L"TextureShaderssd", MB_OK);
+	}
+
+	TurnOnZBuffer();
 }
 
 
@@ -435,107 +449,128 @@ void CGameApp::onResize()
 
 	//스텐실 버퍼 생성
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
-	depthBufferDesc.Width     = m_sizeWindow.width;
-	depthBufferDesc.Height    = m_sizeWindow.height;
-	depthBufferDesc.MipLevels = 1;
-	depthBufferDesc.ArraySize = 1;
-	depthBufferDesc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	if (m_MultiSampleQualityLevel) {
-		depthBufferDesc.SampleDesc.Count   = 4;
-		depthBufferDesc.SampleDesc.Quality = m_MultiSampleQualityLevel - 1;
-	}
-	else {
-		depthBufferDesc.SampleDesc.Count   = 1;
-		depthBufferDesc.SampleDesc.Quality = 0;
-	}
-	depthBufferDesc.Usage          = D3D11_USAGE_DEFAULT;
-	depthBufferDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
-	depthBufferDesc.CPUAccessFlags = NULL;
-	depthBufferDesc.MiscFlags      = NULL;
-	//버퍼 생성
+		depthBufferDesc.Width     = m_sizeWindow.width;
+		depthBufferDesc.Height    = m_sizeWindow.height;
+		depthBufferDesc.MipLevels = 1;
+		depthBufferDesc.ArraySize = 1;
+		depthBufferDesc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		if (m_MultiSampleQualityLevel) {
+			depthBufferDesc.SampleDesc.Count   = 4;
+			depthBufferDesc.SampleDesc.Quality = m_MultiSampleQualityLevel - 1;
+		}
+		else {
+			depthBufferDesc.SampleDesc.Count   = 1;
+			depthBufferDesc.SampleDesc.Quality = 0;
+		}
+		depthBufferDesc.Usage          = D3D11_USAGE_DEFAULT;
+		depthBufferDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
+		depthBufferDesc.CPUAccessFlags = NULL;
+		depthBufferDesc.MiscFlags      = NULL;
 	m_AppInfo.pD3D11Device->CreateTexture2D(&depthBufferDesc, NULL, &m_AppInfo.pBackBuffer);
 	
 	//스텐실 생성
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	ZeroMemory(&depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
-	depthStencilDesc.DepthEnable    = true;
-	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	depthStencilDesc.DepthFunc      = D3D11_COMPARISON_LESS;
-///
-	depthStencilDesc.StencilEnable    = true;
-	depthStencilDesc.StencilWriteMask = 0xFF;
-	depthStencilDesc.StencilReadMask  = 0xFF;
-///
-	depthStencilDesc.FrontFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
-	depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-	depthStencilDesc.FrontFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
-	depthStencilDesc.FrontFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
-///
-	depthStencilDesc.BackFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
-	depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-	depthStencilDesc.BackFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
-	depthStencilDesc.BackFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
-///
+		depthStencilDesc.DepthEnable    = true;
+		depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		depthStencilDesc.DepthFunc      = D3D11_COMPARISON_LESS;
+		///
+		depthStencilDesc.StencilEnable    = true;
+		depthStencilDesc.StencilWriteMask = 0xFF;
+		depthStencilDesc.StencilReadMask  = 0xFF;
+		///
+		depthStencilDesc.FrontFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
+		depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+		depthStencilDesc.FrontFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
+		depthStencilDesc.FrontFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
+		///
+		depthStencilDesc.BackFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
+		depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+		depthStencilDesc.BackFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
+		depthStencilDesc.BackFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
 	m_AppInfo.pD3D11Device->CreateDepthStencilState(&depthStencilDesc, &m_AppInfo.pDepthStencilState);
+	//기본 ZBuffer 설정 된 버퍼로 설정
 	m_AppInfo.pD3D11DeviceContext->OMSetDepthStencilState(m_AppInfo.pDepthStencilState, 1);
 
 	//깊이 스텐실 뷰 생성
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	ZeroMemory(&depthStencilViewDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
-	depthStencilViewDesc.Format             = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	depthStencilViewDesc.ViewDimension      = D3D11_DSV_DIMENSION_TEXTURE2D;
-	depthStencilViewDesc.Texture2D.MipSlice = 0;
+		depthStencilViewDesc.Format             = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		depthStencilViewDesc.ViewDimension      = D3D11_DSV_DIMENSION_TEXTURE2D;
+		depthStencilViewDesc.Texture2D.MipSlice = 0;
 	m_AppInfo.pD3D11Device->CreateDepthStencilView(m_AppInfo.pBackBuffer, &depthStencilViewDesc, &m_AppInfo.pDepthStencilView);
-	//버퍼와 버퍼뷰 설정
 	m_AppInfo.pD3D11DeviceContext->OMSetRenderTargets(1, &m_AppInfo.pRenderTargetView, m_AppInfo.pDepthStencilView);
 
+	//레스터라이저 설정
 	D3D11_RASTERIZER_DESC rasterDesc;
-	rasterDesc.AntialiasedLineEnable = false;
-	rasterDesc.CullMode = D3D11_CULL_BACK;
-	rasterDesc.DepthBias = 0;
-	rasterDesc.DepthBiasClamp = 0.0f;
-	rasterDesc.DepthClipEnable = true;
-	rasterDesc.FillMode = D3D11_FILL_SOLID;
-	rasterDesc.FrontCounterClockwise = false;
-	rasterDesc.MultisampleEnable = false;
-	rasterDesc.ScissorEnable = false;
-	rasterDesc.SlopeScaledDepthBias = 0.0f;
-
+		rasterDesc.AntialiasedLineEnable = false;
+		rasterDesc.CullMode = D3D11_CULL_BACK;
+		rasterDesc.DepthBias = 0;
+		rasterDesc.DepthBiasClamp = 0.0f;
+		rasterDesc.DepthClipEnable = true;
+		rasterDesc.FillMode = D3D11_FILL_SOLID;
+		rasterDesc.FrontCounterClockwise = false;
+		rasterDesc.MultisampleEnable = false;
+		rasterDesc.ScissorEnable = false;
+		rasterDesc.SlopeScaledDepthBias = 0.0f;
 	m_AppInfo.pD3D11Device->CreateRasterizerState(&rasterDesc, &m_AppInfo.pRasterizeState);
 	m_AppInfo.pD3D11DeviceContext->RSSetState(m_AppInfo.pRasterizeState);
 
 	//뷰포트 셋팅
 	D3D11_VIEWPORT viewportSettings;
-	viewportSettings.TopLeftX = 0.0f;
-	viewportSettings.TopLeftY = 0.0f;
-	viewportSettings.Width    = static_cast<float>(m_sizeWindow.width);
-	viewportSettings.Height   = static_cast<float>(m_sizeWindow.height);
-	viewportSettings.MinDepth = 0.0f;
-	viewportSettings.MaxDepth = 1.0f;
-	//뷰표트 설정
+		viewportSettings.TopLeftX = 0.0f;
+		viewportSettings.TopLeftY = 0.0f;
+		viewportSettings.Width    = static_cast<float>(m_sizeWindow.width);
+		viewportSettings.Height   = static_cast<float>(m_sizeWindow.height);
+		viewportSettings.MinDepth = 0.0f;
+		viewportSettings.MaxDepth = 1.0f;
 	m_AppInfo.pD3D11DeviceContext->RSSetViewports(1, &viewportSettings);
 
+	float fieldOfView  = static_cast<float>(D3DX_PI) / 4.0f;
+	float screenAspect = static_cast<float>(m_sizeWindow.width) / static_cast<float>(m_sizeWindow.height);
+
+	D3DXMatrixPerspectiveFovLH(&m_Matrix.projectionMatrix, fieldOfView, screenAspect, m_screenNear, m_screenDepth);
+	D3DXMatrixIdentity(&m_Matrix.worldMatrix);
+	D3DXMatrixOrthoLH(&m_Matrix.orthMatrix, static_cast<float>(m_sizeWindow.width), static_cast<float>(m_sizeWindow.height), m_screenNear, m_screenDepth);
+
+	//깊이 설정되지 않은 버퍼 생성
 	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
 	ZeroMemory(&depthDisabledStencilDesc, sizeof(depthDisabledStencilDesc));
-	depthDisabledStencilDesc.DepthEnable    = true;
-	depthDisabledStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	depthDisabledStencilDesc.DepthFunc      = D3D11_COMPARISON_LESS;
-	///
-	depthDisabledStencilDesc.StencilEnable    = true;
-	depthDisabledStencilDesc.StencilWriteMask = 0xFF;
-	depthDisabledStencilDesc.StencilReadMask  = 0xFF;
-	///
-	depthDisabledStencilDesc.FrontFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
-	depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-	depthDisabledStencilDesc.FrontFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
-	depthDisabledStencilDesc.FrontFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
-	///
-	depthDisabledStencilDesc.BackFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
-	depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-	depthDisabledStencilDesc.BackFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
-	depthDisabledStencilDesc.BackFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
-
+		depthDisabledStencilDesc.DepthEnable    = false;
+		depthDisabledStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		depthDisabledStencilDesc.DepthFunc      = D3D11_COMPARISON_LESS;
+		///
+		depthDisabledStencilDesc.StencilEnable    = true;
+		depthDisabledStencilDesc.StencilWriteMask = 0xFF;
+		depthDisabledStencilDesc.StencilReadMask  = 0xFF;
+		///
+		depthDisabledStencilDesc.FrontFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+		depthDisabledStencilDesc.FrontFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.FrontFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
+		///
+		depthDisabledStencilDesc.BackFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+		depthDisabledStencilDesc.BackFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.BackFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
 	m_AppInfo.pD3D11Device->CreateDepthStencilState(&depthDisabledStencilDesc, &m_AppInfo.pDepthDisableStencilState);
+
+	m_Camera = new CGameCamera();
+	m_Camera->SetPosition(0.0f, 0.0f, -10.0f);
+
+	m_TextureShader = new TextureShader();
+	if (!m_TextureShader->Initialize(m_AppInfo.pD3D11Device, m_hWnd))
+	{
+		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Texture Shaders!", MB_OK);
+		return;
+	}
+
+	m_Bitmap = new GameBitmap();
+	if (!m_Bitmap->Initialize(m_AppInfo.pD3D11Device, m_sizeWindow.width, m_sizeWindow.height, L"..\\Sources\\Geometries\\seafloor.dds", 256, 256))
+	{
+		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Bitmap", MB_OK);
+		return;
+	}
 }
 
 void CGameApp::onShowWindow()
@@ -546,6 +581,32 @@ void CGameApp::onShowWindow()
 	ShowCursor(true);
 	UpdateWindow(m_hWnd);
 }
+
+void CGameApp::TurnOnZBuffer()
+{
+	m_AppInfo.pD3D11DeviceContext->OMSetDepthStencilState(m_AppInfo.pDepthStencilState, 1);
+}
+
+void CGameApp::TurnOffZBuffer()
+{
+	m_AppInfo.pD3D11DeviceContext->OMSetDepthStencilState(m_AppInfo.pDepthDisableStencilState, 1);
+}
+
+D3DXMATRIX& CGameApp::GetProjectionMatrix()
+{
+	return m_Matrix.projectionMatrix;
+}
+
+D3DXMATRIX& CGameApp::GetWorldMatrix()
+{
+	return m_Matrix.worldMatrix;
+}
+
+D3DXMATRIX& CGameApp::GetorthogonalMatrix()
+{
+	return m_Matrix.orthMatrix;
+}
+
 /*
 void CGameApp::BuildShader()
 {

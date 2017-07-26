@@ -1,7 +1,3 @@
-/*
-	사용안함
-*/
-
 //#ifndef __COLORSHADER_H
 //#define __COLORSHDAER_H
 //
