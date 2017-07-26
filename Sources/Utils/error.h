@@ -12,7 +12,7 @@
 #endif
 
 
-typedef LONG ERROR__;
+using ERROR__ = LONG;
 
 void __cdecl ErrorHandler(
 	_In_	HRESULT				hr,

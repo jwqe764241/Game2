@@ -1,13 +1,7 @@
-/*
-	jwqe764241 ¿€º∫
-*/
-
 #include <Sources/Utils/error.h>
 
 #include <iostream>
 #include <stdlib.h>
-
-
 
 void __cdecl ErrorHandler(
 	_In_	HRESULT				hr,

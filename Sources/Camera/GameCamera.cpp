@@ -65,7 +65,7 @@ void CGameCamera::Render()
 	D3DXMatrixLookAtLH(&m_ViewMatrix, &pos, &lookAt, &up);
 }
 
-D3DXMATRIX & CGameCamera::GetViewMatrix()
+D3DXMATRIX& CGameCamera::GetViewMatrix()
 {
 	return m_ViewMatrix;
 }

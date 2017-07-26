@@ -1,10 +1,6 @@
 #pragma once
 
-#pragma comment(lib, "dinput8.lib")
-#pragma comment(lib, "dxguid.lib")
-
 #include <dinput.h>
-#include <Sources\GameDefs.h>
 
 class GameInput
 {
@@ -14,7 +10,7 @@ public:
 	~GameInput();
 
 	bool Initialize(HINSTANCE, HWND, int, int);
-	void Shutdown();
+	void Release();
 	bool Frame();
 
 	bool IsEscapeProcessed();

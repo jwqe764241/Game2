@@ -4,32 +4,23 @@
 #include <Windows.h>
 #include <D3DX11.h>
 #include <D3D11.h>
-#include <D3dx11effect.h>
-#include <cassert>
-#include <memory>
-#include <atlbase.h>
-#include <xnamath.h>
 #include <vector>
-#include <cstring>
 #include <D3DX10math.h>
 
 #include <iostream>
 #include <sstream>
 
 #include <Sources/GameDefs.h>
-#include <Sources/GameWindow.h>
 #include <Sources/GameTimer.h>
 #include <Sources/Utils/error.h>
 #include <Sources/Input/GameInput.h>
 #include <Sources/Shaders/TextureShader.h>
-#include <Sources/Shaders/GameTexture.h>
 #include <Sources/Geometries/GameBitmap.h>
 #include <Sources/Camera/GameCamera.h>
 
 //#define TEST_RENDER_BOX
 
-class CGameApp
-{
+class CGameApp{
 private:
 	struct _AdapterInfo {
 		LUID ID;
@@ -50,14 +41,12 @@ private:
 		ID3D11RasterizerState	*pRasterizeState;
 	};
 
-	struct _WindowSize
-	{
+	struct _WindowSize{
 		int width;
 		int height;
 	};
 
-	struct _Matrix
-	{
+	struct _Matrix{
 		D3DXMATRIX projectionMatrix;
 		D3DXMATRIX worldMatrix;
 		D3DXMATRIX orthMatrix;
@@ -75,7 +64,6 @@ private:
 	Matrix		m_Matrix;
 	std::vector <IDXGIAdapter*> m_vAdapters;
 	std::vector <IDXGIOutput *> m_vAdaptersOutputs;
-	GameInput*				m_Input;
 	//Compoenents--
 
 	//--Settings
@@ -103,6 +91,7 @@ private:
 	std::vector<AdapterInfo> m_vAdapterInfoList;
 	//Info Val--
 
+	//GameInput* m_Input;
 	CGameCamera* m_Camera;
 	TextureShader* m_TextureShader;
 	GameBitmap*	m_Bitmap;
@@ -113,7 +102,7 @@ private:
 public:
 	void Launch();
 	void Update();
-	void Render();
+	bool Render();
 
 	void onResize();
 	void onShowWindow();

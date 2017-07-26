@@ -1,12 +1,7 @@
 #ifndef __TESTGEOMETRY_H
 #define __TESTGEOMETRY_H
 
-#include <Windows.h>
 #include <D3DX11.h>
-#include <D3D11.h>
-#include <memory>
-#include <atlbase.h>
-#include <xnamath.h>
 #include <D3DX10math.h>
 
 #include <Sources/Utils/error.h>

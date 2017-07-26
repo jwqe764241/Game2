@@ -2,12 +2,10 @@
 
 TextureShader::TextureShader() : m_VertexShader(nullptr), m_PixelShader(nullptr), m_InputLayout(nullptr), m_MatrixBuffer(nullptr), m_SampleState(nullptr)
 {
-
 }
 
 TextureShader::~TextureShader()
-{
-	
+{	
 }
 
 bool TextureShader::Initialize(ID3D11Device *device, HWND hwnd)

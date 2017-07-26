@@ -23,7 +23,6 @@ bool GameBitmap::Initialize(ID3D11Device *device, int screenWidth, int screenHei
 	m_bitmapWidth  = bitmapWidth;
 	m_bitmapHeight = bitmapHeight;
 
-
 	m_prevPosX = -1;
 	m_prevPosY = -1;
 
