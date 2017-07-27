@@ -15,9 +15,10 @@
 #include <Sources/Utils/error.h>
 #include <Sources/Input/GameInput.h>
 #include <Sources/Shaders/TextureShader.h>
-#include <Sources/Geometries/GameBitmap.h>
 #include <Sources/Camera/GameCamera.h>
 
+#include <Sources/GameAssetLoader.h>
+#include <Sources/Assets/TestAsset.h>
 //#define TEST_RENDER_BOX
 
 class CGameApp{
@@ -92,9 +93,9 @@ private:
 	//Info Val--
 
 	//GameInput* m_Input;
+	CGameAssetLoader m_AssetLoader;
 	CGameCamera* m_Camera;
 	TextureShader* m_TextureShader;
-	GameBitmap*	m_Bitmap;
 private:
 	void CalculateFrameStatus();
 	void LoadAssets();
@@ -114,6 +115,7 @@ public:
 	D3DXMATRIX& GetWorldMatrix();
 	D3DXMATRIX& GetorthogonalMatrix();
 
+	//no thiscall
 	LRESULT CALLBACK MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 public:

@@ -1,6 +1,6 @@
 #include <Sources/GameApp.h>
 
-//윈도우 프로시저
+////윈도우 프로시저
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch(msg)
@@ -31,9 +31,7 @@ LRESULT CALLBACK CGameApp::MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
 		{
 			PostMessage(hWnd, WM_DESTROY, 0L, 0L);
 		}
-		break;
 	case WM_SIZE:
-		std::cout << "width : " << LOWORD(lParam) << " height : " << HIWORD(lParam) << std::endl;
 		onResize();
 		break;
 	}
@@ -44,7 +42,7 @@ LRESULT CALLBACK CGameApp::MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
 CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height, float screenDepth, float screenNear)
 	: m_AppInfo({nullptr}), m_vAdapters(), m_screenDepth(screenDepth), m_screenNear(screenNear),
 	m_hInstance(hInstance), m_pstrFrameTitle(frameTitle), m_pstrWndClassName(wndClassName), m_iCmdShow(nCmdShow),
-	m_TextureShader(nullptr), m_Bitmap(nullptr)
+	m_TextureShader(nullptr)
 {
 	m_vAdapters.reserve(10);
 
@@ -210,8 +208,8 @@ CGameApp::~CGameApp()
 {
 	UnregisterClass(m_pstrWndClassName, m_hInstance);
 	CloseWindow(m_hWnd);
+	m_AssetLoader.Release();
 	Utils::Release(&m_TextureShader);
-	Utils::Release(&m_Bitmap);
 	Utils::Release(&m_AppInfo.pRasterizeState);
 	Utils::Release(&m_AppInfo.pDepthStencilView);
 	Utils::Release(&m_AppInfo.pDepthDisableStencilState);
@@ -263,11 +261,14 @@ void CGameApp::CalculateFrameStatus()
 
 void CGameApp::LoadAssets() 
 {
-
+	TestAsset* asset = new TestAsset();
+	asset->Load(m_AppInfo.pD3D11Device, m_sizeWindow.width, m_sizeWindow.height, 32, 32);
+	m_AssetLoader.LoadAsset(asset, 2);
 }
 
 void CGameApp::Launch() 
 {
+	LoadAssets();
 	onShowWindow();
 
 	m_GameTimer.Reset();
@@ -314,13 +315,10 @@ bool CGameApp::Render()
 
 	m_Camera->Render();
 
-	if (!m_Bitmap->Render(m_AppInfo.pD3D11DeviceContext, 0, 0)) 
-	{
-		return false;
-	}
+	m_AssetLoader.GetAsset(2)->Render(m_AppInfo.pD3D11DeviceContext, 20, 20);
 
-	if (!m_TextureShader->Render(m_AppInfo.pD3D11DeviceContext, m_Bitmap->GetIndexCount(),
-		m_Matrix.worldMatrix, m_Camera->GetViewMatrix(), m_Matrix.orthMatrix, m_Bitmap->GetTexture()))
+	if (!m_TextureShader->Render(m_AppInfo.pD3D11DeviceContext, m_AssetLoader.GetAsset(2)->GetIndexCount(),
+		m_Matrix.worldMatrix, m_Camera->GetViewMatrix(), m_Matrix.orthMatrix, m_AssetLoader.GetAsset(2)->GetTexture()))
 	{
 		return false;
 	}
@@ -343,7 +341,6 @@ void CGameApp::onResize()
 	Utils::Release(&m_AppInfo.pBackBuffer);
 	//Utils::Release(&m_Input);
 	Utils::Release(&m_TextureShader);
-	Utils::Release(&m_Bitmap);
 
 	RECT rect; GetWindowRect(m_hWnd, &rect);
 	m_sizeWindow.width  = rect.right - rect.left;
@@ -476,13 +473,6 @@ void CGameApp::onResize()
 	if (!m_TextureShader->Initialize(m_AppInfo.pD3D11Device, m_hWnd))
 	{
 		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Texture Shaders!", MB_OK);
-		return;
-	}
-
-	m_Bitmap = new GameBitmap();
-	if (!m_Bitmap->Initialize(m_AppInfo.pD3D11Device, m_sizeWindow.width, m_sizeWindow.height, L"..\\Resources\\test.bmp", 256, 256))
-	{
-		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Bitmap", MB_OK);
 		return;
 	}
 }
