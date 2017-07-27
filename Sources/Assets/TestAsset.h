@@ -1,5 +1,5 @@
-#ifndef __YOUNGHUN_H
-#define __YOUNGHUN_H
+#ifndef __TESTASSET_H
+#define __TESTASSET_H
 
 #include <D3D11.h>
 #include <D3DX11.h>
@@ -9,7 +9,7 @@
 
 class TestAsset : public IRenderable {
 private:
-	wchar_t* filePath = L"../Resources/test.png";
+	wchar_t* filePath = L"../Resources/test.bmp";
 
 public:
 	TestAsset();

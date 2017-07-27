@@ -145,9 +145,4 @@
       <Filter>소스 파일\Engines\shaders</Filter>
     </FxCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\Resources\female_walkcycle.png">
-      <Filter>소스 파일\Resources</Filter>
-    </Image>
-  </ItemGroup>
 </Project>
