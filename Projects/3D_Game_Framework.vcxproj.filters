@@ -24,6 +24,9 @@
     <Filter Include="소스 파일\Input">
       <UniqueIdentifier>{fd4260d5-682f-4a31-8588-d4eaa7c18200}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Objects">
+      <UniqueIdentifier>{fe66be1f-f207-4a7b-8654-6fb33ad42bf0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\main.cpp">
@@ -114,6 +117,15 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Input\GameInput.h">
       <Filter>소스 파일\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Objects\ICharacter.h">
+      <Filter>소스 파일\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Objects\IRenderable.h">
+      <Filter>소스 파일\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Objects\Player.h">
+      <Filter>소스 파일\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
