@@ -318,7 +318,7 @@ bool CGameApp::Render()
 
 	CGameAssetLoader::GetInstance().GetAsset(2)->Render(m_AppInfo.pD3D11DeviceContext, 20, 20);
 
-	if (!m_TextureShader.Render(m_AppInfo.pD3D11DeviceContext, CGameAssetLoader::GetInstance().GetAsset(2)->GetIndexCount(),
+	if (!TextureShader::GetInstance().Render(m_AppInfo.pD3D11DeviceContext, CGameAssetLoader::GetInstance().GetAsset(2)->GetIndexCount(),
 		m_Matrix.worldMatrix, m_Camera.GetViewMatrix(), m_Matrix.orthMatrix, CGameAssetLoader::GetInstance().GetAsset(2)->GetTexture()))
 	{
 		return false;
@@ -463,7 +463,7 @@ void CGameApp::onResize()
 	D3DXMatrixOrthoLH(&m_Matrix.orthMatrix, static_cast<float>(m_WindowSize.width), static_cast<float>(m_WindowSize.height), m_screenNear, m_screenDepth);
 
 	m_Camera.SetPosition(0.0f, 0.0f, -10.0f);
-	if (!m_TextureShader.Initialize(m_AppInfo.pD3D11Device, m_hWnd))
+	if (!TextureShader::GetInstance().Initialize(m_AppInfo.pD3D11Device, m_hWnd))
 	{
 		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Texture Shaders!", MB_OK);
 		return;

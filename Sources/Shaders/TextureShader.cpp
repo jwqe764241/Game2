@@ -9,6 +9,13 @@ TextureShader::~TextureShader()
 	Release();
 }
 
+TextureShader& TextureShader::GetInstance()
+{
+	static TextureShader instance;
+	
+	return instance;
+}
+
 bool TextureShader::Initialize(ID3D11Device *device, HWND hwnd)
 {
 	if (!InitializeShader(device, hwnd, L"..\\Sources\\Shaders\\texture_vs.vs", L"..\\Sources\\Shaders\\texture_ps.ps")) 

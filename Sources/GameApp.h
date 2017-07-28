@@ -94,7 +94,6 @@ private:
 
 	GameInput m_GameInput;
 	CGameCamera m_Camera;
-	TextureShader m_TextureShader;
 private:
 	void CalculateFrameStatus();
 	void LoadAssets();
