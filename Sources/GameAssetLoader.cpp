@@ -7,7 +7,14 @@ CGameAssetLoader::CGameAssetLoader()
 
 CGameAssetLoader::~CGameAssetLoader()
 {
+	Release();
+}
 
+CGameAssetLoader& CGameAssetLoader::GetInstance()
+{
+	static CGameAssetLoader instance;
+
+	return instance;
 }
 
 void CGameAssetLoader::Release()

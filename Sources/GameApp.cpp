@@ -41,8 +41,7 @@ LRESULT CALLBACK CGameApp::MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
 
 CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height, float screenDepth, float screenNear)
 	: m_AppInfo({nullptr}), m_vAdapters(), m_screenDepth(screenDepth), m_screenNear(screenNear),
-	m_hInstance(hInstance), m_pstrFrameTitle(frameTitle), m_pstrWndClassName(wndClassName), m_iCmdShow(nCmdShow),
-	m_TextureShader(nullptr)
+	m_hInstance(hInstance), m_pstrFrameTitle(frameTitle), m_pstrWndClassName(wndClassName), m_iCmdShow(nCmdShow)
 {
 	m_vAdapters.reserve(10);
 
@@ -65,12 +64,12 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	//폭, 너비가 0일 때 현재 해상도 값으로 변경
 	if (width == 0 || height == 0) 
 	{
-		m_sizeWindow = { GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
+		m_WindowSize = { GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
 	}
 	else 
 	{
-		m_sizeWindow.width = width;
-		m_sizeWindow.height = height;
+		m_WindowSize.width = width;
+		m_WindowSize.height = height;
 	}
 
 	m_hWnd = CreateWindowEx(
@@ -80,8 +79,8 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
-		m_sizeWindow.width,
-		m_sizeWindow.height,
+		m_WindowSize.width,
+		m_WindowSize.height,
 		NULL,
 		NULL,
 		m_hInstance,
@@ -144,7 +143,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	int l_iNumerator, l_iDenominator;
 	for (int i = 0; i < l_uiModes; ++i) 
 	{
-		if ((l_pModeList[i].Width == m_sizeWindow.width) && (l_pModeList[i].Height == m_sizeWindow.height)) 
+		if ((l_pModeList[i].Width == m_WindowSize.width) && (l_pModeList[i].Height == m_WindowSize.height)) 
 		{
 			l_iNumerator	= l_pModeList[i].RefreshRate.Numerator;
 			l_iDenominator	= l_pModeList[i].RefreshRate.Denominator;
@@ -170,8 +169,8 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc; 
 	ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
-	swapChainDesc.BufferDesc.Width	                 = m_sizeWindow.width;
-	swapChainDesc.BufferDesc.Height                  = m_sizeWindow.height;
+	swapChainDesc.BufferDesc.Width	                 = m_WindowSize.width;
+	swapChainDesc.BufferDesc.Height                  = m_WindowSize.height;
 	swapChainDesc.BufferDesc.RefreshRate.Numerator   = l_iNumerator;
 	swapChainDesc.BufferDesc.RefreshRate.Denominator = l_iDenominator;
 	swapChainDesc.BufferDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -208,8 +207,6 @@ CGameApp::~CGameApp()
 {
 	UnregisterClass(m_pstrWndClassName, m_hInstance);
 	CloseWindow(m_hWnd);
-	m_AssetLoader.Release();
-	Utils::Release(&m_TextureShader);
 	Utils::Release(&m_AppInfo.pRasterizeState);
 	Utils::Release(&m_AppInfo.pDepthStencilView);
 	Utils::Release(&m_AppInfo.pDepthDisableStencilState);
@@ -229,9 +226,6 @@ CGameApp::~CGameApp()
 	{
 		Utils::Release(&output);
 	}
-
-	delete m_Camera;
-	m_Camera = nullptr;
 }
 
 void CGameApp::CalculateFrameStatus()
@@ -262,14 +256,20 @@ void CGameApp::CalculateFrameStatus()
 void CGameApp::LoadAssets() 
 {
 	TestAsset* asset = new TestAsset();
-	asset->Load(m_AppInfo.pD3D11Device, m_sizeWindow.width, m_sizeWindow.height, 32, 32);
-	m_AssetLoader.LoadAsset(asset, 2);
+	asset->Load(m_AppInfo.pD3D11Device, m_WindowSize.width, m_WindowSize.height, 32, 32);
+	CGameAssetLoader::GetInstance().LoadAsset(asset, 2);
 }
 
 void CGameApp::Launch() 
 {
 	LoadAssets();
 	onShowWindow();
+
+	if (!m_GameInput.Initialize(m_hInstance, m_hWnd, m_WindowSize.width, m_WindowSize.height))
+	{
+		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Input", MB_OK);
+		return;
+	}
 
 	m_GameTimer.Reset();
 	m_GameTimer.Start();
@@ -305,6 +305,7 @@ void CGameApp::Launch()
 void CGameApp::Update()
 {
 	m_GameTimer.Tick();
+	m_GameInput.Frame();
 	CalculateFrameStatus();
 }
 
@@ -313,12 +314,12 @@ bool CGameApp::Render()
 {
 	TurnOffZBuffer();
 
-	m_Camera->Render();
+	m_Camera.Render();
 
-	m_AssetLoader.GetAsset(2)->Render(m_AppInfo.pD3D11DeviceContext, 20, 20);
+	CGameAssetLoader::GetInstance().GetAsset(2)->Render(m_AppInfo.pD3D11DeviceContext, 20, 20);
 
-	if (!m_TextureShader->Render(m_AppInfo.pD3D11DeviceContext, m_AssetLoader.GetAsset(2)->GetIndexCount(),
-		m_Matrix.worldMatrix, m_Camera->GetViewMatrix(), m_Matrix.orthMatrix, m_AssetLoader.GetAsset(2)->GetTexture()))
+	if (!m_TextureShader.Render(m_AppInfo.pD3D11DeviceContext, CGameAssetLoader::GetInstance().GetAsset(2)->GetIndexCount(),
+		m_Matrix.worldMatrix, m_Camera.GetViewMatrix(), m_Matrix.orthMatrix, CGameAssetLoader::GetInstance().GetAsset(2)->GetTexture()))
 	{
 		return false;
 	}
@@ -339,15 +340,13 @@ void CGameApp::onResize()
 	Utils::Release(&m_AppInfo.pRenderTargetView);
 	Utils::Release(&m_AppInfo.pDepthStencilView);
 	Utils::Release(&m_AppInfo.pBackBuffer);
-	//Utils::Release(&m_Input);
-	Utils::Release(&m_TextureShader);
 
 	RECT rect; GetWindowRect(m_hWnd, &rect);
-	m_sizeWindow.width  = rect.right - rect.left;
-	m_sizeWindow.height = rect.bottom - rect.top;
+	m_WindowSize.width  = rect.right - rect.left;
+	m_WindowSize.height = rect.bottom - rect.top;
 
 	//스왑체인 버퍼 사이즈 재설정
-	m_AppInfo.pSwapChain->ResizeBuffers(1, m_sizeWindow.width, m_sizeWindow.height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+	m_AppInfo.pSwapChain->ResizeBuffers(1, m_WindowSize.width, m_WindowSize.height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
 	ID3D11Texture2D* dxgiTextureBuffer = nullptr;
 	m_AppInfo.pSwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&dxgiTextureBuffer));
 	m_AppInfo.pD3D11Device->CreateRenderTargetView(dxgiTextureBuffer, 0, &m_AppInfo.pRenderTargetView);
@@ -355,8 +354,8 @@ void CGameApp::onResize()
 
 	//깊이 버퍼 재설정
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
-		depthBufferDesc.Width     = m_sizeWindow.width;
-		depthBufferDesc.Height    = m_sizeWindow.height;
+		depthBufferDesc.Width     = m_WindowSize.width;
+		depthBufferDesc.Height    = m_WindowSize.height;
 		depthBufferDesc.MipLevels = 1;
 		depthBufferDesc.ArraySize = 1;
 		depthBufferDesc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -450,27 +449,21 @@ void CGameApp::onResize()
 	D3D11_VIEWPORT viewportSettings;
 		viewportSettings.TopLeftX = 0.0f;
 		viewportSettings.TopLeftY = 0.0f;
-		viewportSettings.Width    = static_cast<float>(m_sizeWindow.width);
-		viewportSettings.Height   = static_cast<float>(m_sizeWindow.height);
+		viewportSettings.Width    = static_cast<float>(m_WindowSize.width);
+		viewportSettings.Height   = static_cast<float>(m_WindowSize.height);
 		viewportSettings.MinDepth = 0.0f;
 		viewportSettings.MaxDepth = 1.0f;
 	m_AppInfo.pD3D11DeviceContext->RSSetViewports(1, &viewportSettings);
 
 	float fieldOfView  = static_cast<float>(D3DX_PI) / 4.0f;
-	float screenAspect = static_cast<float>(m_sizeWindow.width) / static_cast<float>(m_sizeWindow.height);
+	float screenAspect = static_cast<float>(m_WindowSize.width) / static_cast<float>(m_WindowSize.height);
 
 	D3DXMatrixPerspectiveFovLH(&m_Matrix.projectionMatrix, fieldOfView, screenAspect, m_screenNear, m_screenDepth);
 	D3DXMatrixIdentity(&m_Matrix.worldMatrix);
-	D3DXMatrixOrthoLH(&m_Matrix.orthMatrix, static_cast<float>(m_sizeWindow.width), static_cast<float>(m_sizeWindow.height), m_screenNear, m_screenDepth);
+	D3DXMatrixOrthoLH(&m_Matrix.orthMatrix, static_cast<float>(m_WindowSize.width), static_cast<float>(m_WindowSize.height), m_screenNear, m_screenDepth);
 
-	//m_Input = new GameInput();
-	//m_Input->Initialize(m_hInstance, m_hWnd, m_sizeWindow.width, m_sizeWindow.height);
-
-	m_Camera = new CGameCamera();
-	m_Camera->SetPosition(0.0f, 0.0f, -10.0f);
-
-	m_TextureShader = new TextureShader();
-	if (!m_TextureShader->Initialize(m_AppInfo.pD3D11Device, m_hWnd))
+	m_Camera.SetPosition(0.0f, 0.0f, -10.0f);
+	if (!m_TextureShader.Initialize(m_AppInfo.pD3D11Device, m_hWnd))
 	{
 		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Texture Shaders!", MB_OK);
 		return;

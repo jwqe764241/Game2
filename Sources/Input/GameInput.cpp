@@ -22,12 +22,14 @@ bool GameInput::Initialize(HINSTANCE hInstance, HWND hwnd, int screenWidth, int 
 	m_mouseX = 0;
 	m_mouseY = 0;
 
-	result = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, CLSID_DirectInput8, (void**)&m_directInput, nullptr);
+	result = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, nullptr);
 	if (FAILED(result)) 
 	{
 		return false;
 	}
 
+
+	//키보드 등록
 	result = m_directInput->CreateDevice(GUID_SysKeyboard, &m_keyboard, nullptr);
 	if (FAILED(result)) 
 	{
@@ -51,6 +53,34 @@ bool GameInput::Initialize(HINSTANCE hInstance, HWND hwnd, int screenWidth, int 
 	{
 		return false;
 	}
+
+	/////---------
+
+	//마우스 등록
+	result = m_directInput->CreateDevice(GUID_SysMouse, &m_mouse, NULL);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	result = m_mouse->SetDataFormat(&c_dfDIMouse);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	result = m_mouse->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	result = m_mouse->Acquire();
+	if (FAILED(result))
+	{
+		return false;
+	}
+	
 
 	return true;
 }

@@ -14,6 +14,7 @@ public:
 	CGameAssetLoader();
 	~CGameAssetLoader();
 	
+	static CGameAssetLoader& GetInstance();
 	void Release();
 
 	//에셋 불러온 후 Map에 저장

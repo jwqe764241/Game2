@@ -6,6 +6,7 @@ TextureShader::TextureShader() : m_VertexShader(nullptr), m_PixelShader(nullptr)
 
 TextureShader::~TextureShader()
 {	
+	Release();
 }
 
 bool TextureShader::Initialize(ID3D11Device *device, HWND hwnd)
@@ -25,7 +26,6 @@ void TextureShader::Release()
 
 bool TextureShader::Render(ID3D11DeviceContext * deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView *texture)
 {
-
 	if (!SetParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture)) 
 	{
 		return false;

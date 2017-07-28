@@ -85,17 +85,16 @@ private:
 	wchar_t		*m_pstrFrameTitle;
 	wchar_t		*m_pstrWndClassName;
 	int			m_iCmdShow;
-	WindowSize  m_sizeWindow;
+	WindowSize  m_WindowSize;
 	//Window Val--
 
 	//--Info Val
 	std::vector<AdapterInfo> m_vAdapterInfoList;
 	//Info Val--
 
-	//GameInput* m_Input;
-	CGameAssetLoader m_AssetLoader;
-	CGameCamera* m_Camera;
-	TextureShader* m_TextureShader;
+	GameInput m_GameInput;
+	CGameCamera m_Camera;
+	TextureShader m_TextureShader;
 private:
 	void CalculateFrameStatus();
 	void LoadAssets();
