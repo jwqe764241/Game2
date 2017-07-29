@@ -1,6 +1,8 @@
 #ifndef __ILEVEL_H
 #define __ILEVEL_H
 
+#include <D3D11.h>
+
 class ILevel {
 public:
 	//레벨에 필요한 에셋들 로드
@@ -10,7 +12,7 @@ public:
 	//입력받은 키, 좌표이동 등을 업데이트
 	virtual void Update(float dt) = 0;
 	//해당 레벨을 출력
-	virtual bool Render()         = 0;
+	virtual bool Render(ID3D11DeviceContext* deviceContext) = 0;
 	
 	//레벨 시작 시 
 	virtual void onStart() = 0;

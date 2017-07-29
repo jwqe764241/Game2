@@ -255,9 +255,6 @@ void CGameApp::CalculateFrameStatus()
 
 void CGameApp::LoadAssets() 
 {
-	TestAsset* asset = new TestAsset();
-	asset->Load(m_AppInfo.pD3D11Device, m_WindowSize.width, m_WindowSize.height, 32, 32);
-	CGameAssetLoader::GetInstance().LoadAsset(asset, 2);
 }
 
 void CGameApp::Launch() 
@@ -270,6 +267,8 @@ void CGameApp::Launch()
 		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Input", MB_OK);
 		return;
 	}
+
+	CGameLevelLoader::GetInstance().LoadLevel(new TestLevel1());
 
 	m_GameTimer.Reset();
 	m_GameTimer.Start();
@@ -306,7 +305,10 @@ void CGameApp::Update()
 {
 	m_GameTimer.Tick();
 	m_GameInput.Frame();
+	CGameLevelLoader::GetInstance().UpdateLevel(m_GameTimer.DeltaTime());
 	CalculateFrameStatus();
+
+
 }
 
 
@@ -316,13 +318,15 @@ bool CGameApp::Render()
 
 	m_Camera.Render();
 
-	CGameAssetLoader::GetInstance().GetAsset(2)->Render(m_AppInfo.pD3D11DeviceContext, 20, 20);
+	//CGameAssetLoader::GetInstance().GetAsset("TestAsset")->Render(m_AppInfo.pD3D11DeviceContext, 20, 20);
 
-	if (!TextureShader::GetInstance().Render(m_AppInfo.pD3D11DeviceContext, CGameAssetLoader::GetInstance().GetAsset(2)->GetIndexCount(),
-		m_Matrix.worldMatrix, m_Camera.GetViewMatrix(), m_Matrix.orthMatrix, CGameAssetLoader::GetInstance().GetAsset(2)->GetTexture()))
-	{
-		return false;
-	}
+	//if (!TextureShader::GetInstance().Render(m_AppInfo.pD3D11DeviceContext, CGameAssetLoader::GetInstance().GetAsset("TestAsset")->GetIndexCount(),
+	//	m_Matrix.worldMatrix, m_Camera.GetViewMatrix(), m_Matrix.orthMatrix, CGameAssetLoader::GetInstance().GetAsset("TestAsset")->GetTexture()))
+	//{
+	//	return false;
+	//}
+
+	CGameLevelLoader::GetInstance().RenderLevel(m_AppInfo.pD3D11DeviceContext);
 
 	TurnOnZBuffer();
 
@@ -468,6 +472,8 @@ void CGameApp::onResize()
 		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Texture Shaders!", MB_OK);
 		return;
 	}
+
+	CGameAssetLoader::GetInstance().Initialize(m_AppInfo.pD3D11Device, m_AppInfo.pD3D11DeviceContext, &m_WindowSize.width, &m_WindowSize.height);
 }
 
 void CGameApp::onShowWindow()

@@ -14,11 +14,11 @@
 #include <Sources/GameTimer.h>
 #include <Sources/Utils/error.h>
 #include <Sources/Input/GameInput.h>
-#include <Sources/Shaders/TextureShader.h>
 #include <Sources/Camera/GameCamera.h>
 
 #include <Sources/GameAssetLoader.h>
-#include <Sources/Assets/TestAsset.h>
+#include <Sources/Level/GameLevelLoader.h>
+#include <Sources/Level/TestLevel1.h>
 //#define TEST_RENDER_BOX
 
 class CGameApp{
