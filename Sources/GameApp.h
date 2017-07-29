@@ -82,9 +82,9 @@ private:
 	//--Window Val
 	HWND		m_hWnd;
 	HINSTANCE	m_hInstance;
-	wchar_t		*m_pstrFrameTitle;
-	wchar_t		*m_pstrWndClassName;
-	int			m_iCmdShow;
+	wchar_t		*m_FrameTitle;
+	wchar_t		*m_WndClassName;
+	int			m_CmdShow;
 	WindowSize  m_WindowSize;
 	//Window Val--
 
@@ -99,6 +99,8 @@ private:
 	void LoadAssets();
 
 public:
+	bool Initialize(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height, float screenDepth, float screenNear);
+	void Release();
 	void Launch();
 	void Update();
 	bool Render();
@@ -113,12 +115,11 @@ public:
 	D3DXMATRIX& GetWorldMatrix();
 	D3DXMATRIX& GetorthogonalMatrix();
 
-	//no thiscall
-	LRESULT CALLBACK MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+	static CGameApp& GetInstance();
 
 public:
-	CGameApp() = delete;
-	CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height, float screenDepth, float screenNear);
+	CGameApp();
 	~CGameApp();
 
 };

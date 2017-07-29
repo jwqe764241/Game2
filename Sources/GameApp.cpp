@@ -9,73 +9,65 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		break;
-	default:
-		CGameApp * pGame = reinterpret_cast<CGameApp *>(GetWindowLongPtr(hWnd, 0));
-
-		if (pGame)
-		{
-			return pGame->MainProc(hWnd, msg, wParam, lParam);
-		}
-		else
-		{
-			return DefWindowProc(hWnd, msg, wParam, lParam);
-		}
-	}
-}
-LRESULT CALLBACK CGameApp::MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	switch (msg)
-	{
-	case WM_KEYDOWN:
-		if (wParam == VK_ESCAPE) 
-		{
-			PostMessage(hWnd, WM_DESTROY, 0L, 0L);
-		}
 	case WM_SIZE:
-		onResize();
+		std::cout << "FDgsdf" << std::endl;
+		CGameApp::GetInstance().onResize();
 		break;
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height, float screenDepth, float screenNear)
-	: m_AppInfo({nullptr}), m_vAdapters(), m_screenDepth(screenDepth), m_screenNear(screenNear),
-	m_hInstance(hInstance), m_pstrFrameTitle(frameTitle), m_pstrWndClassName(wndClassName), m_iCmdShow(nCmdShow)
+CGameApp::CGameApp()
+	: m_AppInfo({nullptr}), m_vAdapters(), m_screenDepth(0.0f), m_screenNear(0.0f),
+	m_hInstance(NULL), m_FrameTitle(nullptr), m_WndClassName(nullptr), m_CmdShow(NULL)
+{
+}
+
+CGameApp::~CGameApp()
+{
+}
+
+bool CGameApp::Initialize(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height, float screenDepth, float screenNear)
 {
 	m_vAdapters.reserve(10);
+
+	m_hInstance = hInstance;
+	m_FrameTitle = frameTitle;
+	m_WndClassName = wndClassName;
+	m_CmdShow = nCmdShow;
+	m_screenDepth = screenDepth;
+	m_screenNear = screenNear;
 
 	//윈도우 클래스 정의 및 등록
 	WNDCLASSEX wndClass;
 	ZeroMemory(&wndClass, sizeof(WNDCLASSEX));
-		wndClass.cbSize			= sizeof(WNDCLASSEX);
-		wndClass.style			= CS_HREDRAW | CS_VREDRAW;
-		wndClass.lpfnWndProc	= WndProc;
-		wndClass.cbClsExtra		= 0;
-		wndClass.cbWndExtra		= sizeof(CGameApp*);
-		wndClass.hInstance		= m_hInstance;
-		wndClass.lpszMenuName	= nullptr;
-		wndClass.hIcon			= LoadIcon(NULL, IDI_WINLOGO);
-		wndClass.lpszClassName	= m_pstrWndClassName;
-		wndClass.hbrBackground	= (HBRUSH)GetStockObject(BLACK_BRUSH);
+		wndClass.cbSize = sizeof(WNDCLASSEX);
+		wndClass.style = CS_HREDRAW | CS_VREDRAW;
+		wndClass.lpfnWndProc = WndProc;
+		wndClass.cbClsExtra = 0;
+		wndClass.hInstance = m_hInstance;
+		wndClass.lpszMenuName = nullptr;
+		wndClass.hIcon = LoadIcon(NULL, IDI_WINLOGO);
+		wndClass.lpszClassName = m_WndClassName;
+		wndClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	RegisterClassEx(&wndClass);
-	//윈도우 임시 셋팅 공간에 포인터 저장 --> 멤버 프로시저로 넘기기 위함
 
 	//폭, 너비가 0일 때 현재 해상도 값으로 변경
-	if (width == 0 || height == 0) 
+	if (width == 0 || height == 0)
 	{
 		m_WindowSize = { GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
 	}
-	else 
+	else
 	{
 		m_WindowSize.width = width;
 		m_WindowSize.height = height;
 	}
 
 	m_hWnd = CreateWindowEx(
-		WS_EX_APPWINDOW ,
-		m_pstrWndClassName,
-		m_pstrFrameTitle,
+		WS_EX_APPWINDOW,
+		m_WndClassName,
+		m_FrameTitle,
 		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
@@ -92,18 +84,18 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	//팩토리 생성
 	IDXGIFactory* l_pFactory = nullptr;
 	CreateDXGIFactory(__uuidof(IDXGIFactory), reinterpret_cast<void **>(&l_pFactory));
-	
+
 	//어댑터 나열
 	IDXGIAdapter* l_pAdapter = nullptr;
 	IDXGIOutput * l_pOutput = nullptr;
 
-	for (int i = 0; l_pFactory->EnumAdapters(i, &l_pAdapter) != DXGI_ERROR_NOT_FOUND; ++i) 
+	for (int i = 0; l_pFactory->EnumAdapters(i, &l_pAdapter) != DXGI_ERROR_NOT_FOUND; ++i)
 	{
 		m_vAdapters.push_back(l_pAdapter);
 	}
-	
+
 	std::cout << "-----------------------인식된 어댑터 정보-----------------------" << std::endl;
-	for (int i = 0; i < m_vAdapters.size(); i++) 
+	for (int i = 0; i < m_vAdapters.size(); i++)
 	{
 		DXGI_ADAPTER_DESC desc;
 		m_vAdapters[i]->GetDesc(&desc);
@@ -112,7 +104,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 		std::cout << "DedicatedVideoMemory  : " << desc.DedicatedVideoMemory << std::endl;
 		std::cout << "DedicatedSystemMemory : " << desc.DedicatedSystemMemory << std::endl;
 		std::cout << "SharedSystemMemory	: " << desc.SharedSystemMemory << "\n" << std::endl;
-	
+
 		int iOutput = 0;
 		while (m_vAdapters[i]->EnumOutputs(iOutput++, &l_pOutput) != DXGI_ERROR_NOT_FOUND) {
 			m_vAdaptersOutputs.push_back(l_pOutput);
@@ -130,7 +122,7 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 	m_vAdaptersOutputs[0]->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &l_uiModes, l_pModeList);
 
 	std::cout << "-----------------------가능한 디스플레이 모드-----------------------" << std::endl;
-	for (int i = 0; i < l_uiModes; i++) 
+	for (int i = 0; i < l_uiModes; i++)
 	{
 		std::cout << "\n" << i << ". 해상도 (width X height)" << l_pModeList[i].Width << "X" << l_pModeList[i].Height << std::endl;
 		std::cout << "픽셀 포맷 : " << l_pModeList[i].Format << std::endl;
@@ -141,15 +133,15 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 
 	//현재 윈도우와 맞는 디스플레이 모드에서 보고율 구하기
 	int l_iNumerator, l_iDenominator;
-	for (int i = 0; i < l_uiModes; ++i) 
+	for (int i = 0; i < l_uiModes; ++i)
 	{
-		if ((l_pModeList[i].Width == m_WindowSize.width) && (l_pModeList[i].Height == m_WindowSize.height)) 
+		if ((l_pModeList[i].Width == m_WindowSize.width) && (l_pModeList[i].Height == m_WindowSize.height))
 		{
-			l_iNumerator	= l_pModeList[i].RefreshRate.Numerator;
-			l_iDenominator	= l_pModeList[i].RefreshRate.Denominator;
+			l_iNumerator = l_pModeList[i].RefreshRate.Numerator;
+			l_iDenominator = l_pModeList[i].RefreshRate.Denominator;
 		}
 	}
-	
+
 	//디스플레이 모드 리스트 추가
 	for (int i = 0; i < m_vAdapters.size(); ++i)
 	{
@@ -158,55 +150,58 @@ CGameApp::CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClass
 
 		AdapterInfo adapterInfo;
 		adapterInfo.Description = l_pAdapterDesc.Description;
-		adapterInfo.ID          = l_pAdapterDesc.AdapterLuid;
+		adapterInfo.ID = l_pAdapterDesc.AdapterLuid;
 
 		m_vAdapterInfoList.push_back(adapterInfo);
 	}
-	
+
 
 	delete[] l_pModeList;
 	Utils::Release(&l_pFactory);
 
-	DXGI_SWAP_CHAIN_DESC swapChainDesc; 
+	DXGI_SWAP_CHAIN_DESC swapChainDesc;
 	ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
-	swapChainDesc.BufferDesc.Width	                 = m_WindowSize.width;
-	swapChainDesc.BufferDesc.Height                  = m_WindowSize.height;
-	swapChainDesc.BufferDesc.RefreshRate.Numerator   = l_iNumerator;
+	swapChainDesc.BufferDesc.Width = m_WindowSize.width;
+	swapChainDesc.BufferDesc.Height = m_WindowSize.height;
+	swapChainDesc.BufferDesc.RefreshRate.Numerator = l_iNumerator;
 	swapChainDesc.BufferDesc.RefreshRate.Denominator = l_iDenominator;
-	swapChainDesc.BufferDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM;
-	swapChainDesc.BufferDesc.ScanlineOrdering        = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	swapChainDesc.BufferDesc.Scaling                 = DXGI_MODE_SCALING_UNSPECIFIED;
-	if (m_MultiSampleQualityLevel) 
+	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	if (m_MultiSampleQualityLevel)
 	{
-		swapChainDesc.SampleDesc.Count   = 4;
+		swapChainDesc.SampleDesc.Count = 4;
 		swapChainDesc.SampleDesc.Quality = m_MultiSampleQualityLevel - 1;
 	}
-	else 
+	else
 	{
-		swapChainDesc.SampleDesc.Count   = 1;
+		swapChainDesc.SampleDesc.Count = 1;
 		swapChainDesc.SampleDesc.Quality = 0;
 	}
-	swapChainDesc.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.BufferCount  = 1;
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.BufferCount = 1;
 	swapChainDesc.OutputWindow = m_hWnd;
-	swapChainDesc.Windowed     = true;
-	swapChainDesc.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
-	swapChainDesc.Flags        = 0;
+	swapChainDesc.Windowed = true;
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	swapChainDesc.Flags = 0;
 
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
 
-	D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, 0, 0, &featureLevel, 1, D3D11_SDK_VERSION, 
+	D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, 0, 0, &featureLevel, 1, D3D11_SDK_VERSION,
 		&swapChainDesc, &m_AppInfo.pSwapChain, &m_AppInfo.pD3D11Device, NULL, &m_AppInfo.pD3D11DeviceContext);
 	m_AppInfo.pSwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&m_AppInfo.pBackBuffer));
 	m_AppInfo.pD3D11Device->CreateRenderTargetView(m_AppInfo.pBackBuffer, NULL, &m_AppInfo.pRenderTargetView);
 
 	onResize();
+
+	return true;
 }
 
-CGameApp::~CGameApp()
+void CGameApp::Release()
 {
-	UnregisterClass(m_pstrWndClassName, m_hInstance);
-	CloseWindow(m_hWnd);
+	UnregisterClass(m_WndClassName, m_hInstance);
+	//CloseWindow(m_hWnd);
+	DestroyWindow(m_hWnd);
 	Utils::Release(&m_AppInfo.pRasterizeState);
 	Utils::Release(&m_AppInfo.pDepthStencilView);
 	Utils::Release(&m_AppInfo.pDepthDisableStencilState);
@@ -217,12 +212,12 @@ CGameApp::~CGameApp()
 	Utils::Release(&m_AppInfo.pD3D11DeviceContext);
 	Utils::Release(&m_AppInfo.pD3D11Device);
 
-	for (IDXGIAdapter* adapter : m_vAdapters) 
+	for (IDXGIAdapter* adapter : m_vAdapters)
 	{
 		Utils::Release(&adapter);
 	}
 
-	for (IDXGIOutput* output : m_vAdaptersOutputs) 
+	for (IDXGIOutput* output : m_vAdaptersOutputs)
 	{
 		Utils::Release(&output);
 	}
@@ -243,7 +238,7 @@ void CGameApp::CalculateFrameStatus()
 	
 		std::wostringstream outs;
 		outs.precision(6);
-		outs << m_pstrFrameTitle << L"  Adapter: "<< m_vAdapterInfoList[1].Description << L"    "
+		outs << m_FrameTitle << L"  Adapter: "<< m_vAdapterInfoList[1].Description << L"    "
 			<< L"FPS: " << fps << L"    "
 			<< L"Frame Time: " << mspf << L" (ms)";
 		SetWindowText(m_hWnd, outs.str().c_str());
@@ -285,7 +280,10 @@ void CGameApp::Launch()
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-
+		if (m_GameInput.IsEscapeProcessed())
+		{
+			return;
+		}
 		m_AppInfo.pD3D11DeviceContext->ClearRenderTargetView(m_AppInfo.pRenderTargetView, GameColors::GREEN);
 
 		m_AppInfo.pD3D11DeviceContext->ClearDepthStencilView(m_AppInfo.pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
@@ -481,7 +479,6 @@ void CGameApp::onShowWindow()
 	ShowWindow(m_hWnd, SW_SHOW);
 	SetForegroundWindow(m_hWnd);
 	SetFocus(m_hWnd);
-	ShowCursor(true);
 	UpdateWindow(m_hWnd);
 }
 
@@ -493,6 +490,13 @@ void CGameApp::TurnOnZBuffer()
 void CGameApp::TurnOffZBuffer()
 {
 	m_AppInfo.pD3D11DeviceContext->OMSetDepthStencilState(m_AppInfo.pDepthDisableStencilState, 1);
+}
+
+CGameApp& CGameApp::GetInstance()
+{
+	static CGameApp Instance;
+
+	return Instance;
 }
 
 D3DXMATRIX& CGameApp::GetProjectionMatrix()
