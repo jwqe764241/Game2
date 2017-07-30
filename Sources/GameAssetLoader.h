@@ -4,7 +4,7 @@
 #include <map>
 
 #include <Sources/Assets/TestAsset.h>
-#include <Sources/Objects/IRenderable.h>
+#include <Sources/Interface/IRenderable.h>
 
 enum AssetID {
 	//TetAsset은 말 그대로 테스트이기 때문에 테스트 위부터 아이디에 추가할 것

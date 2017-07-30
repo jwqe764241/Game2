@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include <Sources/Objects/IRenderable.h>
-#include <Sources/Objects/ILevel.h>
+#include <Sources/Interface/IRenderable.h>
+#include <Sources/Interface/ILevel.h>
 
 class TestLevel2 : public ILevel{
 private:

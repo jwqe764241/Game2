@@ -6,7 +6,7 @@
 
 #include <Sources/Geometries/GameBitmap.h>
 #include <Sources/Shaders/TextureShader.h>
-#include <Sources/Objects/IRenderable.h>
+#include <Sources/Interface/IRenderable.h>
 
 class TestAsset : public IRenderable {
 private:

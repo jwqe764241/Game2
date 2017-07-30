@@ -45,6 +45,9 @@
     <Filter Include="소스 파일\Assets\Levels">
       <UniqueIdentifier>{6fe70bce-8112-4617-b3e3-ee70d4259f17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Assets\Player">
+      <UniqueIdentifier>{9b48e7e8-1ace-4cc1-b0a1-89ded03e3035}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\error.cpp">
@@ -95,6 +98,9 @@
     <ClCompile Include="..\Sources\Level\TestLevel2.cpp">
       <Filter>소스 파일\Assets\Levels</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Player.cpp">
+      <Filter>소스 파일\Assets\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
@@ -136,15 +142,6 @@
     <ClInclude Include="..\Sources\GameApp.h">
       <Filter>소스 파일\Engines</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Objects\Player.h">
-      <Filter>소스 파일\Assets\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Objects\ICharacter.h">
-      <Filter>소스 파일\Assets\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Objects\IRenderable.h">
-      <Filter>소스 파일\Assets\Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\GameAssetLoader.h">
       <Filter>소스 파일\Engines</Filter>
     </ClInclude>
@@ -157,14 +154,23 @@
     <ClInclude Include="..\Sources\Level\GameLevelLoader.h">
       <Filter>소스 파일\Engines\Level</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Objects\ILevel.h">
-      <Filter>소스 파일\Assets\Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Level\TestLevel1.h">
       <Filter>소스 파일\Assets\Levels</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Level\TestLevel2.h">
       <Filter>소스 파일\Assets\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Player.h">
+      <Filter>소스 파일\Assets\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Interface\ICharacter.h">
+      <Filter>소스 파일\Assets\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Interface\ILevel.h">
+      <Filter>소스 파일\Assets\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Interface\IRenderable.h">
+      <Filter>소스 파일\Assets\Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,8 +6,8 @@
 
 #include <Sources/GameAssetLoader.h>
 #include <Sources/Assets/TestAsset.h>
-#include <Sources/Objects/IRenderable.h>
-#include <Sources/Objects/ILevel.h>
+#include <Sources/Interface/IRenderable.h>
+#include <Sources/Interface/ILevel.h>
 
 class TestLevel1 : public ILevel{
 private:

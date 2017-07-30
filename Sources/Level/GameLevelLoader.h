@@ -3,7 +3,7 @@
 
 #include <D3D11.h>
 
-#include <Sources/Objects/ILevel.h>
+#include <Sources/Interface/ILevel.h>
 
 class CGameLevelLoader {
 private:
