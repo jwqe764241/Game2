@@ -14,9 +14,5 @@ public:
 	virtual void Damage(int damage) = 0;
 	virtual void Die()              = 0;
 
-	virtual bool isDied() { return isDied; };
-
-protected:
-	int m_Health;
-	bool isDied;
+	virtual bool isDied() = 0;
 };

@@ -26,7 +26,7 @@ private:
 
 public:
 	GameBitmap();
-	GameBitmap(const GameBitmap& other);
+	GameBitmap(GameBitmap& other);
 	~GameBitmap();
 
 	bool Initialize(ID3D11Device *device, int screenWidth, int screenHeight, wchar_t* filePath, int bitmapWidth, int bitmapHeight);

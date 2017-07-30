@@ -39,6 +39,15 @@
     <Filter Include="소스 파일\Resources">
       <UniqueIdentifier>{f2c38b20-8eca-44c3-99a9-bb1908c07086}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Engines\Level">
+      <UniqueIdentifier>{321f17a0-fc4c-4046-884d-e2281574da14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Assets\Levels">
+      <UniqueIdentifier>{6fe70bce-8112-4617-b3e3-ee70d4259f17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Assets\Player">
+      <UniqueIdentifier>{9b48e7e8-1ace-4cc1-b0a1-89ded03e3035}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\error.cpp">
@@ -79,6 +88,18 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Assets\TestAsset.cpp">
       <Filter>소스 파일\Assets\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Level\GameLevelLoader.cpp">
+      <Filter>소스 파일\Engines\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Level\TestLevel1.cpp">
+      <Filter>소스 파일\Assets\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Level\TestLevel2.cpp">
+      <Filter>소스 파일\Assets\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Player.cpp">
+      <Filter>소스 파일\Assets\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,15 +142,6 @@
     <ClInclude Include="..\Sources\GameApp.h">
       <Filter>소스 파일\Engines</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Objects\Player.h">
-      <Filter>소스 파일\Assets\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Objects\ICharacter.h">
-      <Filter>소스 파일\Assets\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Objects\IRenderable.h">
-      <Filter>소스 파일\Assets\Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\GameAssetLoader.h">
       <Filter>소스 파일\Engines</Filter>
     </ClInclude>
@@ -138,6 +150,27 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Assets\TestAsset.h">
       <Filter>소스 파일\Assets\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Level\GameLevelLoader.h">
+      <Filter>소스 파일\Engines\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Level\TestLevel1.h">
+      <Filter>소스 파일\Assets\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Level\TestLevel2.h">
+      <Filter>소스 파일\Assets\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Player.h">
+      <Filter>소스 파일\Assets\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Interface\ICharacter.h">
+      <Filter>소스 파일\Assets\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Interface\ILevel.h">
+      <Filter>소스 파일\Assets\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Interface\IRenderable.h">
+      <Filter>소스 파일\Assets\Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

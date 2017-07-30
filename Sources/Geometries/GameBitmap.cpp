@@ -5,11 +5,6 @@ GameBitmap::GameBitmap() : m_vertexBuffer(nullptr), m_indexBuffer(nullptr), m_Te
 
 }
 
-GameBitmap::GameBitmap(const GameBitmap& other) 
-{
-
-}
-
 GameBitmap::~GameBitmap()
 {
 

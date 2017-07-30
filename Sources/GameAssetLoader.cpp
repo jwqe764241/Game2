@@ -7,30 +7,58 @@ CGameAssetLoader::CGameAssetLoader()
 
 CGameAssetLoader::~CGameAssetLoader()
 {
-
+	//Release();
 }
 
-void CGameAssetLoader::Release()
+CGameAssetLoader& CGameAssetLoader::GetInstance()
 {
-	ClearMap();
+	static CGameAssetLoader instance;
+
+	return instance;
 }
 
-void CGameAssetLoader::LoadAsset(IRenderable* target, int id)
+void CGameAssetLoader::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, int* screenWidth, int* screenHeight)
 {
-	m_AssetMap.insert(std::pair<int, TargetInterface*>(id, target));
+	m_DeviceRef = device;
+	m_DeviceContextRef = deviceContext;
+	m_ScreenWidthRef = screenWidth;
+	m_ScreenHeightRef = screenHeight;
 }
 
-TargetInterface* CGameAssetLoader::GetAsset(int id)
-{
-	return m_AssetMap.find(id)->second;
-}
+//void CGameAssetLoader::Release()
+//{
+//	//ClearMap();
+//}
 
-void CGameAssetLoader::ClearMap()
+TargetInterface* CGameAssetLoader::LoadAsset(int id, int bitmapWidth, int bitmapHeight)
 {
-	for (auto itor = m_AssetMap.begin(); itor != m_AssetMap.end(); itor++)
+
+	TargetInterface* asset = nullptr;
+
+	switch (id)
 	{
-		delete itor->second;
+	case ID_ASSET_TESTASSET:
+		asset = new TestAsset();
+		break;
 	}
 
-	m_AssetMap.clear();
+	asset->Load(m_DeviceRef, *m_ScreenWidthRef, *m_ScreenHeightRef, bitmapWidth, bitmapHeight);
+
+	return asset;
+	//m_AssetMap.insert(std::pair<std::string, TargetInterface*>(id, target));
 }
+
+//TargetInterface* CGameAssetLoader::GetAsset(std::string id)
+//{
+//	return m_AssetMap.find(id)->second;
+//}
+//
+//void CGameAssetLoader::ClearMap()
+//{
+//	for (auto itor = m_AssetMap.begin(); itor != m_AssetMap.end(); itor++)
+//	{
+//		delete itor->second;
+//	}
+//
+//	m_AssetMap.clear();
+//}

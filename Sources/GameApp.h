@@ -14,11 +14,11 @@
 #include <Sources/GameTimer.h>
 #include <Sources/Utils/error.h>
 #include <Sources/Input/GameInput.h>
-#include <Sources/Shaders/TextureShader.h>
 #include <Sources/Camera/GameCamera.h>
 
 #include <Sources/GameAssetLoader.h>
-#include <Sources/Assets/TestAsset.h>
+#include <Sources/Level/GameLevelLoader.h>
+#include <Sources/Level/TestLevel1.h>
 //#define TEST_RENDER_BOX
 
 class CGameApp{
@@ -82,25 +82,24 @@ private:
 	//--Window Val
 	HWND		m_hWnd;
 	HINSTANCE	m_hInstance;
-	wchar_t		*m_pstrFrameTitle;
-	wchar_t		*m_pstrWndClassName;
-	int			m_iCmdShow;
-	WindowSize  m_sizeWindow;
+	wchar_t		*m_FrameTitle;
+	wchar_t		*m_WndClassName;
+	int			m_CmdShow;
+	WindowSize  m_WindowSize;
 	//Window Val--
 
 	//--Info Val
 	std::vector<AdapterInfo> m_vAdapterInfoList;
 	//Info Val--
 
-	//GameInput* m_Input;
-	CGameAssetLoader m_AssetLoader;
-	CGameCamera* m_Camera;
-	TextureShader* m_TextureShader;
+	GameInput m_GameInput;
 private:
 	void CalculateFrameStatus();
 	void LoadAssets();
 
 public:
+	bool Initialize(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height, float screenDepth, float screenNear);
+	void Release();
 	void Launch();
 	void Update();
 	bool Render();
@@ -115,12 +114,12 @@ public:
 	D3DXMATRIX& GetWorldMatrix();
 	D3DXMATRIX& GetorthogonalMatrix();
 
-	//no thiscall
-	LRESULT CALLBACK MainProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	CGameCamera m_Camera;
+
+	static CGameApp& GetInstance();
 
 public:
-	CGameApp() = delete;
-	CGameApp(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height, float screenDepth, float screenNear);
+	CGameApp();
 	~CGameApp();
 
 };
