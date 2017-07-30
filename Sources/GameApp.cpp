@@ -305,8 +305,6 @@ void CGameApp::Update()
 	m_GameInput.Frame();
 	CGameLevelLoader::GetInstance().UpdateLevel(m_GameTimer.DeltaTime());
 	CalculateFrameStatus();
-
-
 }
 
 

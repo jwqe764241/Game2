@@ -93,7 +93,6 @@ private:
 	//Info Val--
 
 	GameInput m_GameInput;
-	CGameCamera m_Camera;
 private:
 	void CalculateFrameStatus();
 	void LoadAssets();
@@ -115,6 +114,7 @@ public:
 	D3DXMATRIX& GetWorldMatrix();
 	D3DXMATRIX& GetorthogonalMatrix();
 
+	CGameCamera m_Camera;
 
 	static CGameApp& GetInstance();
 

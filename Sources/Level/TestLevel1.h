@@ -2,6 +2,7 @@
 #define __TESTLEVEL1_H
 
 #include <vector>
+#include <Sources/GameApp.h>
 
 #include <Sources/GameAssetLoader.h>
 #include <Sources/Assets/TestAsset.h>
