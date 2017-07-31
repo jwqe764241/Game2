@@ -1,19 +1,11 @@
 #pragma once
 
-<<<<<<< HEAD
-#include <d3d11.h>
-#include <D3DX10math.h>
-#include "Sources\Interface\IRenderable.h"
-#include "Sources\Interface\ICharacter.h"
-#include "Sources\Geometries\GameBitmap.h"
-=======
 #include <D3DX11.h>
 
 #include <Sources/Input/GameInput.h>
 #include <Sources/Geometries/GameBitmap.h>
 #include <Sources/Interface/IRenderable.h>
 #include <Sources/Interface/ICharacter.h>
->>>>>>> origin/1.0
 
 class Player : public IRenderable, public ICharacter
 {
