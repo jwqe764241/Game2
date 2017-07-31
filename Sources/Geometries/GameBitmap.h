@@ -8,7 +8,7 @@
 #include <Sources/Shaders/GameTexture.h>
 
 class GameBitmap {
-private:
+protected:
 	struct _VertexType {
 		D3DXVECTOR3 position;
 		D3DXVECTOR2 texture;
@@ -29,12 +29,16 @@ public:
 	GameBitmap(const GameBitmap& other);
 	~GameBitmap();
 
-	bool Initialize(ID3D11Device *device, int screenWidth, int screenHeight, wchar_t* filePath, int bitmapWidth, int bitmapHeight);
+	bool Initialize(ID3D11Device *device, wchar_t* filePath, int bitmapWidth, int bitmapHeight);
 	void Release();
 	bool Render(ID3D11DeviceContext *deviceContext, int posX, int posY);
 
 	int GetIndexCount();
 	ID3D11ShaderResourceView* GetTexture();
+
+protected:
+	VertexType* GetVertices();
+
 private:
 	bool InitializeBuffers(ID3D11Device* device);
 	void ReleaseBuffers();
@@ -44,7 +48,7 @@ private:
 	bool LoadTexture(ID3D11Device *device, wchar_t *filePath);
 	void ReleaseTexture();
 
-private:
+protected:
 	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
 	int m_vertexCount, m_indexCount;
 	GameTexture *m_Texture;
@@ -52,6 +56,8 @@ private:
 	int m_screenWidth, m_screenHeight;
 	int m_bitmapWidth, m_bitmapHeight;
 	int m_prevPosX   , m_prevPosY;
+
+	VertexType* m_vertices;
 };
 
 #endif
