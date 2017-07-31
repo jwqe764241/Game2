@@ -6,6 +6,7 @@ GameSprite::GameSprite(float framesPerSecond, float animationSpeed, bool isLoopi
 	m_animationSpeed = animationSpeed;
 	m_isLooping = isLooping;
 	m_currentSpeed = 0;
+	m_currentMotion = 0;
 }
 
 GameSprite::~GameSprite()
@@ -14,12 +15,12 @@ GameSprite::~GameSprite()
 
 void GameSprite::Initialize(ID3D11Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight, float numberOfMotions)
 {
-	GameBitmap::Initialize(device, filePath, bitmapWidth, bitmapHeight);
-
 	m_currentFrame = 0;
 	m_previousFrame = -1.0f;
 	m_maxFrames = (float)bitmapWidth / (float)(bitmapHeight / numberOfMotions);
 	m_numOfMotions = numberOfMotions;
+
+	GameBitmap::Initialize(device, filePath, bitmapWidth / m_maxFrames, bitmapHeight / numberOfMotions);
 }
 
 void GameSprite::Update(float dt)
@@ -52,10 +53,10 @@ void GameSprite::Update(float dt)
 		2. 그에 따라 렌더 작업도 2번 수행한다.
 	추후에 이 것을 수정해야될 듯 싶다.
 */
-void GameSprite::Render(ID3D11DeviceContext* context, int posX, int posY)
+void GameSprite::Render(ID3D11DeviceContext* context, int screenWidth, int screenHeight, int posX, int posY)
 {
 	// 위치 정보를 업데이트하고, 렌더한다.
-	GameBitmap::Render(context, posX, posY);
+	GameBitmap::Render(context, screenWidth, screenHeight, posX, posY);
 
 	// 스프라이트의 애니메이션(프레임)을 업데이트한다.
 	UpdateBuffers(context);
@@ -67,6 +68,11 @@ void GameSprite::Render(ID3D11DeviceContext* context, int posX, int posY)
 	context->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 	context->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
+void GameSprite::SetMotion(float index)
+{
+	m_currentMotion = index;
 }
 
 void GameSprite::UpdateBuffers(ID3D11DeviceContext * deviceContext)

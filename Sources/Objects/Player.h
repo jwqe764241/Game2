@@ -11,7 +11,7 @@ public:
 	Player();
 	~Player();
 
-	virtual void Load(ID3D11Device*, int, int, int, int) override;
+	virtual void Load(ID3D11Device*, int, int) override;
 	virtual void Release() override;
 	virtual void Reset() override;
 	virtual void Update(float dt) override;

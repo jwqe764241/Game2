@@ -82,11 +82,11 @@ void GameBitmap::Release()
 	ReleaseBuffers();
 }
 
-bool GameBitmap::Render(ID3D11DeviceContext *deviceContext, int posX, int posY)
+bool GameBitmap::Render(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY)
 {
 	bool result;
 
-	result = UpdateBuffers(deviceContext, posX, posY);
+	result = UpdateBuffers(deviceContext, screenWidth, screenHeight, posX, posY);
 	if (!result) 
 	{
 		return false;
@@ -180,7 +180,7 @@ void GameBitmap::ReleaseBuffers()
 	Utils::Release(&m_vertexBuffer);
 }
 
-bool GameBitmap::UpdateBuffers(ID3D11DeviceContext *deviceContext, int posX, int posY)
+bool GameBitmap::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY)
 {
 	Rect_F rect;
 	VertexType* vertices = GetVertices();
@@ -195,9 +195,9 @@ bool GameBitmap::UpdateBuffers(ID3D11DeviceContext *deviceContext, int posX, int
 	m_prevPosX = posX;
 	m_prevPosY = posY;
 
-	rect.left   = static_cast<float>((m_screenWidth / 2) * -1) + static_cast<float>(posX);
+	rect.left   = static_cast<float>((screenWidth / 2) * -1) + static_cast<float>(posX);
 	rect.right  = rect.left + static_cast<float>(m_bitmapWidth);
-	rect.top    = static_cast<float>(m_screenHeight / 2) - static_cast<float>(posY);
+	rect.top    = static_cast<float>(screenHeight / 2) - static_cast<float>(posY);
 	rect.bottom = rect.top - static_cast<float>(m_bitmapHeight);
 
 	//Triangle - 1

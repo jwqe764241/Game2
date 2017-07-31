@@ -15,12 +15,11 @@ public:
 	TestAsset();
 	~TestAsset();
 
-	virtual void Load(ID3D11Device* device, int screenWidth, int screenHeight, 
-		int bitmapWidth, int bitmapHeight)	override;
+	virtual void Load(ID3D11Device* device,	int bitmapWidth, int bitmapHeight)	override;
 	virtual void Release() override;
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
-	virtual void Render(ID3D11DeviceContext* deviceContext, int x, int y) override;
+	virtual void Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight, int x, int y) override;
 	virtual int GetIndexCount() override;
 	virtual ID3D11ShaderResourceView* GetTexture() override;
 

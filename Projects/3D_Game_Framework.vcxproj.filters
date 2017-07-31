@@ -89,6 +89,9 @@
     <ClCompile Include="..\Sources\Geometries\GameSprite.cpp">
       <Filter>소스 파일\Engines\Geometries</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Assets\SpriteAsset.cpp">
+      <Filter>소스 파일\Assets\Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
@@ -150,6 +153,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Geometries\GameSprite.h">
       <Filter>소스 파일\Engines\Geometries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\SpriteAsset.h">
+      <Filter>소스 파일\Assets\Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

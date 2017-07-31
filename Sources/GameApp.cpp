@@ -1,5 +1,7 @@
 #include <Sources/GameApp.h>
 
+#include "Sources\Assets\SpriteAsset.h"
+
 ////윈도우 프로시저
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -261,8 +263,8 @@ void CGameApp::CalculateFrameStatus()
 
 void CGameApp::LoadAssets() 
 {
-	TestAsset* asset = new TestAsset();
-	asset->Load(m_AppInfo.pD3D11Device, m_sizeWindow.width, m_sizeWindow.height, 32, 32);
+	SpriteAsset* asset = new SpriteAsset();
+	asset->Load(m_AppInfo.pD3D11Device, 576, 256);
 	m_AssetLoader.LoadAsset(asset, 2);
 }
 
@@ -306,6 +308,7 @@ void CGameApp::Update()
 {
 	m_GameTimer.Tick();
 	CalculateFrameStatus();
+	m_AssetLoader.GetAsset(2)->Update(m_GameTimer.DeltaTime());
 }
 
 
@@ -315,7 +318,7 @@ bool CGameApp::Render()
 
 	m_Camera->Render();
 
-	m_AssetLoader.GetAsset(2)->Render(m_AppInfo.pD3D11DeviceContext, 20, 20);
+	m_AssetLoader.GetAsset(2)->Render(m_AppInfo.pD3D11DeviceContext, m_sizeWindow.width, m_sizeWindow.height, 20, 20);
 
 	if (!m_TextureShader->Render(m_AppInfo.pD3D11DeviceContext, m_AssetLoader.GetAsset(2)->GetIndexCount(),
 		m_Matrix.worldMatrix, m_Camera->GetViewMatrix(), m_Matrix.orthMatrix, m_AssetLoader.GetAsset(2)->GetTexture()))

@@ -31,7 +31,7 @@ public:
 
 	bool Initialize(ID3D11Device *device, wchar_t* filePath, int bitmapWidth, int bitmapHeight);
 	void Release();
-	bool Render(ID3D11DeviceContext *deviceContext, int posX, int posY);
+	bool Render(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY);
 
 	int GetIndexCount();
 	ID3D11ShaderResourceView* GetTexture();
@@ -42,7 +42,7 @@ protected:
 private:
 	bool InitializeBuffers(ID3D11Device* device);
 	void ReleaseBuffers();
-	bool UpdateBuffers(ID3D11DeviceContext *deviceContext, int posX, int posY);
+	bool UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY);
 	void RenderBuffers(ID3D11DeviceContext *deviceContext);
 
 	bool LoadTexture(ID3D11Device *device, wchar_t *filePath);
@@ -53,7 +53,6 @@ protected:
 	int m_vertexCount, m_indexCount;
 	GameTexture *m_Texture;
 
-	int m_screenWidth, m_screenHeight;
 	int m_bitmapWidth, m_bitmapHeight;
 	int m_prevPosX   , m_prevPosY;
 

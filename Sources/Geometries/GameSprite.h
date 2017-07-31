@@ -15,7 +15,9 @@ public:
 
 	void Initialize(ID3D11Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight, float numberOfMotions);
 	void Update(float dt);
-	void Render(ID3D11DeviceContext* context, int posX, int posY);
+	void Render(ID3D11DeviceContext* context, int screenWidth, int screenHeight, int posX, int posY);
+
+	void SetMotion(float index);
 
 protected:
 	void UpdateBuffers(ID3D11DeviceContext *deviceContext);
