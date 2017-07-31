@@ -18,6 +18,7 @@ public:
 	void Render(ID3D11DeviceContext* context, int posX, int posY);
 
 protected:
+	void UpdateBuffers(ID3D11DeviceContext *deviceContext);
 
 private:
 	float m_currentFrame;
