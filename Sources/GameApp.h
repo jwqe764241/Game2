@@ -91,8 +91,6 @@ private:
 	//--Info Val
 	std::vector<AdapterInfo> m_vAdapterInfoList;
 	//Info Val--
-
-	GameInput m_GameInput;
 private:
 	void CalculateFrameStatus();
 	void LoadAssets();

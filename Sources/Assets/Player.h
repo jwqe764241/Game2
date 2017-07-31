@@ -1,5 +1,9 @@
 #pragma once
+
 #include <D3DX11.h>
+
+#include <Sources/Input/GameInput.h>
+#include <Sources/Geometries/GameBitmap.h>
 #include <Sources/Interface/IRenderable.h>
 #include <Sources/Interface/ICharacter.h>
 
@@ -7,6 +11,7 @@ class Player : public IRenderable, public ICharacter
 {
 private:
 	int m_Health;
+	
 public:
 	Player();
 	~Player();

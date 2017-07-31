@@ -257,7 +257,7 @@ void CGameApp::Launch()
 	LoadAssets();
 	onShowWindow();
 
-	if (!m_GameInput.Initialize(m_hInstance, m_hWnd, m_WindowSize.width, m_WindowSize.height))
+	if (!GameInput::GetInstance().Initialize(m_hInstance, m_hWnd, m_WindowSize.width, m_WindowSize.height))
 	{
 		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Input", MB_OK);
 		return;
@@ -280,7 +280,7 @@ void CGameApp::Launch()
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		if (m_GameInput.IsEscapeProcessed())
+		if (GameInput::GetInstance().IsEscapeProcessed())
 		{
 			return;
 		}
@@ -302,7 +302,7 @@ void CGameApp::Launch()
 void CGameApp::Update()
 {
 	m_GameTimer.Tick();
-	m_GameInput.Frame();
+	GameInput::GetInstance().Frame();
 	CGameLevelLoader::GetInstance().UpdateLevel(m_GameTimer.DeltaTime());
 	CalculateFrameStatus();
 }
