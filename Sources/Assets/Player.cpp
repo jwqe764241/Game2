@@ -10,7 +10,7 @@ Player::~Player()
 
 }
 
-void Player::Load(ID3D11Device * device, int screenWidth, int screenHeight, int bitmapWidth, int bitmapHeight)
+void Player::Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight)
 {
 
 }
@@ -35,7 +35,7 @@ void Player::Update(float dt, int keyCode)
 
 }
 
-void Player::Render(ID3D11DeviceContext * deviceContext)
+void Player::Render(ID3D11DeviceContext * deviceContext, int screenWidth, int screenHeight)
 {
 
 }
@@ -45,12 +45,7 @@ void Player::Idle()
 
 }
 
-void Player::Move(XMVECTORF32 target)
-{
-
-}
-
-void Player::Look(XMVECTORF32 direction)
+void Player::Move(D3DXVECTOR3 target)
 {
 
 }

@@ -4,11 +4,13 @@
 #include <map>
 
 #include <Sources/Assets/TestAsset.h>
+#include <Sources/Assets/SpriteAsset.h>
 #include <Sources/Interface/IRenderable.h>
 
 enum AssetID {
 	//TetAsset은 말 그대로 테스트이기 때문에 테스트 위부터 아이디에 추가할 것
-	ID_ASSET_TESTASSET = 50
+	ID_ASSET_TESTASSET = 50,
+	ID_ASSET_SPRITEASSET = 60
 };
 
 using TargetInterface = IRenderable;

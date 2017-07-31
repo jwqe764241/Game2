@@ -35,11 +35,11 @@ void TestLevel1::Update(float dt)
 	}
 }
 
-bool TestLevel1::Render(ID3D11DeviceContext* deviceContext)
+bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)
 {
 	for (std::vector<IRenderable*>::iterator idx = m_RenderList.begin(); idx != m_RenderList.end(); idx++)
 	{
-		(*idx)->Render(deviceContext);
+		(*idx)->Render(deviceContext, screenWidth, screenHeight);
 
 		TextureShader::GetInstance().Render(deviceContext, (*idx)->GetIndexCount(), CGameApp::GetInstance().GetWorldMatrix(), CGameApp::GetInstance().m_Camera.GetViewMatrix(),
 			CGameApp::GetInstance().GetorthogonalMatrix(), (*idx)->GetTexture());
