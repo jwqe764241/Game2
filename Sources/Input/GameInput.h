@@ -2,6 +2,8 @@
 
 #include <dinput.h>
 
+#include <Sources/GameDefs.h>
+
 class GameInput
 {
 public:
@@ -10,10 +12,12 @@ public:
 	~GameInput();
 
 	bool Initialize(HINSTANCE, HWND, int, int);
+	static GameInput& GetInstance();
 	void Release();
 	bool Frame();
 
 	bool IsEscapeProcessed();
+	bool IsPressed(DWORD keycode);
 	void GetMouseLocation(int&, int&);
 
 private:

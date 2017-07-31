@@ -27,7 +27,6 @@ void Player::Reset()
 
 void Player::Update(float dt)
 {
-
 }
 
 void Player::Update(float dt, int keyCode)

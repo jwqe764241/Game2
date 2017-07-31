@@ -40,6 +40,7 @@ private:
 		ID3D11DepthStencilState *pDepthDisableStencilState;
 		ID3D11DepthStencilView	*pDepthStencilView;
 		ID3D11RasterizerState	*pRasterizeState;
+		ID3D11BlendState		*pBlendState;
 	};
 
 	struct _WindowSize{
@@ -91,8 +92,6 @@ private:
 	//--Info Val
 	std::vector<AdapterInfo> m_vAdapterInfoList;
 	//Info Val--
-
-	GameInput m_GameInput;
 private:
 	void CalculateFrameStatus();
 	void LoadAssets();
