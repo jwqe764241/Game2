@@ -9,70 +9,106 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\Utils">
+    <Filter Include="소스 파일\Engines">
+      <UniqueIdentifier>{4584e7ec-391a-40b1-8329-f5ec34ce911a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engines\Utils">
       <UniqueIdentifier>{6b5adcb6-3701-45dd-b67a-37aaf2981567}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Camera">
-      <UniqueIdentifier>{8110d104-8225-4ac5-a6ca-48dba919ef9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Geometries">
-      <UniqueIdentifier>{b82daa17-d840-4b4b-a603-5d8fc111a99c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\shaders">
+    <Filter Include="소스 파일\Engines\shaders">
       <UniqueIdentifier>{81359a10-d6cd-4eb9-9700-abeff35c5149}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Input">
+    <Filter Include="소스 파일\Engines\Input">
       <UniqueIdentifier>{fd4260d5-682f-4a31-8588-d4eaa7c18200}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engines\Geometries">
+      <UniqueIdentifier>{b82daa17-d840-4b4b-a603-5d8fc111a99c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engines\Camera">
+      <UniqueIdentifier>{8110d104-8225-4ac5-a6ca-48dba919ef9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Assets">
+      <UniqueIdentifier>{1e4c5813-7a2f-4368-85bb-44e6a6ab3ab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Assets\Interface">
+      <UniqueIdentifier>{f8a87e45-210a-40ed-9810-64ed8d443d62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Assets\Test">
+      <UniqueIdentifier>{e94671c7-46ac-4035-b513-7c81ff63289b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Resources">
+      <UniqueIdentifier>{f2c38b20-8eca-44c3-99a9-bb1908c07086}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engines\Level">
+      <UniqueIdentifier>{9a59fb05-a6d5-4406-9a1e-92fe656c0c13}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Objects">
       <UniqueIdentifier>{fe66be1f-f207-4a7b-8654-6fb33ad42bf0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Sources\Utils\error.cpp">
+      <Filter>소스 파일\Engines\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Camera\GameCamera.cpp">
+      <Filter>소스 파일\Engines\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Geometries\GameBitmap.cpp">
+      <Filter>소스 파일\Engines\Geometries</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Shaders\GameTexture.cpp">
+      <Filter>소스 파일\Engines\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\console.cpp">
+      <Filter>소스 파일\Engines\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Shaders\TextureShader.cpp">
+      <Filter>소스 파일\Engines\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Input\GameInput.cpp">
+      <Filter>소스 파일\Engines\Input</Filter>
+    </ClCompile>
     <ClCompile Include="..\Sources\main.cpp">
+      <Filter>소스 파일\Engines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\GameTimer.cpp">
+      <Filter>소스 파일\Engines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\GameApp.cpp">
+      <Filter>소스 파일\Engines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\GameSettings.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\GameWindow.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Utils\error.cpp">
-      <Filter>소스 파일\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\GameTimer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\GameSettings.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\GameApp.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Camera\GameCamera.cpp">
-      <Filter>소스 파일\Camera</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Shaders\ColorShader.cpp">
-      <Filter>소스 파일\shaders</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Geometries\GameBitmap.cpp">
-      <Filter>소스 파일\Geometries</Filter>
+    <ClCompile Include="..\Sources\GameAssetLoader.cpp">
+      <Filter>소스 파일\Engines</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Shaders\GameTexture.cpp">
-      <Filter>소스 파일\shaders</Filter>
+    <ClCompile Include="..\Sources\Assets\TestAsset.cpp">
+      <Filter>소스 파일\Assets\Test</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Utils\console.cpp">
-      <Filter>소스 파일\Utils</Filter>
+    <ClCompile Include="..\Sources\Geometries\GameSprite.cpp">
+      <Filter>소스 파일\Engines\Geometries</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Shaders\TextureShader.cpp">
-      <Filter>소스 파일\shaders</Filter>
+    <ClCompile Include="..\Sources\Level\GameLevelLoader.cpp">
+      <Filter>소스 파일\Engines\Level</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Input\GameInput.cpp">
-      <Filter>소스 파일\Input</Filter>
+    <ClCompile Include="..\Sources\Level\TestLevel1.cpp">
+      <Filter>소스 파일\Engines\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Level\TestLevel2.cpp">
+      <Filter>소스 파일\Engines\Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
     <None Include="..\Sources\Shaders\texture_ps.ps">
-      <Filter>소스 파일\shaders</Filter>
+      <Filter>소스 파일\Engines\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -80,43 +116,64 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\console.h">
-      <Filter>소스 파일\Utils</Filter>
+      <Filter>소스 파일\Engines\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\error.h">
-      <Filter>소스 파일\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\GameWindow.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\GameTimer.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\GameSettings.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\GameApp.h">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Engines\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Camera\GameCamera.h">
-      <Filter>소스 파일\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\GameDefs.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Shaders\ColorShader.h">
-      <Filter>소스 파일\shaders</Filter>
+      <Filter>소스 파일\Engines\Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Geometries\GameBitmap.h">
-      <Filter>소스 파일\Geometries</Filter>
+      <Filter>소스 파일\Engines\Geometries</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Shaders\GameTexture.h">
-      <Filter>소스 파일\shaders</Filter>
+      <Filter>소스 파일\Engines\shaders</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Shaders\TextureShader.h">
-      <Filter>소스 파일\shaders</Filter>
+      <Filter>소스 파일\Engines\shaders</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Input\GameInput.h">
-      <Filter>소스 파일\Input</Filter>
+      <Filter>소스 파일\Engines\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\GameTimer.h">
+      <Filter>소스 파일\Engines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\GameDefs.h">
+      <Filter>소스 파일\Engines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\GameApp.h">
+      <Filter>소스 파일\Engines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Objects\ICharacter.h">
+      <Filter>소스 파일\Assets\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Objects\IRenderable.h">
+      <Filter>소스 파일\Assets\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\GameSettings.h" />
+    <ClInclude Include="..\Sources\GameWindow.h" />
+    <ClInclude Include="..\Sources\Shaders\ColorShader.h" />
+    <ClInclude Include="..\Sources\GameAssetLoader.h">
+      <Filter>소스 파일\Engines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\TestAsset.h">
+      <Filter>소스 파일\Assets\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Objects\Player.h">
+      <Filter>소스 파일\Assets\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Geometries\GameSprite.h">
+      <Filter>소스 파일\Engines\Geometries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Level\GameLevelLoader.h">
+      <Filter>소스 파일\Engines\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Level\TestLevel1.h">
+      <Filter>소스 파일\Engines\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Level\TestLevel2.h">
+      <Filter>소스 파일\Engines\Level</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Objects\ICharacter.h">
       <Filter>소스 파일\Objects</Filter>
@@ -130,7 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Sources\Shaders\texture_vs.vs">
-      <Filter>소스 파일\shaders</Filter>
+      <Filter>소스 파일\Engines\shaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

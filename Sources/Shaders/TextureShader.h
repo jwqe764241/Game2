@@ -22,6 +22,7 @@ public:
 	TextureShader();
 	~TextureShader();
 
+	static TextureShader& GetInstance();
 	bool Initialize(ID3D11Device *device, HWND hwnd);
 	void Release();
 	bool Render(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView *texture);

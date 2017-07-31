@@ -43,18 +43,20 @@ D3DXVECTOR3 CGameCamera::GetRotation() const
 
 void CGameCamera::Render()
 {
-	D3DXVECTOR3 up     = {0.0f, 1.0f, 0.0f};
+	D3DXVECTOR3 up     = {0.0f, 1.0f, 0.0f}; //--> 카메라는 고정이기 때문에 해당 값으로 초기화
 	D3DXVECTOR3 pos    = m_Position;
 	D3DXVECTOR3 lookAt = {0.0f, 0.0f, 1.0f};
 
 	float roll, pitch, yaw;
 	D3DXMATRIX rotationMatrix;
 
-	//라디안
+	//라디안으로 변환
+	//D3DXMatrixRotationYawPitchRoll()가 라디안 단위이기 때문에
 	roll  = m_Rotation.z * 0.0174532925f;
 	pitch = m_Rotation.x * 0.0174532925f;
 	yaw   = m_Rotation.y * 0.0174532925f;
 
+	//roll, pitch, yaw를 이용하여 ratationMatrix 생성
 	D3DXMatrixRotationYawPitchRoll(&rotationMatrix, yaw, pitch, roll);
 
 	D3DXVec3TransformCoord(&lookAt, &lookAt, &rotationMatrix);
@@ -62,6 +64,7 @@ void CGameCamera::Render()
 
 	lookAt += pos;
 
+	//뷰 행렬 생성
 	D3DXMatrixLookAtLH(&m_ViewMatrix, &pos, &lookAt, &up);
 }
 

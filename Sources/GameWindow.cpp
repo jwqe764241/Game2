@@ -13,7 +13,7 @@
 //	ZeroMemory(&wndClass, sizeof(WNDCLASSEX));
 //	wndClass.cbSize = sizeof(WNDCLASSEX);
 //	wndClass.style = CS_HREDRAW | CS_VREDRAW;
-//	wndClass.lpfnWndProc = CGameWindow::WndProc;
+//	wndClass.lpfnWndProc = CGameWindow::MainProc;
 //	wndClass.cbClsExtra = 0;
 //	wndClass.cbClsExtra = sizeof(CGameWindow*);
 //	wndClass.hInstance = m_hInstance;
@@ -73,7 +73,7 @@
 //}
 //
 //
-//LRESULT CALLBACK CGameWindow::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
+//LRESULT CALLBACK CGameWindow::MainProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 //{
 //	switch (umessage){
 //		case WM_LBUTTONUP:

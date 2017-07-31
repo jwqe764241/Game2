@@ -37,10 +37,10 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 	#endif
 
 	//게임 인스턴스 생성 및 시작
-	CGameApp * pGameApp = new CGameApp(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 800, 600, 1000.0f, 0.1f);
-	pGameApp->Launch();
-
-	delete pGameApp;
+	CGameApp::GetInstance().Initialize(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 800, 600, 1000.0f, 0.1f);
+	//CGameApp * pGameApp = new CGameApp(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 800, 600, 1000.0f, 0.1f);
+	CGameApp::GetInstance().Launch();
+	CGameApp::GetInstance().Release();
 
 	#if defined(_COMMAND_OPEN_CONSOLE)
 		system("pause");

@@ -27,7 +27,7 @@
 //	WindowSize  m_sizeWindow;
 //	//Window Val
 //private:
-//	static LRESULT CALLBACK WndProc(HWND hWnd, UINT umessage, WPARAM wParam, LPARAM lParam);
+//	static LRESULT CALLBACK MainProc(HWND hWnd, UINT umessage, WPARAM wParam, LPARAM lParam);
 //
 //public:
 //	void StartWindow();
