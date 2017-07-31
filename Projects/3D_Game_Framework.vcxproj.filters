@@ -101,6 +101,9 @@
     <ClCompile Include="..\Sources\Assets\Player.cpp">
       <Filter>소스 파일\Assets\Player</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Assets\SpriteAsset.cpp">
+      <Filter>소스 파일\Assets\Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
@@ -171,6 +174,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Interface\IRenderable.h">
       <Filter>소스 파일\Assets\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\SpriteAsset.h">
+      <Filter>소스 파일\Assets\Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

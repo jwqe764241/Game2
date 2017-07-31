@@ -1,5 +1,7 @@
 #include <Sources/GameApp.h>
 
+#include "Sources\Assets\SpriteAsset.h"
+
 ////윈도우 프로시저
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -314,15 +316,13 @@ bool CGameApp::Render()
 
 	m_Camera.Render();
 
-	//CGameAssetLoader::GetInstance().GetAsset("TestAsset")->Render(m_AppInfo.pD3D11DeviceContext, 20, 20);
-
 	//if (!TextureShader::GetInstance().Render(m_AppInfo.pD3D11DeviceContext, CGameAssetLoader::GetInstance().GetAsset("TestAsset")->GetIndexCount(),
 	//	m_Matrix.worldMatrix, m_Camera.GetViewMatrix(), m_Matrix.orthMatrix, CGameAssetLoader::GetInstance().GetAsset("TestAsset")->GetTexture()))
 	//{
 	//	return false;
 	//}
 
-	CGameLevelLoader::GetInstance().RenderLevel(m_AppInfo.pD3D11DeviceContext);
+	CGameLevelLoader::GetInstance().RenderLevel(m_AppInfo.pD3D11DeviceContext, m_WindowSize.width, m_WindowSize.height);
 
 	TurnOnZBuffer();
 

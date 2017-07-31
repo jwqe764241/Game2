@@ -81,11 +81,11 @@ void CGameLevelLoader::UpdateLevel(float dt)
 	}
 }
 
-bool CGameLevelLoader::RenderLevel(ID3D11DeviceContext* deviceContext)
+bool CGameLevelLoader::RenderLevel(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)
 {
 	if (m_CurrentLevel)
 	{
-		if (!m_CurrentLevel->Render(deviceContext))
+		if (!m_CurrentLevel->Render(deviceContext, screenWidth, screenHeight))
 		{
 			return false;
 		}
