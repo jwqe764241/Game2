@@ -72,7 +72,10 @@ void GameSprite::Render(ID3D11DeviceContext* context, int screenWidth, int scree
 
 void GameSprite::SetMotion(float index)
 {
-	m_currentMotion = index;
+	if (m_currentMotion != index)
+	{
+		m_currentMotion = index;
+	}
 }
 
 void GameSprite::UpdateBuffers(ID3D11DeviceContext * deviceContext)

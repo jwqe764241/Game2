@@ -14,7 +14,7 @@ bool TestLevel1::Load()
 {
 	m_RenderList.reserve(20);
 
-	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
+	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_PLAYER, 576, 256));
 	//m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
 	return true;
 }

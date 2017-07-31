@@ -3,15 +3,21 @@
 #include <D3DX11.h>
 
 #include <Sources/Input/GameInput.h>
-#include <Sources/Geometries/GameBitmap.h>
+#include <Sources/Geometries/GameSprite.h>
 #include <Sources/Interface/IRenderable.h>
 #include <Sources/Interface/ICharacter.h>
 
 class Player : public IRenderable, public ICharacter
 {
 private:
+	wchar_t* m_ResourcePath = L"../Resources/sprite.bmp";
+
 	int m_Health;
-	
+	float m_PosX;
+	float m_PosY;
+	float m_Speed;
+	GameSprite m_Sprite;
+
 public:
 	Player();
 	~Player();
@@ -30,4 +36,7 @@ public:
 	virtual void Damage(int damage) override;
 	virtual void Die() override;
 	virtual bool isDied() override;
+
+	virtual int GetIndexCount() override;
+	virtual ID3D11ShaderResourceView* GetTexture() override;
 };
