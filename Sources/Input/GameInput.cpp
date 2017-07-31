@@ -80,32 +80,26 @@ bool GameInput::Initialize(HINSTANCE hInstance, HWND hwnd, int screenWidth, int 
 	{
 		return false;
 	}
-	
 
 	return true;
 }
 
+GameInput& GameInput::GetInstance()
+{
+	static GameInput instance;
+
+	return instance;
+}
+
 void GameInput::Release()
 {
-	if (m_mouse) 
-	{
-		m_mouse->Unacquire();
-		m_mouse->Release();
-		m_mouse = nullptr;
-	}
+	m_mouse->Unacquire();
+	Utils::Release(&m_mouse);
 
-	if (m_keyboard) 
-	{
-		m_keyboard->Unacquire();
-		m_keyboard->Release();
-		m_keyboard = nullptr;
-	}
+	m_keyboard->Unacquire();
+	Utils::Release(&m_mouse);
 
-	if (m_directInput) 
-	{
-		m_directInput->Release();
-		m_directInput = nullptr;
-	}
+	Utils::Release(&m_directInput);
 }
 
 bool GameInput::Frame()
@@ -131,11 +125,12 @@ bool GameInput::Frame()
 
 bool GameInput::IsEscapeProcessed()
 {
-	if (m_keyboardState[DIK_ESCAPE] & 0x80) 
-	{
-		return true;
-	}
-	return false;
+	return m_keyboardState[DIK_ESCAPE] & 0x80;
+}
+
+bool GameInput::IsPressed(DWORD keycode)
+{
+	return m_keyboardState[keycode] & 0x80;
 }
 
 void GameInput::GetMouseLocation(int& mouseX, int& mouseY)

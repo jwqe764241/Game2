@@ -257,7 +257,7 @@ void CGameApp::Launch()
 	LoadAssets();
 	onShowWindow();
 
-	if (!m_GameInput.Initialize(m_hInstance, m_hWnd, m_WindowSize.width, m_WindowSize.height))
+	if (!GameInput::GetInstance().Initialize(m_hInstance, m_hWnd, m_WindowSize.width, m_WindowSize.height))
 	{
 		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Input", MB_OK);
 		return;
@@ -280,7 +280,7 @@ void CGameApp::Launch()
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		if (m_GameInput.IsEscapeProcessed())
+		if (GameInput::GetInstance().IsEscapeProcessed())
 		{
 			return;
 		}
@@ -302,7 +302,7 @@ void CGameApp::Launch()
 void CGameApp::Update()
 {
 	m_GameTimer.Tick();
-	m_GameInput.Frame();
+	GameInput::GetInstance().Frame();
 	CGameLevelLoader::GetInstance().UpdateLevel(m_GameTimer.DeltaTime());
 	CalculateFrameStatus();
 }
@@ -375,6 +375,23 @@ void CGameApp::onResize()
 		depthBufferDesc.MiscFlags      = NULL;
 	m_AppInfo.pD3D11Device->CreateTexture2D(&depthBufferDesc, NULL, &m_AppInfo.pBackBuffer);
 	
+	//
+	D3D11_BLEND_DESC blendStateDesc;
+	ZeroMemory(&blendStateDesc, sizeof(D3D11_BLEND_DESC));
+		blendStateDesc.AlphaToCoverageEnable = FALSE;
+		blendStateDesc.IndependentBlendEnable = FALSE;
+		blendStateDesc.RenderTarget[0].BlendEnable = TRUE;
+		blendStateDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+		blendStateDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		blendStateDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		blendStateDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+		blendStateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_DEST_ALPHA;
+		blendStateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		blendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	m_AppInfo.pD3D11Device->CreateBlendState(&blendStateDesc, &m_AppInfo.pBlendState);
+	m_AppInfo.pD3D11DeviceContext->OMSetBlendState(m_AppInfo.pBlendState, NULL, 0xFFFFFF);
+
+
 	//깊이 스텐실 버퍼 생성 -> Z버퍼 켬
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	ZeroMemory(&depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));

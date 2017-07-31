@@ -27,7 +27,6 @@ void Player::Reset()
 
 void Player::Update(float dt)
 {
-
 }
 
 void Player::Update(float dt, int keyCode)
@@ -45,12 +44,12 @@ void Player::Idle()
 
 }
 
-void Player::Move(XMVECTORF32 target)
+void Player::Move(D3DXVECTOR4 target)
 {
 
 }
 
-void Player::Look(XMVECTORF32 direction)
+void Player::Look(D3DXVECTOR4 direction)
 {
 
 }
