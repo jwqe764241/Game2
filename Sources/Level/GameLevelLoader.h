@@ -21,7 +21,7 @@ public:
 	void UnloadLevel();
 	bool ChangeLevel(ILevel* level);
 	void UpdateLevel(float dt);
-	bool RenderLevel(ID3D11DeviceContext* deviceContext);
+	bool RenderLevel(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight);
 };
 
 #endif

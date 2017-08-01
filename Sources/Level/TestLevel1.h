@@ -4,15 +4,18 @@
 #include <vector>
 #include <Sources/GameApp.h>
 
+#include <Sources/GameDefs.h>
 #include <Sources/GameAssetLoader.h>
-#include <Sources/Assets/TestAsset.h>
+#include <Sources/Camera/GameCamera.h>
+#include <Sources/Input/GameInput.h>
 #include <Sources/Interface/IRenderable.h>
 #include <Sources/Interface/ILevel.h>
 
 class TestLevel1 : public ILevel{
 private:
 	std::vector<IRenderable*> m_RenderList;
-
+	Player* m_Player;
+	CGameCamera m_Camera;
 public:
 	TestLevel1();
 	~TestLevel1();
@@ -20,7 +23,7 @@ public:
 	virtual bool Load() override;
 	virtual void Unload() override;
 	virtual void Update(float dt) override;
-	virtual bool Render(ID3D11DeviceContext* deviceContext) override;
+	virtual bool Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight) override;
 
 	virtual void onStart() override;
 	virtual void onEnd() override;

@@ -40,12 +40,16 @@ TargetInterface* CGameAssetLoader::LoadAsset(int id, int bitmapWidth, int bitmap
 	case ID_ASSET_TESTASSET:
 		asset = new TestAsset();
 		break;
+	case ID_ASSET_SPRITEASSET:
+		asset = new SpriteAsset();
+		break;
+	case ID_ASSET_PLAYER:
+		asset = new Player();
 	}
 
-	asset->Load(m_DeviceRef, *m_ScreenWidthRef, *m_ScreenHeightRef, bitmapWidth, bitmapHeight);
+	asset->Load(m_DeviceRef, bitmapWidth, bitmapHeight);
 
 	return asset;
-	//m_AssetMap.insert(std::pair<std::string, TargetInterface*>(id, target));
 }
 
 //TargetInterface* CGameAssetLoader::GetAsset(std::string id)

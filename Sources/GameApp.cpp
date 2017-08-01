@@ -1,5 +1,7 @@
 #include <Sources/GameApp.h>
 
+#include "Sources\Assets\SpriteAsset.h"
+
 ////윈도우 프로시저
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -221,6 +223,8 @@ void CGameApp::Release()
 	{
 		Utils::Release(&output);
 	}
+
+	CGameLevelLoader::GetInstance().UnloadLevel();
 }
 
 void CGameApp::CalculateFrameStatus()
@@ -257,7 +261,7 @@ void CGameApp::Launch()
 	LoadAssets();
 	onShowWindow();
 
-	if (!m_GameInput.Initialize(m_hInstance, m_hWnd, m_WindowSize.width, m_WindowSize.height))
+	if (!GameInput::GetInstance().Initialize(m_hInstance, m_hWnd, m_WindowSize.width, m_WindowSize.height))
 	{
 		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Input", MB_OK);
 		return;
@@ -280,11 +284,11 @@ void CGameApp::Launch()
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		if (m_GameInput.IsEscapeProcessed())
+		if (GameInput::GetInstance().IsEscapeProcessed())
 		{
 			return;
 		}
-		m_AppInfo.pD3D11DeviceContext->ClearRenderTargetView(m_AppInfo.pRenderTargetView, GameColors::GREEN);
+		m_AppInfo.pD3D11DeviceContext->ClearRenderTargetView(m_AppInfo.pRenderTargetView, GameColors::BLUE);
 
 		m_AppInfo.pD3D11DeviceContext->ClearDepthStencilView(m_AppInfo.pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
@@ -302,7 +306,7 @@ void CGameApp::Launch()
 void CGameApp::Update()
 {
 	m_GameTimer.Tick();
-	m_GameInput.Frame();
+	GameInput::GetInstance().Frame();
 	CGameLevelLoader::GetInstance().UpdateLevel(m_GameTimer.DeltaTime());
 	CalculateFrameStatus();
 }
@@ -312,17 +316,13 @@ bool CGameApp::Render()
 {
 	TurnOffZBuffer();
 
-	m_Camera.Render();
-
-	//CGameAssetLoader::GetInstance().GetAsset("TestAsset")->Render(m_AppInfo.pD3D11DeviceContext, 20, 20);
-
 	//if (!TextureShader::GetInstance().Render(m_AppInfo.pD3D11DeviceContext, CGameAssetLoader::GetInstance().GetAsset("TestAsset")->GetIndexCount(),
 	//	m_Matrix.worldMatrix, m_Camera.GetViewMatrix(), m_Matrix.orthMatrix, CGameAssetLoader::GetInstance().GetAsset("TestAsset")->GetTexture()))
 	//{
 	//	return false;
 	//}
 
-	CGameLevelLoader::GetInstance().RenderLevel(m_AppInfo.pD3D11DeviceContext);
+	CGameLevelLoader::GetInstance().RenderLevel(m_AppInfo.pD3D11DeviceContext, m_WindowSize.width, m_WindowSize.height);
 
 	TurnOnZBuffer();
 
@@ -375,6 +375,23 @@ void CGameApp::onResize()
 		depthBufferDesc.MiscFlags      = NULL;
 	m_AppInfo.pD3D11Device->CreateTexture2D(&depthBufferDesc, NULL, &m_AppInfo.pBackBuffer);
 	
+	//
+	D3D11_BLEND_DESC blendStateDesc;
+	ZeroMemory(&blendStateDesc, sizeof(D3D11_BLEND_DESC));
+		blendStateDesc.AlphaToCoverageEnable = FALSE;
+		blendStateDesc.IndependentBlendEnable = FALSE;
+		blendStateDesc.RenderTarget[0].BlendEnable = TRUE;
+		blendStateDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+		blendStateDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		blendStateDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		blendStateDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+		blendStateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_DEST_ALPHA;
+		blendStateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		blendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	m_AppInfo.pD3D11Device->CreateBlendState(&blendStateDesc, &m_AppInfo.pBlendState);
+	m_AppInfo.pD3D11DeviceContext->OMSetBlendState(m_AppInfo.pBlendState, NULL, 0xFFFFFF);
+
+
 	//깊이 스텐실 버퍼 생성 -> Z버퍼 켬
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	ZeroMemory(&depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
@@ -462,7 +479,6 @@ void CGameApp::onResize()
 	D3DXMatrixIdentity(&m_Matrix.worldMatrix);
 	D3DXMatrixOrthoLH(&m_Matrix.orthMatrix, static_cast<float>(m_WindowSize.width), static_cast<float>(m_WindowSize.height), m_screenNear, m_screenDepth);
 
-	m_Camera.SetPosition(0.0f, 0.0f, -10.0f);
 	if (!TextureShader::GetInstance().Initialize(m_AppInfo.pD3D11Device, m_hWnd))
 	{
 		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Texture Shaders!", MB_OK);
@@ -475,6 +491,7 @@ void CGameApp::onResize()
 void CGameApp::onShowWindow()
 {
 	ShowWindow(m_hWnd, SW_SHOW);
+	ShowCursor(false);
 	SetForegroundWindow(m_hWnd);
 	SetFocus(m_hWnd);
 	UpdateWindow(m_hWnd);
@@ -510,4 +527,9 @@ D3DXMATRIX& CGameApp::GetWorldMatrix()
 D3DXMATRIX& CGameApp::GetorthogonalMatrix()
 {
 	return m_Matrix.orthMatrix;
+}
+
+WindowSize CGameApp::GetWindowSize() const
+{
+	return m_WindowSize;
 }

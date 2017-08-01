@@ -21,42 +21,43 @@
 #include <Sources/Level/TestLevel1.h>
 //#define TEST_RENDER_BOX
 
+struct _WindowSize {
+	int width;
+	int height;
+};
+
+struct _AdapterInfo {
+	LUID ID;
+	std::wstring Description;
+	//int Numerator;
+	//int Denominator;
+};
+
+struct _AppInfo {
+	ID3D11Device			*pD3D11Device;
+	ID3D11DeviceContext		*pD3D11DeviceContext;
+	IDXGISwapChain			*pSwapChain;
+	ID3D11RenderTargetView	*pRenderTargetView;
+	ID3D11Texture2D			*pBackBuffer;
+	ID3D11DepthStencilState *pDepthStencilState;
+	ID3D11DepthStencilState *pDepthDisableStencilState;
+	ID3D11DepthStencilView	*pDepthStencilView;
+	ID3D11RasterizerState	*pRasterizeState;
+	ID3D11BlendState		*pBlendState;
+};
+
+struct _AppMatrix {
+	D3DXMATRIX projectionMatrix;
+	D3DXMATRIX worldMatrix;
+	D3DXMATRIX orthMatrix;
+};
+
+using AdapterInfo = _AdapterInfo;
+using AppInfo     = _AppInfo;
+using WindowSize  = _WindowSize;
+using Matrix      = _AppMatrix;
+
 class CGameApp{
-private:
-	struct _AdapterInfo {
-		LUID ID;
-		std::wstring Description;
-		//int Numerator;
-		//int Denominator;
-	};
-
-	struct _AppInfo {
-		ID3D11Device			*pD3D11Device;
-		ID3D11DeviceContext		*pD3D11DeviceContext;
-		IDXGISwapChain			*pSwapChain;
-		ID3D11RenderTargetView	*pRenderTargetView;
-		ID3D11Texture2D			*pBackBuffer;
-		ID3D11DepthStencilState *pDepthStencilState;
-		ID3D11DepthStencilState *pDepthDisableStencilState;
-		ID3D11DepthStencilView	*pDepthStencilView;
-		ID3D11RasterizerState	*pRasterizeState;
-	};
-
-	struct _WindowSize{
-		int width;
-		int height;
-	};
-
-	struct _Matrix{
-		D3DXMATRIX projectionMatrix;
-		D3DXMATRIX worldMatrix;
-		D3DXMATRIX orthMatrix;
-	};
-
-	using AdapterInfo = _AdapterInfo;
-	using AppInfo     = _AppInfo;
-	using WindowSize  = _WindowSize;
-	using Matrix      = _Matrix;
 
 private:
 	//--Components
@@ -91,8 +92,6 @@ private:
 	//--Info Val
 	std::vector<AdapterInfo> m_vAdapterInfoList;
 	//Info Val--
-
-	GameInput m_GameInput;
 private:
 	void CalculateFrameStatus();
 	void LoadAssets();
@@ -114,7 +113,7 @@ public:
 	D3DXMATRIX& GetWorldMatrix();
 	D3DXMATRIX& GetorthogonalMatrix();
 
-	CGameCamera m_Camera;
+	WindowSize GetWindowSize() const;
 
 	static CGameApp& GetInstance();
 

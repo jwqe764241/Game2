@@ -1,30 +1,24 @@
-#ifndef __TESTASSET_H
-#define __TESTASSET_H
+#pragma once
 
-#include <D3D11.h>
-#include <D3DX11.h>
+#include <d3d11.h>
+#include <D3DX10math.h>
 
-#include <Sources/Geometries/GameSprite.h>
-#include <Sources/Shaders/TextureShader.h>
 #include <Sources/Interface/IRenderable.h>
+#include <Sources/Geometries/GameSprite.h>
 
-class TestAsset : public IRenderable {
-private:
-	/*
-		부쉬로 변경함
-		그냥 고정할 예정
-	*/
-	wchar_t* filePath = L"../Resources/bush.png";
+class SpriteAsset : public IRenderable
+{
+	wchar_t* m_ResourcePath = L"../Resources/sprite.bmp";
 
-	float m_PosX;
-	float m_PosY;
+	GameSprite m_Object;
+
+	float m_PosX, m_PosY;
 
 public:
-	TestAsset();
-	TestAsset(TestAsset& other);
-	~TestAsset();
+	SpriteAsset();
+	~SpriteAsset();
 
-	virtual void Load(ID3D11Device* device,	int bitmapWidth, int bitmapHeight)	override;
+	virtual void Load(ID3D11Device* device, int bitmapWidth, int bitmapHeight)	override;
 	virtual void Release() override;
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
@@ -34,8 +28,4 @@ public:
 	virtual D3DXVECTOR2 GetPosition() const override;
 	virtual void SetPosition(const D3DXVECTOR2 pos) override;
 	virtual GameSprite* GetSprite() override;
-
-	GameBitmap m_Bitmap;
 };
-
-#endif
