@@ -15,6 +15,8 @@ void Player::Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight)
 	m_PosX = 0;
 	m_PosY = 0;
 	m_Sprite.Initialize(device, m_ResourcePath, bitmapWidth, bitmapHeight, 4);
+	m_Sprite.SetLooping(false);
+	m_Sprite.SetMotion(2);
 }
 
 void Player::Release()
@@ -32,8 +34,6 @@ void Player::Update(float dt)
 	GameInput& input = GameInput::GetInstance();
 	float x = 0.0f, y = 0.0f;
 	float speed = 150.0f;
-
-	m_Sprite.SetLooping(true);
 
 	if (input.IsPressed(DIK_W)) 
 	{
@@ -72,6 +72,7 @@ void Player::Update(float dt)
 		m_PosY += y;
 	}
 
+	m_Sprite.SetLooping(true);
 	m_Sprite.Update(dt);
 }
 

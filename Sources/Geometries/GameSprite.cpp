@@ -27,6 +27,12 @@ void GameSprite::Update(float dt)
 {
 	if (m_maxFrames == 1.0f) return;
 
+	if (!m_isLooping)
+	{
+		m_currentFrame = m_maxFrames;
+		return;
+	}
+
 	if (m_currentFrame <= m_maxFrames) {
 		m_currentSpeed += m_animationSpeed * dt;
 
@@ -38,9 +44,9 @@ void GameSprite::Update(float dt)
 				if (m_isLooping) {
 					m_currentFrame = 0;
 				}
-				else {
-					m_currentFrame = m_maxFrames;
-				}
+				//else {
+				//	m_currentFrame = m_maxFrames;
+				//}
 			}
 		}
 	}
