@@ -29,8 +29,6 @@ void Player::Reset()
 
 void Player::Update(float dt)
 {
-	static bool sibal = false;
-
 	GameInput& input = GameInput::GetInstance();
 	float x = 0.0f, y = 0.0f;
 	float speed = 150.0f;
@@ -61,7 +59,6 @@ void Player::Update(float dt)
 	{
 		m_Sprite.SetLooping(false);
 		m_Sprite.Update(dt);
-		sibal = true;
 		return;
 	}
 
