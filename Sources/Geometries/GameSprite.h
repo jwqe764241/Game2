@@ -18,6 +18,7 @@ public:
 	void Render(ID3D11DeviceContext* context, int screenWidth, int screenHeight, int posX, int posY);
 
 	void SetMotion(float index);
+	void SetLooping(bool condition);
 
 protected:
 	void UpdateBuffers(ID3D11DeviceContext *deviceContext);

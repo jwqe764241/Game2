@@ -15,7 +15,6 @@ private:
 	int m_Health;
 	float m_PosX;
 	float m_PosY;
-	float m_Speed;
 	GameSprite m_Sprite;
 
 public:

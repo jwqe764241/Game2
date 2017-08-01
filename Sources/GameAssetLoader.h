@@ -15,6 +15,7 @@ enum AssetID {
 	ID_ASSET_PLAYER
 };
 
+//TODO: 확실해 지면 해당 것으로 수정하기
 using TargetInterface = IRenderable;
 
 class CGameAssetLoader {

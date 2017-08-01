@@ -14,7 +14,6 @@ void Player::Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight)
 {
 	m_PosX = 0;
 	m_PosY = 0;
-	m_Speed = 1.0f;
 	m_Sprite.Initialize(device, m_ResourcePath, bitmapWidth, bitmapHeight, 4);
 }
 
@@ -30,37 +29,39 @@ void Player::Reset()
 
 void Player::Update(float dt)
 {
-	m_Sprite.Update(dt);
+	static bool sibal = false;
 
 	GameInput& input = GameInput::GetInstance();
 	float x = 0.0f, y = 0.0f;
-	float speed = 50.0f;
+	float speed = 150.0f;
 
-	//TODO:델타타임 적용 안됨
+	m_Sprite.SetLooping(true);
+
 	if (input.IsPressed(DIK_W)) 
 	{
 		m_Sprite.SetMotion(0);
-		y -= 5;
+		y -= 1;
 	}
 	else if (input.IsPressed(DIK_A))
 	{
 		m_Sprite.SetMotion(1);
-		x -= 5;
+		x -= 1;
 	}
 	else if (input.IsPressed(DIK_S))
 	{
 		m_Sprite.SetMotion(2);
-		y += 5;
+		y += 1;
 	}
 	else if (input.IsPressed(DIK_D))
 	{
 		m_Sprite.SetMotion(3);
-		x += 5;
+		x += 1;
 	}
 	else
 	{
-		Idle();
+		m_Sprite.SetLooping(false);
 		m_Sprite.Update(dt);
+		sibal = true;
 		return;
 	}
 
@@ -73,6 +74,8 @@ void Player::Update(float dt)
 		m_PosX += x;
 		m_PosY += y;
 	}
+
+	m_Sprite.Update(dt);
 }
 
 void Player::Update(float dt, int keyCode)
@@ -87,12 +90,14 @@ void Player::Render(ID3D11DeviceContext * deviceContext, int screenWidth, int sc
 
 void Player::Idle()
 {
-	m_Sprite.SetMotion(2);
+	m_Sprite.SetLooping(false);
 }
 
+//어디다가 쓰지..
 void Player::Move(D3DXVECTOR3 target)
 {
-
+	m_PosX = target.x;
+	m_PosY = target.y;
 }
 
 void Player::Attack(void ** target)

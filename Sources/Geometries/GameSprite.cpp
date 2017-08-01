@@ -26,8 +26,8 @@ void GameSprite::Initialize(ID3D11Device *device, wchar_t *filePath, int bitmapW
 void GameSprite::Update(float dt)
 {
 	if (m_maxFrames == 1.0f) return;
-	
-	if (m_currentFrame < m_maxFrames) {
+
+	if (m_currentFrame <= m_maxFrames) {
 		m_currentSpeed += m_animationSpeed * dt;
 
 		if (m_currentSpeed > m_framesPerSecond) {
@@ -78,11 +78,19 @@ void GameSprite::SetMotion(float index)
 	}
 }
 
+void GameSprite::SetLooping(bool condition)
+{
+	if (m_isLooping != condition)
+	{
+		m_isLooping = condition;
+	}
+}
+
 void GameSprite::UpdateBuffers(ID3D11DeviceContext * deviceContext)
 {
 	// 이전 프레임과 동일한 프레임인 경우. 함수를 나온다.
 	if (m_currentFrame == m_previousFrame) return;
-
+	
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	GameBitmap::VertexType* vertices = GameBitmap::GetVertices();
 
