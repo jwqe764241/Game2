@@ -107,6 +107,10 @@ GameBitmap::VertexType * GameBitmap::GetVertices()
 	return m_vertices;
 }
 
+GameBitmap::BitmapSize GameBitmap::GetBitmapSize() const
+{
+	return GameBitmap::BitmapSize{ m_bitmapWidth, m_bitmapHeight };
+}
 
 bool GameBitmap::InitializeBuffers(ID3D11Device *device)
 {

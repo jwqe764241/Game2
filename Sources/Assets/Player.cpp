@@ -128,3 +128,19 @@ ID3D11ShaderResourceView* Player::GetTexture()
 {
 	return m_Sprite.GetTexture();
 }
+
+D3DXVECTOR2 Player::GetPosition() const
+{
+	return D3DXVECTOR2{ m_PosX, m_PosY };
+}
+
+void Player::SetPosition(const D3DXVECTOR2 pos)
+{
+	m_PosX = pos.x;
+	m_PosY = pos.y;
+}
+
+GameSprite* Player::GetSprite()
+{
+	return &m_Sprite;
+}

@@ -20,6 +20,9 @@ void GameSprite::Initialize(ID3D11Device *device, wchar_t *filePath, int bitmapW
 	m_maxFrames = (float)bitmapWidth / (float)(bitmapHeight / numberOfMotions);
 	m_numOfMotions = numberOfMotions;
 
+	m_frameWidth = bitmapWidth / m_maxFrames;
+	m_frameHeight = bitmapHeight / m_numOfMotions;
+
 	GameBitmap::Initialize(device, filePath, bitmapWidth / m_maxFrames, bitmapHeight / numberOfMotions);
 }
 
@@ -27,6 +30,12 @@ void GameSprite::Update(float dt)
 {
 	if (m_maxFrames == 1.0f) return;
 
+	/*
+		전방에 체크를 하지 않으면
+		m_isLooping 값을 초기에 false 값으로 설정을 해 놓아도
+		마지막 프레임까지 업데이트 되고 설정이 되기 때문에
+		해당 위치에 추가하게됨
+	*/
 	if (!m_isLooping)
 	{
 		m_currentFrame = m_maxFrames;
@@ -44,6 +53,7 @@ void GameSprite::Update(float dt)
 				if (m_isLooping) {
 					m_currentFrame = 0;
 				}
+				//초기 체크 위치
 				//else {
 				//	m_currentFrame = m_maxFrames;
 				//}
@@ -90,6 +100,28 @@ void GameSprite::SetLooping(bool condition)
 	{
 		m_isLooping = condition;
 	}
+}
+
+float GameSprite::GetMaxFrame() const
+{
+	return m_maxFrames;
+}
+
+float GameSprite::GetMotionNumber() const
+{
+	return m_numOfMotions;
+}
+
+float GameSprite::GetFrameWidth() const
+//그려질 프레임의 너비
+{
+	return m_frameWidth;
+}
+
+float GameSprite::GetFrameHeight() const
+//그려질 프레임의 높이
+{
+	return m_frameHeight;
 }
 
 void GameSprite::UpdateBuffers(ID3D11DeviceContext * deviceContext)

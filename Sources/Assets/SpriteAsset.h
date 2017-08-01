@@ -3,16 +3,16 @@
 #include <d3d11.h>
 #include <D3DX10math.h>
 
-#include "Sources\Interface\IRenderable.h"
-#include "Sources\Geometries\GameSprite.h"
+#include <Sources/Interface/IRenderable.h>
+#include <Sources/Geometries/GameSprite.h>
 
 class SpriteAsset : public IRenderable
 {
-	wchar_t* m_filePath = L"../Resources/sprite.bmp";
+	wchar_t* m_ResourcePath = L"../Resources/sprite.bmp";
 
-	GameSprite m_object;
+	GameSprite m_Object;
 
-	int m_posX, m_posY;
+	float m_PosX, m_PosY;
 
 public:
 	SpriteAsset();
@@ -25,4 +25,7 @@ public:
 	virtual void Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight) override;
 	virtual int GetIndexCount() override;
 	virtual ID3D11ShaderResourceView* GetTexture() override;
+	virtual D3DXVECTOR2 GetPosition() const override;
+	virtual void SetPosition(const D3DXVECTOR2 pos) override;
+	virtual GameSprite* GetSprite() override;
 };

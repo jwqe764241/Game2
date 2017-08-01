@@ -38,4 +38,8 @@ public:
 
 	virtual int GetIndexCount() override;
 	virtual ID3D11ShaderResourceView* GetTexture() override;
+
+	virtual D3DXVECTOR2 GetPosition() const override;
+	virtual void SetPosition(const D3DXVECTOR2 pos) override;
+	virtual GameSprite* GetSprite() override;
 };

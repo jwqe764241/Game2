@@ -223,6 +223,8 @@ void CGameApp::Release()
 	{
 		Utils::Release(&output);
 	}
+
+	CGameLevelLoader::GetInstance().UnloadLevel();
 }
 
 void CGameApp::CalculateFrameStatus()
@@ -286,7 +288,7 @@ void CGameApp::Launch()
 		{
 			return;
 		}
-		m_AppInfo.pD3D11DeviceContext->ClearRenderTargetView(m_AppInfo.pRenderTargetView, GameColors::GREEN);
+		m_AppInfo.pD3D11DeviceContext->ClearRenderTargetView(m_AppInfo.pRenderTargetView, GameColors::BLUE);
 
 		m_AppInfo.pD3D11DeviceContext->ClearDepthStencilView(m_AppInfo.pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
@@ -313,8 +315,6 @@ void CGameApp::Update()
 bool CGameApp::Render()
 {
 	TurnOffZBuffer();
-
-	m_Camera.Render();
 
 	//if (!TextureShader::GetInstance().Render(m_AppInfo.pD3D11DeviceContext, CGameAssetLoader::GetInstance().GetAsset("TestAsset")->GetIndexCount(),
 	//	m_Matrix.worldMatrix, m_Camera.GetViewMatrix(), m_Matrix.orthMatrix, CGameAssetLoader::GetInstance().GetAsset("TestAsset")->GetTexture()))
@@ -479,7 +479,6 @@ void CGameApp::onResize()
 	D3DXMatrixIdentity(&m_Matrix.worldMatrix);
 	D3DXMatrixOrthoLH(&m_Matrix.orthMatrix, static_cast<float>(m_WindowSize.width), static_cast<float>(m_WindowSize.height), m_screenNear, m_screenDepth);
 
-	m_Camera.SetPosition(0.0f, 0.0f, -10.0f);
 	if (!TextureShader::GetInstance().Initialize(m_AppInfo.pD3D11Device, m_hWnd))
 	{
 		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Texture Shaders!", MB_OK);
@@ -492,6 +491,7 @@ void CGameApp::onResize()
 void CGameApp::onShowWindow()
 {
 	ShowWindow(m_hWnd, SW_SHOW);
+	ShowCursor(false);
 	SetForegroundWindow(m_hWnd);
 	SetFocus(m_hWnd);
 	UpdateWindow(m_hWnd);
@@ -527,4 +527,9 @@ D3DXMATRIX& CGameApp::GetWorldMatrix()
 D3DXMATRIX& CGameApp::GetorthogonalMatrix()
 {
 	return m_Matrix.orthMatrix;
+}
+
+WindowSize CGameApp::GetWindowSize() const
+{
+	return m_WindowSize;
 }
