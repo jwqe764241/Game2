@@ -4,16 +4,20 @@
 #include <D3D11.h>
 #include <D3DX11.h>
 
-#include <Sources/Geometries/GameBitmap.h>
+#include <Sources/Geometries/GameSprite.h>
 #include <Sources/Shaders/TextureShader.h>
 #include <Sources/Interface/IRenderable.h>
 
 class TestAsset : public IRenderable {
 private:
-	wchar_t* filePath = L"../Resources/test.bmp";
+	/*
+		부쉬로 변경함
+		그냥 고정할 예정
+	*/
+	wchar_t* filePath = L"../Resources/bush.png";
 
-	float m_posX;
-	float m_posY;
+	float m_PosX;
+	float m_PosY;
 
 public:
 	TestAsset();
@@ -27,6 +31,9 @@ public:
 	virtual void Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight) override;
 	virtual int GetIndexCount() override;
 	virtual ID3D11ShaderResourceView* GetTexture() override;
+	virtual D3DXVECTOR2 GetPosition() const override;
+	virtual void SetPosition(const D3DXVECTOR2 pos) override;
+	virtual GameSprite* GetSprite() override;
 
 	GameBitmap m_Bitmap;
 };

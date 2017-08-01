@@ -20,14 +20,29 @@ void GameSprite::Initialize(ID3D11Device *device, wchar_t *filePath, int bitmapW
 	m_maxFrames = (float)bitmapWidth / (float)(bitmapHeight / numberOfMotions);
 	m_numOfMotions = numberOfMotions;
 
+	m_frameWidth = bitmapWidth / m_maxFrames;
+	m_frameHeight = bitmapHeight / m_numOfMotions;
+
 	GameBitmap::Initialize(device, filePath, bitmapWidth / m_maxFrames, bitmapHeight / numberOfMotions);
 }
 
 void GameSprite::Update(float dt)
 {
 	if (m_maxFrames == 1.0f) return;
-	
-	if (m_currentFrame < m_maxFrames) {
+
+	/*
+		전방에 체크를 하지 않으면
+		m_isLooping 값을 초기에 false 값으로 설정을 해 놓아도
+		마지막 프레임까지 업데이트 되고 설정이 되기 때문에
+		해당 위치에 추가하게됨
+	*/
+	if (!m_isLooping)
+	{
+		m_currentFrame = m_maxFrames;
+		return;
+	}
+
+	if (m_currentFrame <= m_maxFrames) {
 		m_currentSpeed += m_animationSpeed * dt;
 
 		if (m_currentSpeed > m_framesPerSecond) {
@@ -38,9 +53,10 @@ void GameSprite::Update(float dt)
 				if (m_isLooping) {
 					m_currentFrame = 0;
 				}
-				else {
-					m_currentFrame = m_maxFrames;
-				}
+				//초기 체크 위치
+				//else {
+				//	m_currentFrame = m_maxFrames;
+				//}
 			}
 		}
 	}
@@ -72,14 +88,47 @@ void GameSprite::Render(ID3D11DeviceContext* context, int screenWidth, int scree
 
 void GameSprite::SetMotion(float index)
 {
-	m_currentMotion = index;
+	if (m_currentMotion != index)
+	{
+		m_currentMotion = index;
+	}
+}
+
+void GameSprite::SetLooping(bool condition)
+{
+	if (m_isLooping != condition)
+	{
+		m_isLooping = condition;
+	}
+}
+
+float GameSprite::GetMaxFrame() const
+{
+	return m_maxFrames;
+}
+
+float GameSprite::GetMotionNumber() const
+{
+	return m_numOfMotions;
+}
+
+float GameSprite::GetFrameWidth() const
+//그려질 프레임의 너비
+{
+	return m_frameWidth;
+}
+
+float GameSprite::GetFrameHeight() const
+//그려질 프레임의 높이
+{
+	return m_frameHeight;
 }
 
 void GameSprite::UpdateBuffers(ID3D11DeviceContext * deviceContext)
 {
 	// 이전 프레임과 동일한 프레임인 경우. 함수를 나온다.
 	if (m_currentFrame == m_previousFrame) return;
-
+	
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	GameBitmap::VertexType* vertices = GameBitmap::GetVertices();
 

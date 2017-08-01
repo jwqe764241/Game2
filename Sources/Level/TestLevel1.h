@@ -4,15 +4,18 @@
 #include <vector>
 #include <Sources/GameApp.h>
 
+#include <Sources/GameDefs.h>
 #include <Sources/GameAssetLoader.h>
-#include <Sources/Assets/TestAsset.h>
+#include <Sources/Camera/GameCamera.h>
+#include <Sources/Input/GameInput.h>
 #include <Sources/Interface/IRenderable.h>
 #include <Sources/Interface/ILevel.h>
 
 class TestLevel1 : public ILevel{
 private:
 	std::vector<IRenderable*> m_RenderList;
-
+	Player* m_Player;
+	CGameCamera m_Camera;
 public:
 	TestLevel1();
 	~TestLevel1();

@@ -18,6 +18,15 @@ public:
 	void Render(ID3D11DeviceContext* context, int screenWidth, int screenHeight, int posX, int posY);
 
 	void SetMotion(float index);
+	void SetLooping(bool condition);
+
+	/*
+		에셋 조작을 위하여 4개 함수 추가하였음
+	*/
+	float GetMaxFrame() const;
+	float GetMotionNumber() const;
+	float GetFrameWidth() const;
+	float GetFrameHeight() const;
 
 protected:
 	void UpdateBuffers(ID3D11DeviceContext *deviceContext);
@@ -32,6 +41,9 @@ private:
 
 	float m_numOfMotions;
 	float m_currentMotion;
+
+	float m_frameWidth;
+	float m_frameHeight;
 
 	bool m_isLooping;
 };

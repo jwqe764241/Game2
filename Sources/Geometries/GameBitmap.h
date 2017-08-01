@@ -21,8 +21,15 @@ protected:
 		float bottom;
 	};
 
+	struct _BitmapSize
+	{
+		int width;
+		int height;
+	};
+
 	using VertexType = _VertexType;
 	using Rect_F     = _RECT_F;
+	using BitmapSize = _BitmapSize;
 
 public:
 	GameBitmap();
@@ -35,6 +42,8 @@ public:
 
 	int GetIndexCount();
 	ID3D11ShaderResourceView* GetTexture();
+
+	BitmapSize GetBitmapSize() const;
 
 protected:
 	VertexType* GetVertices();
