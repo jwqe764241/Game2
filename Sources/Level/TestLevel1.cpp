@@ -12,42 +12,53 @@ TestLevel1::~TestLevel1()
 
 bool TestLevel1::Load()
 {
-	m_RenderList.reserve(20);
+	m_EnvironmentList.reserve(20);
+	m_ActorList.reserve(20);
+
+	m_LevelSize.top = 0;
+	m_LevelSize.bottom = 600;
+	m_LevelSize.left = 0;
+	m_LevelSize.right = 800;
 
 	/*
 		테스트 전용으로 덤불 에셋 10개 추가
 	*/
-	D3DXVECTOR2 posList[10];
-	posList[0] = { 30, 50 };
-	posList[1] = { 60, 400 };
-	posList[2] = { 100, 50 };
-	posList[3] = { 300, 60 };
-	posList[4] = { 700, 500 };
-	posList[5] = { 550, 300 };
-	posList[6] = { 340, 400 };
-	posList[7] = { 200, 350 };
-	posList[8] = { 200, 500 };
-	posList[9] = { 30, 500 };
 
-	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
+	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
+	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
+	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
+	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
+	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
+	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
+	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
+	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
+	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
+	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
 
 	for (int i = 0; i < 10; ++i)
 	{
-		m_RenderList[i]->SetPosition(posList[i]);
+		m_EnvironmentList[i]->SetPosition(m_PosList[i]);
+	}
+	/*
+		캐스트는 옳은 방법이 아닌 것 같다; -> 뭐래냐? 나 미친거니.. 이 캐스팅은 봐주자...
+		어떻게 다른 방법이 있으랴 
+	*/
+	m_ActorList.push_back(dynamic_cast<ICharacter *>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_ENEMY1, 576, 256)));
+	m_ActorList.push_back(dynamic_cast<ICharacter *>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_ENEMY1, 576, 256)));
+	m_ActorList.push_back(dynamic_cast<ICharacter *>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_ENEMY1, 576, 256)));
+	m_ActorList.push_back(dynamic_cast<ICharacter *>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_ENEMY1, 576, 256)));
+	m_ActorList.push_back(dynamic_cast<ICharacter *>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_ENEMY1, 576, 256)));
+
+	for (int i = 0; i < 5; ++i)
+	{
+		m_ActorList[i]->SetPosition(m_SpawnPoint[i]);
 	}
 
 	//플레이어 생성
 	m_Player = dynamic_cast<Player*>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_PLAYER, 576, 256));
-	m_Camera.SetPosition(0.0f, 0.0f, -10.0f);
+	m_Camera.SetPosition(0.0f, 0.0f, -1.0f);
+	
+	m_Player->SetPositionLimit(&m_LevelSize);
 
 	onStart();
 
@@ -56,7 +67,12 @@ bool TestLevel1::Load()
 
 void TestLevel1::Unload()
 {
-	for (auto target : m_RenderList)
+	for (auto target : m_EnvironmentList)
+	{
+		target->Release();
+	}
+
+	for (auto target : m_ActorList)
 	{
 		target->Release();
 	}
@@ -66,9 +82,14 @@ void TestLevel1::Unload()
 
 void TestLevel1::Update(float dt)
 {
-	for (std::vector<IRenderable*>::iterator idx = m_RenderList.begin(); idx != m_RenderList.end(); idx++)
+	for (auto target : m_EnvironmentList)
 	{
-		(*idx)->Update(dt);
+		target->Update(dt);
+	}
+
+	for (auto target : m_ActorList)
+	{
+		target->Update(dt);
 	}
 
 	m_Player->Update(dt);
@@ -98,20 +119,28 @@ bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int
 	TextureShader::GetInstance().Render(deviceContext, m_Player->GetIndexCount(), CGameApp::GetInstance().GetWorldMatrix(), m_Camera.GetViewMatrix(),
 		CGameApp::GetInstance().GetorthogonalMatrix(), m_Player->GetTexture());
 
+	for(auto target : m_ActorList)
+	{
+		target->Render(deviceContext, screenWidth, screenHeight);
+
+		TextureShader::GetInstance().Render(deviceContext, target->GetIndexCount(), CGameApp::GetInstance().GetWorldMatrix(), m_Camera.GetViewMatrix(),
+			CGameApp::GetInstance().GetorthogonalMatrix(), target->GetTexture());
+	}
+
 	/*
 		렌더 리스트에 등록된 스프라이트 렌더
 	*/
-	for (std::vector<IRenderable*>::iterator idx = m_RenderList.begin(); idx != m_RenderList.end(); idx++)
+	for (auto target : m_EnvironmentList)
 	{
-		(*idx)->Render(deviceContext, screenWidth, screenHeight);
+		target->Render(deviceContext, screenWidth, screenHeight);
 
-		TextureShader::GetInstance().Render(deviceContext, (*idx)->GetIndexCount(), CGameApp::GetInstance().GetWorldMatrix(), m_Camera.GetViewMatrix(),
-			CGameApp::GetInstance().GetorthogonalMatrix(), (*idx)->GetTexture());
+		TextureShader::GetInstance().Render(deviceContext, target->GetIndexCount(), CGameApp::GetInstance().GetWorldMatrix(), m_Camera.GetViewMatrix(),
+			CGameApp::GetInstance().GetorthogonalMatrix(), target->GetTexture());
 	}
+
 
 	return true;
 }
-
 
 void TestLevel1::onStart()
 {

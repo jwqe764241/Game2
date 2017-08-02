@@ -1,5 +1,4 @@
-#ifndef __GAMETEXTURE_H
-#define __GAMETEXTURE_H
+#pragma once
 
 #include <D3DX11.h>
 
@@ -19,5 +18,3 @@ public:
 	ID3D11ShaderResourceView* m_Texture;
 
 };
-
-#endif

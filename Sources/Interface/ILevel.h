@@ -1,5 +1,4 @@
-#ifndef __ILEVEL_H
-#define __ILEVEL_H
+#pragma once
 
 #include <D3D11.h>
 
@@ -20,5 +19,3 @@ public:
 	virtual void onEnd() = 0;
 
 };
-
-#endif

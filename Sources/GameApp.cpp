@@ -121,6 +121,7 @@ bool CGameApp::Initialize(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * w
 	m_vAdaptersOutputs[0]->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &l_uiModes, NULL);
 	//디스플레이 모드 전부 가져옴
 	DXGI_MODE_DESC * l_pModeList = new DXGI_MODE_DESC[l_uiModes];
+	ZeroMemory(l_pModeList, sizeof(DXGI_MODE_DESC) * l_uiModes);
 	m_vAdaptersOutputs[0]->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &l_uiModes, l_pModeList);
 
 	std::cout << "-----------------------가능한 디스플레이 모드-----------------------" << std::endl;

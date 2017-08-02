@@ -7,15 +7,17 @@
 #include <Sources/Interface/IRenderable.h>
 #include <Sources/Interface/ICharacter.h>
 
-class Player : public IRenderable, public ICharacter
+class Player : public ICharacter
 {
 private:
-	wchar_t* m_ResourcePath = L"../Resources/sprite.bmp";
+	wchar_t* m_ResourcePath;
 
 	int m_Health;
-	float m_PosX;
-	float m_PosY;
+	D3DXVECTOR2 m_Pos;
 	GameSprite m_Sprite;
+
+	bool isSetPositionLimit;
+		RECT m_PositionLimit;
 
 public:
 	Player();
@@ -42,4 +44,9 @@ public:
 	virtual D3DXVECTOR2 GetPosition() const override;
 	virtual void SetPosition(const D3DXVECTOR2 pos) override;
 	virtual GameSprite* GetSprite() override;
+	
+	/*
+		NULL일 경우에 설정 안함, 값이 있으면 설정 함
+	*/
+	void SetPositionLimit(const RECT* limitPos);
 };
