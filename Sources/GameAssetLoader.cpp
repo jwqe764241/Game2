@@ -45,6 +45,9 @@ TargetInterface* CGameAssetLoader::LoadAsset(int id, int bitmapWidth, int bitmap
 		break;
 	case ID_ASSET_PLAYER:
 		asset = new Player();
+		break;
+	case ID_ASSET_ENEMY1:
+		asset = new Enemy1();
 	}
 
 	asset->Load(m_DeviceRef, bitmapWidth, bitmapHeight);

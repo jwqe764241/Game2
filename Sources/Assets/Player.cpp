@@ -12,8 +12,9 @@ Player::~Player()
 
 void Player::Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight)
 {
-	m_PosX = 0;
-	m_PosY = 0;
+	m_Pos.x = 0;
+	m_Pos.y = 0;
+	m_Health = 100;
 	m_Sprite.Initialize(device, m_ResourcePath, bitmapWidth, bitmapHeight, 4);
 	m_Sprite.SetLooping(false);
 	m_Sprite.SetMotion(2);
@@ -68,8 +69,8 @@ void Player::Update(float dt)
 		speed *= dt;
 		x *= speed / length;
 		y *= speed / length;
-		m_PosX += x;
-		m_PosY += y;
+		m_Pos.x += x;
+		m_Pos.y += y;
 	}
 
 	m_Sprite.SetLooping(true);
@@ -83,7 +84,7 @@ void Player::Update(float dt, int keyCode)
 
 void Player::Render(ID3D11DeviceContext * deviceContext, int screenWidth, int screenHeight)
 {
-	m_Sprite.Render(deviceContext, screenWidth, screenHeight, m_PosX, m_PosY);
+	m_Sprite.Render(deviceContext, screenWidth, screenHeight, m_Pos.x, m_Pos.y);
 }
 
 void Player::Idle()
@@ -94,8 +95,8 @@ void Player::Idle()
 //어디다가 쓰지..
 void Player::Move(D3DXVECTOR3 target)
 {
-	m_PosX = target.x;
-	m_PosY = target.y;
+	m_Pos.x = target.x;
+	m_Pos.y = target.y;
 }
 
 void Player::Attack(void ** target)
@@ -141,13 +142,12 @@ ID3D11ShaderResourceView* Player::GetTexture()
 
 D3DXVECTOR2 Player::GetPosition() const
 {
-	return D3DXVECTOR2{ m_PosX, m_PosY };
+	return m_Pos;
 }
 
 void Player::SetPosition(const D3DXVECTOR2 pos)
 {
-	m_PosX = pos.x;
-	m_PosY = pos.y;
+	m_Pos = pos;
 }
 
 GameSprite* Player::GetSprite()

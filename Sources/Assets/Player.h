@@ -7,14 +7,13 @@
 #include <Sources/Interface/IRenderable.h>
 #include <Sources/Interface/ICharacter.h>
 
-class Player : public IRenderable, public ICharacter
+class Player : public ICharacter
 {
 private:
 	wchar_t* m_ResourcePath;
 
 	int m_Health;
-	float m_PosX;
-	float m_PosY;
+	D3DXVECTOR2 m_Pos;
 	GameSprite m_Sprite;
 
 public:
