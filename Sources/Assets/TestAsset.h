@@ -1,5 +1,4 @@
-#ifndef __TESTASSET_H
-#define __TESTASSET_H
+#pragma once
 
 #include <D3D11.h>
 #include <D3DX11.h>
@@ -37,5 +36,3 @@ public:
 
 	GameBitmap m_Bitmap;
 };
-
-#endif

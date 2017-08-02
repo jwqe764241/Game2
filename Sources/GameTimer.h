@@ -1,5 +1,4 @@
-#ifndef __GAMETIMER_H
-#define __GAMETIMER_H
+#pragma once
 
 #include <Windows.h>
 
@@ -39,5 +38,3 @@ private:
 
 	bool m_IsStopped;
 };
-
-#endif

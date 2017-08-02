@@ -1,5 +1,4 @@
-#ifndef __TESTLEVEL2_H
-#define __TESTLEVEL2_H
+#pragma once
 
 #include <vector>
 
@@ -22,5 +21,3 @@ public:
 	virtual void onStart() override;
 	virtual void onEnd() override;
 };
-
-#endif

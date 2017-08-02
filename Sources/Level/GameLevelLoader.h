@@ -1,5 +1,4 @@
-#ifndef __GAMELEVELLOADER_H
-#define __GAMELEVELLOADER_H
+#pragma once
 
 #include <D3D11.h>
 
@@ -23,5 +22,3 @@ public:
 	void UpdateLevel(float dt);
 	bool RenderLevel(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight);
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef __GAMECAMERA_H
-#define __GAMECAMERA_H
+#pragma once
 
 #include <D3DX10math.h>
 
@@ -30,5 +29,3 @@ private:
 	D3DXVECTOR3 m_Rotation;
 	D3DXMATRIX m_ViewMatrix;	
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef __TEXTURESHADER_H
-#define __TEXTURESHADER_H
+#pragma once
 
 #include <d3d11.h>
 #include <D3DX10math.h>
@@ -43,5 +42,3 @@ private:
 	ID3D11Buffer *m_MatrixBuffer;
 	ID3D11SamplerState *m_SampleState;
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef __GAMEASSETLOADER
-#define __GAMEASSETLOADER
+#pragma once
 
 #include <map>
 
@@ -45,5 +44,3 @@ private:
 	int* m_ScreenWidthRef;
 	int* m_ScreenHeightRef;	
 };
-
-#endif

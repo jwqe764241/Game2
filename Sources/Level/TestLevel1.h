@@ -1,5 +1,4 @@
-#ifndef __TESTLEVEL1_H
-#define __TESTLEVEL1_H
+#pragma once
 
 #include <vector>
 #include <Sources/GameApp.h>
@@ -28,5 +27,3 @@ public:
 	virtual void onStart() override;
 	virtual void onEnd() override;
 };
-
-#endif

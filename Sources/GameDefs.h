@@ -1,6 +1,4 @@
-#ifndef __GAMEDEFS_H
-#define __GAMEDEFS_H
-
+#pragma once
 #include <Windows.h>
 #include <D3DX11.h>
 #include <D3D11.h>
@@ -52,5 +50,3 @@ namespace Utils {
 		}
 	}
 }
-
-#endif

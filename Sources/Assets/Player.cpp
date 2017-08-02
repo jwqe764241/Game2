@@ -105,12 +105,19 @@ void Player::Attack(void ** target)
 
 void Player::Damage(int damage)
 {
-
+	if (m_Health - damage <= 0)
+	{
+		m_Health = 0;
+	}
+	else
+	{
+		m_Health -= damage;
+	}
 }
 
 void Player::Die()
 {
-
+	m_Health = 0;
 }
 
 bool Player::isDied()
