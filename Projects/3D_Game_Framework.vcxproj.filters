@@ -48,6 +48,9 @@
     <Filter Include="소스 파일\Assets\Player">
       <UniqueIdentifier>{9b48e7e8-1ace-4cc1-b0a1-89ded03e3035}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Assets\Enemy">
+      <UniqueIdentifier>{1a3712a0-9ab2-42c1-97f7-1d4199939cdf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\error.cpp">
@@ -103,6 +106,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Assets\SpriteAsset.cpp">
       <Filter>소스 파일\Assets\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Enemy1.cpp">
+      <Filter>소스 파일\Assets\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +183,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Assets\SpriteAsset.h">
       <Filter>소스 파일\Assets\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Enemy1.h">
+      <Filter>소스 파일\Assets\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

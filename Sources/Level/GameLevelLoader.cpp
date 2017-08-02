@@ -51,6 +51,7 @@ void CGameLevelLoader::UnloadLevel()
 	{
 		m_CurrentLevel->Unload();
 		delete m_CurrentLevel;
+		m_CurrentLevel = nullptr;
 	}
 }
 

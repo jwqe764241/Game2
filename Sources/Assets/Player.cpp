@@ -1,6 +1,6 @@
 #include <Sources/Assets/Player.h>
 
-Player::Player() : m_Sprite(15.0f, 1.0f, true)
+Player::Player() : m_Sprite(15.0f, 1.0f, true), m_ResourcePath(L"../Resources/sprite.bmp")
 {
 
 }
@@ -115,7 +115,10 @@ void Player::Die()
 
 bool Player::isDied()
 {
-
+	if (m_Health <= 0)
+	{
+		return false;
+	}
 	return false;
 }
 

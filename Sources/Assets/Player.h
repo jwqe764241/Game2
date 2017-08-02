@@ -10,7 +10,7 @@
 class Player : public IRenderable, public ICharacter
 {
 private:
-	wchar_t* m_ResourcePath = L"../Resources/sprite.bmp";
+	wchar_t* m_ResourcePath;
 
 	int m_Health;
 	float m_PosX;

@@ -6,14 +6,14 @@
 #include <D3D11.h>
 
 namespace GameColors {
-	static const FLOAT RED[4]     = {1.0f, 0.0f, 0.0f, 1.0f};
-	static const FLOAT GREEN[4]   = {0.0f, 1.0f, 0.0f, 1.0f};
-	static const FLOAT BLUE[4]    = {0.0f, 0.0f, 1.0f, 1.0f};
-	static const FLOAT BLACK[4]   = {0.0f, 0.0f, 0.0f, 1.0f};
-	static const FLOAT WHITE[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
-	static const FLOAT YELLOW[4]  = {1.0f, 1.0f, 0.0f, 1.0f};
-	static const FLOAT CYAN[4]    = {0.0f, 1.0f, 1.0f, 1.0f};
-	static const FLOAT MAGENTA[4] = {1.0f, 0.0f, 1.0f, 1.0f};
+	constexpr FLOAT RED[4]     = {1.0f, 0.0f, 0.0f, 1.0f};
+	constexpr FLOAT GREEN[4]   = {0.0f, 1.0f, 0.0f, 1.0f};
+	constexpr FLOAT BLUE[4]    = {0.0f, 0.0f, 1.0f, 1.0f};
+	constexpr FLOAT BLACK[4]   = {0.0f, 0.0f, 0.0f, 1.0f};
+	constexpr FLOAT WHITE[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
+	constexpr FLOAT YELLOW[4]  = {1.0f, 1.0f, 0.0f, 1.0f};
+	constexpr FLOAT CYAN[4]    = {0.0f, 1.0f, 1.0f, 1.0f};
+	constexpr FLOAT MAGENTA[4] = {1.0f, 0.0f, 1.0f, 1.0f};
 }
 
 //이제 사용안함

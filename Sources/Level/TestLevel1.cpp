@@ -17,17 +17,19 @@ bool TestLevel1::Load()
 	/*
 		테스트 전용으로 덤불 에셋 10개 추가
 	*/
-	D3DXVECTOR2 posList[10];
-	posList[0] = { 30, 50 };
-	posList[1] = { 60, 400 };
-	posList[2] = { 100, 50 };
-	posList[3] = { 300, 60 };
-	posList[4] = { 700, 500 };
-	posList[5] = { 550, 300 };
-	posList[6] = { 340, 400 };
-	posList[7] = { 200, 350 };
-	posList[8] = { 200, 500 };
-	posList[9] = { 30, 500 };
+	D3DXVECTOR2 posList[10]
+	{
+		{ 30, 50 },
+		{ 60, 400 },
+		{ 100, 50 },
+		{ 300, 60 },
+		{ 700, 500 },
+		{ 550, 300 },
+		{ 340, 400 },
+		{ 200, 350 },
+		{ 200, 500 },
+		{ 30, 500 },
+	};
 
 	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
 	m_RenderList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
@@ -66,9 +68,9 @@ void TestLevel1::Unload()
 
 void TestLevel1::Update(float dt)
 {
-	for (std::vector<IRenderable*>::iterator idx = m_RenderList.begin(); idx != m_RenderList.end(); idx++)
+	for (auto idx : m_RenderList)
 	{
-		(*idx)->Update(dt);
+		idx->Update(dt);
 	}
 
 	m_Player->Update(dt);
@@ -101,17 +103,16 @@ bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int
 	/*
 		렌더 리스트에 등록된 스프라이트 렌더
 	*/
-	for (std::vector<IRenderable*>::iterator idx = m_RenderList.begin(); idx != m_RenderList.end(); idx++)
+	for (auto idx : m_RenderList)
 	{
-		(*idx)->Render(deviceContext, screenWidth, screenHeight);
+		idx->Render(deviceContext, screenWidth, screenHeight);
 
-		TextureShader::GetInstance().Render(deviceContext, (*idx)->GetIndexCount(), CGameApp::GetInstance().GetWorldMatrix(), m_Camera.GetViewMatrix(),
-			CGameApp::GetInstance().GetorthogonalMatrix(), (*idx)->GetTexture());
+		TextureShader::GetInstance().Render(deviceContext, idx->GetIndexCount(), CGameApp::GetInstance().GetWorldMatrix(), m_Camera.GetViewMatrix(),
+			CGameApp::GetInstance().GetorthogonalMatrix(), idx->GetTexture());
 	}
 
 	return true;
 }
-
 
 void TestLevel1::onStart()
 {
