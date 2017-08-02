@@ -7,7 +7,7 @@ CGameAssetLoader::CGameAssetLoader()
 
 CGameAssetLoader::~CGameAssetLoader()
 {
-	//Release();
+	Release();
 }
 
 CGameAssetLoader& CGameAssetLoader::GetInstance()
@@ -19,16 +19,20 @@ CGameAssetLoader& CGameAssetLoader::GetInstance()
 
 void CGameAssetLoader::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, int* screenWidth, int* screenHeight)
 {
+	m_AllocList.reserve(50);
 	m_DeviceRef = device;
 	m_DeviceContextRef = deviceContext;
 	m_ScreenWidthRef = screenWidth;
 	m_ScreenHeightRef = screenHeight;
 }
 
-//void CGameAssetLoader::Release()
-//{
-//	//ClearMap();
-//}
+void CGameAssetLoader::Release()
+{
+	for (auto allocTarget : m_AllocList)
+	{
+		Utils::Release(&allocTarget);
+	}
+}
 
 TargetInterface* CGameAssetLoader::LoadAsset(int id, int bitmapWidth, int bitmapHeight)
 {
@@ -51,6 +55,7 @@ TargetInterface* CGameAssetLoader::LoadAsset(int id, int bitmapWidth, int bitmap
 	}
 
 	asset->Load(m_DeviceRef, bitmapWidth, bitmapHeight);
+	m_AllocList.push_back(asset);
 
 	return asset;
 }

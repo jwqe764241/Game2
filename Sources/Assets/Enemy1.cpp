@@ -90,7 +90,7 @@ void Enemy1::Damage(int damage)
 	}
 	else
 	{
-		m_Health - damage;
+		m_Health -= damage;
 	}
 }
 
