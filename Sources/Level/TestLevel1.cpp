@@ -15,6 +15,11 @@ bool TestLevel1::Load()
 	m_EnvironmentList.reserve(20);
 	m_ActorList.reserve(20);
 
+	m_LevelSize.top = 0;
+	m_LevelSize.bottom = 600;
+	m_LevelSize.left = 0;
+	m_LevelSize.right = 800;
+
 	/*
 		테스트 전용으로 덤불 에셋 10개 추가
 	*/
@@ -52,6 +57,8 @@ bool TestLevel1::Load()
 	//플레이어 생성
 	m_Player = dynamic_cast<Player*>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_PLAYER, 576, 256));
 	m_Camera.SetPosition(0.0f, 0.0f, -1.0f);
+	
+	m_Player->SetPositionLimit(&m_LevelSize);
 
 	onStart();
 

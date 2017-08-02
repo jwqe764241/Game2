@@ -34,8 +34,7 @@ private:
 	Player* m_Player;
 	CGameCamera m_Camera;
 
-	const D3DXVECTOR2 m_PosList[10]
-	{
+	const D3DXVECTOR2 m_PosList[10] = {
 		{ 30, 50 },
 		{ 60, 400 },
 		{ 100, 50 },
@@ -47,7 +46,6 @@ private:
 		{ 200, 500 },
 		{ 30, 500 },
 	};
-
 	const D3DXVECTOR2 m_SpawnPoint[5] = {
 		{200, 0},
 		{700, 500},
@@ -55,6 +53,8 @@ private:
 		{300, 300},
 		{700, 500}
 	};
+
+	RECT m_LevelSize;
 
 public:
 	TestLevel1();

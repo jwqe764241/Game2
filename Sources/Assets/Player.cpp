@@ -18,6 +18,7 @@ void Player::Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight)
 	m_Sprite.Initialize(device, m_ResourcePath, bitmapWidth, bitmapHeight, 4);
 	m_Sprite.SetLooping(false);
 	m_Sprite.SetMotion(2);
+	isSetPositionLimit = false;
 }
 
 void Player::Release()
@@ -69,8 +70,23 @@ void Player::Update(float dt)
 		speed *= dt;
 		x *= speed / length;
 		y *= speed / length;
-		m_Pos.x += x;
-		m_Pos.y += y;
+		if (isSetPositionLimit)
+		{
+			if (m_Pos.x + x >= m_PositionLimit.left && (m_Pos.x + x) + m_Sprite.GetFrameWidth() <= m_PositionLimit.right)
+			{
+				m_Pos.x += x;
+			}
+
+			if (m_Pos.y + y >= m_PositionLimit.top && (m_Pos.y + y) + m_Sprite.GetFrameHeight() <= m_PositionLimit.bottom)
+			{
+				m_Pos.y += y;
+			}
+		}
+		else
+		{
+			m_Pos.x += x;
+			m_Pos.y += y;
+		}
 	}
 
 	m_Sprite.SetLooping(true);
@@ -153,4 +169,18 @@ void Player::SetPosition(const D3DXVECTOR2 pos)
 GameSprite* Player::GetSprite()
 {
 	return &m_Sprite;
+}
+
+void Player::SetPositionLimit(const RECT* limitPos)
+{
+	if (limitPos == nullptr)
+	{
+		isSetPositionLimit = false;
+		m_PositionLimit = { 0 };
+	}
+	else
+	{
+		isSetPositionLimit = true;
+		m_PositionLimit = (*limitPos);
+	}
 }

@@ -16,6 +16,9 @@ private:
 	D3DXVECTOR2 m_Pos;
 	GameSprite m_Sprite;
 
+	bool isSetPositionLimit;
+		RECT m_PositionLimit;
+
 public:
 	Player();
 	~Player();
@@ -41,4 +44,9 @@ public:
 	virtual D3DXVECTOR2 GetPosition() const override;
 	virtual void SetPosition(const D3DXVECTOR2 pos) override;
 	virtual GameSprite* GetSprite() override;
+	
+	/*
+		NULL일 경우에 설정 안함, 값이 있으면 설정 함
+	*/
+	void SetPositionLimit(const RECT* limitPos);
 };
