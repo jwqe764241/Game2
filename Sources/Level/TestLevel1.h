@@ -6,7 +6,7 @@
 #include <Sources/GameDefs.h>
 #include <Sources/GameAssetLoader.h>
 #include <Sources/Camera/GameCamera.h>
-#include <Sources/Input/GameInput.h>
+#include <Sources/Input/GameInput2.h>
 #include <Sources/Interface/IRenderable.h>
 #include <Sources/Interface/ILevel.h>
 

@@ -110,6 +110,9 @@
     <ClCompile Include="..\Sources\Assets\Enemy1.cpp">
       <Filter>소스 파일\Assets\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Input\GameInput2.cpp">
+      <Filter>소스 파일\Engines\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
@@ -186,6 +189,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Assets\Enemy1.h">
       <Filter>소스 파일\Assets\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Input\GameInput2.h">
+      <Filter>소스 파일\Engines\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

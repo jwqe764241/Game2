@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Windows.h>
+#include <windowsx.h>
 #include <D3DX11.h>
 #include <D3D11.h>
 #include <vector>
@@ -12,8 +13,9 @@
 #include <Sources/GameDefs.h>
 #include <Sources/GameTimer.h>
 #include <Sources/Utils/error.h>
-#include <Sources/Input/GameInput.h>
-#include <Sources/Camera/GameCamera.h>
+
+//#include <Sources/Input/GameInput.h>
+#include <Sources/Input/GameInput2.h>
 
 #include <Sources/GameAssetLoader.h>
 #include <Sources/Level/GameLevelLoader.h>
@@ -113,6 +115,7 @@ public:
 	D3DXMATRIX& GetorthogonalMatrix();
 
 	WindowSize GetWindowSize() const;
+	HWND GetHWND() const;
 
 	static CGameApp& GetInstance();
 

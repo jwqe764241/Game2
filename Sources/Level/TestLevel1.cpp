@@ -16,9 +16,9 @@ bool TestLevel1::Load()
 	m_ActorList.reserve(20);
 
 	m_LevelSize.top = 0;
-	m_LevelSize.bottom = 600;
+	m_LevelSize.bottom = 1000;
 	m_LevelSize.left = 0;
-	m_LevelSize.right = 800;
+	m_LevelSize.right = 1000;
 
 	/*
 		테스트 전용으로 덤불 에셋 10개 추가
@@ -92,12 +92,23 @@ void TestLevel1::Update(float dt)
 		target->Update(dt);
 	}
 
-	m_Player->Update(dt);
 	/*
 		스페이스바 누를 시에 카메라 트레킹
 		위치 기준은 Player가 화면 중앙에 오도록 함
 	*/
-	if (GameInput::GetInstance().IsPressed(DIK_SPACE))
+	//GameInput 버전
+	//if (GameInput::GetInstance().IsKeyPressed(DIK_SPACE))
+	//{
+	//	D3DXVECTOR2 pos = m_Player->GetPosition();
+	//	float width  = CGameApp::GetInstance().GetWindowSize().width;
+	//	float height = CGameApp::GetInstance().GetWindowSize().height;
+
+	//	m_Camera.SetPosition(pos.x - ((width / 2) - m_Player->GetSprite()->GetFrameWidth()), 
+	//		(pos.y - ((height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1 , -10.0f);
+	//}
+
+	//GameInput2 버전
+	if (GameInput2::GetInstance().IsPressed(VK_SPACE))
 	{
 		D3DXVECTOR2 pos = m_Player->GetPosition();
 		float width  = CGameApp::GetInstance().GetWindowSize().width;
@@ -106,6 +117,9 @@ void TestLevel1::Update(float dt)
 		m_Camera.SetPosition(pos.x - ((width / 2) - m_Player->GetSprite()->GetFrameWidth()), 
 			(pos.y - ((height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1 , -10.0f);
 	}
+
+	m_Player->Update(dt);
+
 }
 
 bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)

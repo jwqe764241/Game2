@@ -19,8 +19,12 @@ bool GameInput::Initialize(HINSTANCE hInstance, HWND hwnd, int screenWidth, int 
 	m_screenWidth = screenWidth;
 	m_screenHeight = screenHeight;
 
-	m_mouseX = 0;
-	m_mouseY = 0;
+
+	POINT point;
+	GetCursorPos(&point);
+
+	m_mouseX = point.x;
+	m_mouseY = point.y;
 
 	result = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, nullptr);
 	if (FAILED(result)) 
@@ -128,15 +132,19 @@ bool GameInput::IsEscapeProcessed()
 	return m_keyboardState[DIK_ESCAPE] & 0x80;
 }
 
-bool GameInput::IsPressed(DWORD keycode)
+bool GameInput::IsKeyPressed(DWORD keycode)
 {
 	return m_keyboardState[keycode] & 0x80;
 }
 
-void GameInput::GetMouseLocation(int& mouseX, int& mouseY)
+bool GameInput::IsMousePressed(DWORD keycode)
 {
-	mouseX = m_mouseX;
-	mouseY = m_mouseY;
+	return m_mouseState.rgbButtons[keycode] & 0x80;
+}
+
+POINT GameInput::GetMousePosition()
+{
+	return POINT{ m_mouseX, m_mouseY };
 }
 
 bool GameInput::ReadKeyboard()

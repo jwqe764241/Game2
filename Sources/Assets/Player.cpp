@@ -33,26 +33,42 @@ void Player::Reset()
 
 void Player::Update(float dt)
 {
-	GameInput& input = GameInput::GetInstance();
+	GameInput2& input = GameInput2::GetInstance();
 	float x = 0.0f, y = 0.0f;
 	float speed = 150.0f;
+	
+	if (input.IsPressed(VK_LBUTTON))
+	{
+		std::cout << "clicked" << std::endl;
+		
+		/*
+			그냥 저냥 테스트일 뿐
+			이런 상황을 위하여 DirectInput으로 구현된 GameInput을
+			프로시저에서 처리하는 클래스로 다시 구현해야 할
+			필요가 있음
+		*/
 
-	if (input.IsPressed(DIK_W)) 
+		POINT po = input.GetMousePosition();
+		std::cout << "x : " << po.x << "   y : " << po.y << std::endl;
+	}
+	
+	/*
+	if (input.IsPressed(0x57)) 
 	{
 		m_Sprite.SetMotion(0);
 		y -= 1;
 	}
-	else if (input.IsPressed(DIK_A))
+	else if (input.IsPressed(0x41))
 	{
 		m_Sprite.SetMotion(1);
 		x -= 1;
 	}
-	else if (input.IsPressed(DIK_S))
+	else if (input.IsPressed(0x53))
 	{
 		m_Sprite.SetMotion(2);
 		y += 1;
 	}
-	else if (input.IsPressed(DIK_D))
+	else if (input.IsPressed(0x44))
 	{
 		m_Sprite.SetMotion(3);
 		x += 1;
@@ -63,6 +79,7 @@ void Player::Update(float dt)
 		m_Sprite.Update(dt);
 		return;
 	}
+	*/
 
 	float length = sqrt(pow(x, 2) + pow(y, 2));
 

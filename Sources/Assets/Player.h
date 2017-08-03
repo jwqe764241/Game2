@@ -2,7 +2,8 @@
 
 #include <D3DX11.h>
 
-#include <Sources/Input/GameInput.h>
+//#include <Sources/Input/GameInput.h>
+#include <Sources/Input/GameInput2.h>
 #include <Sources/Geometries/GameSprite.h>
 #include <Sources/Interface/IRenderable.h>
 #include <Sources/Interface/ICharacter.h>

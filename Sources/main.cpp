@@ -6,10 +6,10 @@
 #include <crtdbg.h>
 
 #ifdef _DEBUG
-#define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
+//#define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 #endif
 
-//#define _COMMAND_OPEN_CONSOLE
+#define _COMMAND_OPEN_CONSOLE
 
 #if defined(_MBCS)
 
