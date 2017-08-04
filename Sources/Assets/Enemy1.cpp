@@ -71,7 +71,7 @@ void Enemy1::Idle()
 	
 }
 
-void Enemy1::Move(D3DXVECTOR3 target)
+void Enemy1::Move(D3DXVECTOR2 target)
 {
 	m_Pos.x = target.x;
 	m_Pos.y = target.y;

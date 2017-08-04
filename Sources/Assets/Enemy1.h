@@ -32,7 +32,7 @@ public:
 
 	// ICharacter을(를) 통해 상속됨
 	virtual void Idle() override;
-	virtual void Move(D3DXVECTOR3 target) override;
+	virtual void Move(D3DXVECTOR2 target) override;
 	virtual void Attack(void ** target) override;
 	virtual void Damage(int damage) override;
 	virtual void Die() override;

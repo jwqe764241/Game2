@@ -13,7 +13,7 @@ class ICharacter : public IRenderable
 {
 public:
 	virtual void Idle()                      = 0;
-	virtual void Move(D3DXVECTOR3 target)    = 0;
+	virtual void Move(D3DXVECTOR2 target)    = 0;
 	virtual void Attack(void** target)       = 0; // attack close target or target attack.
 	//virtual void Attack(XMVECTORF32 direction, Wepon wepon); // long target or non-target attack.
 	/*

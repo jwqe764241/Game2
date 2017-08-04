@@ -118,7 +118,7 @@ void TestLevel1::Update(float dt)
 			(pos.y - ((height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1 , -10.0f);
 	}
 
-	m_Player->Update(dt);
+	m_Player->Update(dt, &m_Camera);
 
 }
 

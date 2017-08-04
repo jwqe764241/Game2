@@ -52,7 +52,7 @@ void Player::Update(float dt)
 		std::cout << "x : " << po.x << "   y : " << po.y << std::endl;
 	}
 	
-	/*
+	
 	if (input.IsPressed(0x57)) 
 	{
 		m_Sprite.SetMotion(0);
@@ -79,7 +79,6 @@ void Player::Update(float dt)
 		m_Sprite.Update(dt);
 		return;
 	}
-	*/
 
 	float length = sqrt(pow(x, 2) + pow(y, 2));
 
@@ -110,9 +109,53 @@ void Player::Update(float dt)
 	m_Sprite.Update(dt);
 }
 
-void Player::Update(float dt, int keyCode)
+void Player::Update(float dt, CGameCamera* pCamera)
 {
+	GameInput2& input = GameInput2::GetInstance();
+	float x = 0.0f, y = 0.0f;
+	float speed = 150.0f;
 
+	if (input.IsPressed(VK_LBUTTON))
+	{
+		/*
+		그냥 저냥 테스트일 뿐
+		이런 상황을 위하여 DirectInput으로 구현된 GameInput을
+		프로시저에서 처리하는 클래스로 다시 구현해야 할
+		필요가 있음
+		*/
+
+		POINT po = input.GetMousePosition();
+		D3DXVECTOR3 cameraPos = pCamera->GetPosition();
+		Move(D3DXVECTOR2{ po.x + cameraPos.x, po.y - cameraPos.y});
+	}
+	
+	float length = sqrt(pow(x, 2) + pow(y, 2));
+
+	if (length > 0) {
+		speed *= dt;
+		x *= speed / length;
+		y *= speed / length;
+		if (isSetPositionLimit)
+		{
+			if (m_Pos.x + x >= m_PositionLimit.left && (m_Pos.x + x) + m_Sprite.GetFrameWidth() <= m_PositionLimit.right)
+			{
+				m_Pos.x += x;
+			}
+
+			if (m_Pos.y + y >= m_PositionLimit.top && (m_Pos.y + y) + m_Sprite.GetFrameHeight() <= m_PositionLimit.bottom)
+			{
+				m_Pos.y += y;
+			}
+		}
+		else
+		{
+			m_Pos.x += x;
+			m_Pos.y += y;
+		}
+	}
+
+	m_Sprite.SetLooping(true);
+	m_Sprite.Update(dt);
 }
 
 void Player::Render(ID3D11DeviceContext * deviceContext, int screenWidth, int screenHeight)
@@ -126,7 +169,7 @@ void Player::Idle()
 }
 
 //어디다가 쓰지..
-void Player::Move(D3DXVECTOR3 target)
+void Player::Move(D3DXVECTOR2 target)
 {
 	m_Pos.x = target.x;
 	m_Pos.y = target.y;
