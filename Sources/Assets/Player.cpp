@@ -155,6 +155,17 @@ void Player::Update(float dt, CGameCamera* pCamera)
 	float length = sqrt(pow(x, 2) + pow(y, 2));
 
 	if (length > 0) {
+
+		if ((m_Pos.x >= (targetX - 1.0f)) && (m_Pos.x <= (targetX + 1.0f)))
+		{
+			if ((m_Pos.y >= (targetY - 5.0f)) && (m_Pos.y <= (targetY + 5.0f)))
+			{
+				isWalking = false;
+				m_Sprite.SetLooping(false);
+				return;
+			}
+		}
+
 		speed *= dt;
 		x *= speed / length;
 		y *= speed / length;
@@ -176,15 +187,6 @@ void Player::Update(float dt, CGameCamera* pCamera)
 			m_Pos.y += y;
 		}
 
-		if ((m_Pos.x >= (targetX - 1.0f)) && (m_Pos.x <= (targetX + 1.0f)))
-		{
-			if ((m_Pos.y >= (targetY - 5.0f)) && (m_Pos.y <= (targetY + 5.0f)))
-			{
-				isWalking = false;
-				m_Sprite.SetLooping(false);
-				return;
-			}
-		}
 	}
 
 	m_Sprite.SetLooping(true);

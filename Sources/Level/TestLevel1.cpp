@@ -87,10 +87,10 @@ void TestLevel1::Update(float dt)
 		target->Update(dt);
 	}
 
-	for (auto target : m_ActorList)
-	{
-		target->Update(dt);
-	}
+	//for (auto target : m_ActorList)
+	//{
+	//	target->Update(dt);
+	//}
 
 	/*
 		스페이스바 누를 시에 카메라 트레킹
@@ -133,13 +133,13 @@ bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int
 	TextureShader::GetInstance().Render(deviceContext, m_Player->GetIndexCount(), CGameApp::GetInstance().GetWorldMatrix(), m_Camera.GetViewMatrix(),
 		CGameApp::GetInstance().GetorthogonalMatrix(), m_Player->GetTexture());
 
-	for(auto target : m_ActorList)
-	{
-		target->Render(deviceContext, screenWidth, screenHeight);
+	//for(auto target : m_ActorList)
+	//{
+	//	target->Render(deviceContext, screenWidth, screenHeight);
 
-		TextureShader::GetInstance().Render(deviceContext, target->GetIndexCount(), CGameApp::GetInstance().GetWorldMatrix(), m_Camera.GetViewMatrix(),
-			CGameApp::GetInstance().GetorthogonalMatrix(), target->GetTexture());
-	}
+	//	TextureShader::GetInstance().Render(deviceContext, target->GetIndexCount(), CGameApp::GetInstance().GetWorldMatrix(), m_Camera.GetViewMatrix(),
+	//		CGameApp::GetInstance().GetorthogonalMatrix(), target->GetTexture());
+	//}
 
 	/*
 		렌더 리스트에 등록된 스프라이트 렌더
