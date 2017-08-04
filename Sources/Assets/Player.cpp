@@ -111,11 +111,13 @@ void Player::Update(float dt)
 
 void Player::Update(float dt, CGameCamera* pCamera)
 {
-	GameInput2& input = GameInput2::GetInstance();
+	static bool isWalking = false;
+	static float targetX = 0.0f, targetY = 0.0f;
+
 	float x = 0.0f, y = 0.0f;
 	float speed = 150.0f;
 
-	if (input.IsPressed(VK_LBUTTON))
+	if (GameInput2::GetInstance().IsPressed(VK_LBUTTON))
 	{
 		/*
 		그냥 저냥 테스트일 뿐
@@ -124,11 +126,32 @@ void Player::Update(float dt, CGameCamera* pCamera)
 		필요가 있음
 		*/
 
-		POINT po = input.GetMousePosition();
+		POINT po = GameInput2::GetInstance().GetMousePosition();
 		D3DXVECTOR3 cameraPos = pCamera->GetPosition();
-		Move(D3DXVECTOR2{ po.x + cameraPos.x, po.y - cameraPos.y});
+		//Move(D3DXVECTOR2{ po.x + cameraPos.x, po.y - cameraPos.y});
+		targetX = po.x + cameraPos.x - 32;
+		targetY = po.y - cameraPos.y - 32;
+		isWalking = true;
 	}
 	
+	if (m_Pos.x < targetX)
+	{
+		x += 1.0f;
+	}
+	else
+	{
+		x -= 1.0f;
+	}
+
+	if (m_Pos.y < targetY)
+	{
+		y += 1.0f;
+	}
+	else
+	{
+		y -= 1.0f;
+	}
+
 	float length = sqrt(pow(x, 2) + pow(y, 2));
 
 	if (length > 0) {
@@ -151,6 +174,16 @@ void Player::Update(float dt, CGameCamera* pCamera)
 		{
 			m_Pos.x += x;
 			m_Pos.y += y;
+		}
+
+		if ((m_Pos.x >= (targetX - 1.0f)) && (m_Pos.x <= (targetX + 1.0f)))
+		{
+			if ((m_Pos.y >= (targetY - 5.0f)) && (m_Pos.y <= (targetY + 5.0f)))
+			{
+				isWalking = false;
+				m_Sprite.SetLooping(false);
+				return;
+			}
 		}
 	}
 
