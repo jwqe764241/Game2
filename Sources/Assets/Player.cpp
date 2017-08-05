@@ -37,22 +37,7 @@ void Player::Update(float dt)
 	float x = 0.0f, y = 0.0f;
 	float speed = 150.0f;
 	
-	if (input.IsPressed(VK_LBUTTON))
-	{
-		std::cout << "clicked" << std::endl;
-		
-		/*
-			그냥 저냥 테스트일 뿐
-			이런 상황을 위하여 DirectInput으로 구현된 GameInput을
-			프로시저에서 처리하는 클래스로 다시 구현해야 할
-			필요가 있음
-		*/
-
-		POINT po = input.GetMousePosition();
-		std::cout << "x : " << po.x << "   y : " << po.y << std::endl;
-	}
-	
-	
+	/*
 	if (input.IsPressed(0x57)) 
 	{
 		m_Sprite.SetMotion(0);
@@ -72,6 +57,24 @@ void Player::Update(float dt)
 	{
 		m_Sprite.SetMotion(3);
 		x += 1;
+	}
+	else
+	{
+		m_Sprite.SetLooping(false);
+		m_Sprite.Update(dt);
+		return;
+	}
+	*/
+
+	if (input.IsPressed(VK_RIGHT))
+	{
+		x += 1.0f;
+		m_Sprite.SetMotion(3);
+	}
+	else if (input.IsPressed(VK_LEFT))
+	{
+		x -= 1.0f;
+		m_Sprite.SetMotion(1);
 	}
 	else
 	{
@@ -110,6 +113,7 @@ void Player::Update(float dt)
 }
 
 void Player::Update(float dt, CGameCamera* pCamera)
+//해당 업데이트는 마우스 클릭 시 해당 마우스 좌표로 이동하게 하는 시뮬레이션 함수임
 {
 	static bool isWalking = false;
 	static float targetX = 0.0f, targetY = 0.0f;

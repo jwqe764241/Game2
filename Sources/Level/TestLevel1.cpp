@@ -108,17 +108,20 @@ void TestLevel1::Update(float dt)
 	//}
 
 	//GameInput2 ¹öÀü
-	if (GameInput2::GetInstance().IsPressed(VK_SPACE))
+
+	D3DXVECTOR2 pos = m_Player->GetPosition();
+	WindowSize size = CGameApp::GetInstance().GetWindowSize();
+	if (pos.x + m_Player->GetSprite()->GetFrameWidth() >= (size.width / 2) && pos.x <= m_LevelSize.right - (size.width / 2))
 	{
 		D3DXVECTOR2 pos = m_Player->GetPosition();
-		float width  = CGameApp::GetInstance().GetWindowSize().width;
-		float height = CGameApp::GetInstance().GetWindowSize().height;
+		float width  = size.width;
+		float height = size.height;
 
 		m_Camera.SetPosition(pos.x - ((width / 2) - m_Player->GetSprite()->GetFrameWidth()), 
 			(pos.y - ((height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1 , -10.0f);
 	}
 
-	m_Player->Update(dt, &m_Camera);
+	m_Player->Update(dt);
 
 }
 
