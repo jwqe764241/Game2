@@ -56,7 +56,11 @@ bool TestLevel1::Load()
 
 	//플레이어 생성
 	m_Player = dynamic_cast<Player*>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_PLAYER, 576, 256));
-	m_Camera.SetPosition(0.0f, 0.0f, -1.0f);
+	//m_Camera.SetPosition(0.0f, 0.0f, -1.0f);
+
+	WindowSize size = CGameApp::GetInstance().GetWindowSize();
+	m_Camera.SetPosition(m_LevelSize.left,
+		(m_Player->GetPosition().y - size.height + m_Player->GetSprite()->GetFrameHeight() + 50) * -1, -10.0f);
 	
 	m_Player->SetPositionLimit(&m_LevelSize);
 
@@ -111,14 +115,11 @@ void TestLevel1::Update(float dt)
 
 	D3DXVECTOR2 pos = m_Player->GetPosition();
 	WindowSize size = CGameApp::GetInstance().GetWindowSize();
-	if (pos.x + m_Player->GetSprite()->GetFrameWidth() >= (size.width / 2) && pos.x <= m_LevelSize.right - (size.width / 2))
+	float halfWidth = size.width / 2;
+	if (pos.x + m_Player->GetSprite()->GetFrameWidth() >= (halfWidth) && pos.x <= m_LevelSize.right - (halfWidth))
 	{
-		D3DXVECTOR2 pos = m_Player->GetPosition();
-		float width  = size.width;
-		float height = size.height;
-
-		m_Camera.SetPosition(pos.x - ((width / 2) - m_Player->GetSprite()->GetFrameWidth()), 
-			(pos.y - ((height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1 , -10.0f);
+		m_Camera.SetPosition(pos.x - ((size.width / 2) - m_Player->GetSprite()->GetFrameWidth()), 
+			(pos.y - size.height + m_Player->GetSprite()->GetFrameHeight() + 50) * -1 , -10.0f);
 	}
 
 	m_Player->Update(dt);
