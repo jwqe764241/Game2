@@ -4,6 +4,12 @@
 
 #include <Sources/GameDefs.h>
 
+enum MouseCode {
+	LBUTTONLICKED = 0,
+	RBUTTONCLICKED,
+	WHEELBUTTONCLICKED
+};
+
 class GameInput
 {
 public:
@@ -17,8 +23,13 @@ public:
 	bool Frame();
 
 	bool IsEscapeProcessed();
-	bool IsPressed(DWORD keycode);
-	void GetMouseLocation(int&, int&);
+	bool IsKeyPressed(DWORD keycode);
+	bool IsMousePressed(DWORD keycode);
+
+	/*
+		사용하지 말것 GetCursorPos()를 사용할 것
+	*/
+	POINT GetMousePosition();
 
 private:
 	bool ReadKeyboard();
