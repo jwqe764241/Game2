@@ -9,12 +9,67 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_DESTROY:
 	case WM_CLOSE:
-		PostQuitMessage(0);
-		break;
+		{
+			PostQuitMessage(0);
+			break;
+		}
 	case WM_SIZE:
-		std::cout << "FDgsdf" << std::endl;
-		CGameApp::GetInstance().onResize();
-		break;
+		{
+			CGameApp::GetInstance().onResize();
+			break;
+		}
+
+	/*
+		GameInput 전용 메시지 처리기
+	*/
+	case WM_KEYDOWN:
+		{
+			GameInput2::GetInstance().PressKey(wParam);
+			break;
+		}
+	case WM_KEYUP:
+		{
+			GameInput2::GetInstance().ReleaseKey(wParam);
+			break;
+		}
+	case WM_MOUSEMOVE:
+		{
+			GameInput2::GetInstance().UpdateMousePosition(POINT{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) });
+			break;
+		}
+	//왼쪽 마우스 메시지 처리기
+	case WM_LBUTTONDOWN:
+		{
+			GameInput2::GetInstance().PressKey(VK_LBUTTON);
+			break;
+		}
+	case WM_LBUTTONUP:
+		{
+			GameInput2::GetInstance().ReleaseKey(VK_LBUTTON);
+			break;
+		}
+	//오른쪽 마우스 메시지 처리기
+	case WM_RBUTTONDOWN:
+		{
+			GameInput2::GetInstance().PressKey(VK_RBUTTON);
+			break;
+		}
+	case WM_RBUTTONUP:
+		{
+			GameInput2::GetInstance().ReleaseKey(VK_RBUTTON);
+			break;
+		}
+	//가운데 마우스 메시지 처리기
+	case WM_MBUTTONDOWN:
+		{
+			GameInput2::GetInstance().PressKey(VK_MBUTTON);
+			break;
+		}
+	case WM_MBUTTONUP:
+		{
+			GameInput2::GetInstance().ReleaseKey(VK_MBUTTON);
+			break;
+		}
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
@@ -195,6 +250,8 @@ bool CGameApp::Initialize(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * w
 	m_AppInfo.pSwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&m_AppInfo.pBackBuffer));
 	m_AppInfo.pD3D11Device->CreateRenderTargetView(m_AppInfo.pBackBuffer, NULL, &m_AppInfo.pRenderTargetView);
 
+	GameInput2::GetInstance().Initialize(m_hWnd);
+
 	onResize();
 
 	return true;
@@ -262,12 +319,6 @@ void CGameApp::Launch()
 	LoadAssets();
 	onShowWindow();
 
-	if (!GameInput::GetInstance().Initialize(m_hInstance, m_hWnd, m_WindowSize.width, m_WindowSize.height))
-	{
-		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Input", MB_OK);
-		return;
-	}
-
 	CGameLevelLoader::GetInstance().LoadLevel(new TestLevel1());
 
 	m_GameTimer.Reset();
@@ -285,7 +336,7 @@ void CGameApp::Launch()
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		if (GameInput::GetInstance().IsEscapeProcessed())
+		if (GameInput2::GetInstance().IsPressed(VK_ESCAPE))
 		{
 			return;
 		}
@@ -307,7 +358,7 @@ void CGameApp::Launch()
 void CGameApp::Update()
 {
 	m_GameTimer.Tick();
-	GameInput::GetInstance().Frame();
+	//GameInput::GetInstance().Frame();
 	CGameLevelLoader::GetInstance().UpdateLevel(m_GameTimer.DeltaTime());
 	CalculateFrameStatus();
 }
@@ -487,15 +538,23 @@ void CGameApp::onResize()
 	}
 
 	CGameAssetLoader::GetInstance().Initialize(m_AppInfo.pD3D11Device, m_AppInfo.pD3D11DeviceContext, &m_WindowSize.width, &m_WindowSize.height);
+
+	onShowWindow();
 }
 
 void CGameApp::onShowWindow()
 {
 	ShowWindow(m_hWnd, SW_SHOW);
-	ShowCursor(false);
+	//ShowCursor(false);
 	SetForegroundWindow(m_hWnd);
 	SetFocus(m_hWnd);
 	UpdateWindow(m_hWnd);
+
+	//if (!GameInput::GetInstance().Initialize(m_hInstance, m_hWnd, m_WindowSize.width, m_WindowSize.height))
+	//{
+	//	MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Input", MB_OK);
+	//	return;
+	//}
 }
 
 void CGameApp::TurnOnZBuffer()
@@ -533,4 +592,9 @@ D3DXMATRIX& CGameApp::GetorthogonalMatrix()
 WindowSize CGameApp::GetWindowSize() const
 {
 	return m_WindowSize;
+}
+
+HWND CGameApp::GetHWND() const
+{
+	return m_hWnd;
 }
