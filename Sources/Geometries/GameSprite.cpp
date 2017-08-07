@@ -69,7 +69,7 @@ void GameSprite::Update(float dt)
 		2. 그에 따라 렌더 작업도 2번 수행한다.
 	추후에 이 것을 수정해야될 듯 싶다.
 */
-void GameSprite::Render(ID3D11DeviceContext* context, int screenWidth, int screenHeight, int posX, int posY)
+void GameSprite::Render(ID3D11DeviceContext* context, int screenWidth, int screenHeight, float posX, float posY)
 {
 	// 위치 정보를 업데이트하고, 렌더한다.
 	GameBitmap::Render(context, screenWidth, screenHeight, posX, posY);

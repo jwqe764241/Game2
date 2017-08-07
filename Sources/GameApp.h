@@ -1,5 +1,4 @@
-#ifndef __GAMEAPP_H
-#define __GAMEAPP_H
+#pragma once
 
 #include <Windows.h>
 #include <D3DX11.h>
@@ -122,5 +121,3 @@ public:
 	~CGameApp();
 
 };
-
-#endif

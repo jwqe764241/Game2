@@ -1,5 +1,4 @@
-#ifndef __TESTGEOMETRY_H
-#define __TESTGEOMETRY_H
+#pragma once
 
 #include <D3DX11.h>
 #include <D3DX10math.h>
@@ -67,5 +66,3 @@ protected:
 
 	VertexType* m_vertices;
 };
-
-#endif
