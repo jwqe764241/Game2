@@ -1,6 +1,6 @@
 #include <Sources/Assets/Player.h>
 
-Player::Player() : m_Sprite(15.0f, 1.0f, true), m_ResourcePath(L"../Resources/sprite.bmp")
+Player::Player() : m_Sprite(15.0f, 2.0f, true), m_ResourcePath(L"../Resources/sprite.bmp")
 {
 
 }
@@ -35,7 +35,7 @@ void Player::Update(float dt)
 {
 	GameInput2& input = GameInput2::GetInstance();
 	float x = 0.0f, y = 0.0f;
-	float speed = 150.0f;
+	float speed = 350.0f;
 	
 	/*
 	if (input.IsPressed(0x57)) 
@@ -75,6 +75,16 @@ void Player::Update(float dt)
 	{
 		x -= 1.0f;
 		m_Sprite.SetMotion(1);
+	}
+	else if (input.IsPressed(VK_UP))
+	{
+		y -= 1.0f;
+		m_Sprite.SetMotion(0);
+	}
+	else if (input.IsPressed(VK_DOWN))
+	{
+		y += 1.0f;
+		m_Sprite.SetMotion(2);
 	}
 	else
 	{

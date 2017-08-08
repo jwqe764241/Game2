@@ -204,12 +204,8 @@ bool TextureShader::SetParameters(ID3D11DeviceContext * deviceContext, D3DXMATRI
 void TextureShader::RenderShader(ID3D11DeviceContext * deviceContext, int indexCount)
 {
 	deviceContext->IASetInputLayout(m_InputLayout);
-
 	deviceContext->VSSetShader(m_VertexShader, NULL, 0);
-
 	deviceContext->PSSetShader(m_PixelShader, NULL, 0);
-
 	deviceContext->PSSetSamplers(0, 1, &m_SampleState);
-
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 }

@@ -55,7 +55,7 @@ private:
 	};
 
 	RECT m_LevelSize;
-
+	GameBitmap m_LevelBitmap;
 public:
 	TestLevel1();
 	~TestLevel1();

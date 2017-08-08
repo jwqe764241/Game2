@@ -116,6 +116,12 @@ public:
 
 	WindowSize GetWindowSize() const;
 	HWND GetHWND() const;
+	ID3D11Device* GetDevice() const;
+	
+	/*
+		임시적인 함수임
+	*/
+	const AppInfo* GetAppInfo() const;
 
 	static CGameApp& GetInstance();
 

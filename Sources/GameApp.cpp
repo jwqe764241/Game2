@@ -18,12 +18,38 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			CGameApp::GetInstance().onResize();
 			break;
 		}
-
+	case WM_SYSCOMMAND:
+		{
+			switch (wParam)
+			{
+			case SC_MAXIMIZE:
+				{
+					CGameApp::GetInstance().GetAppInfo()->pSwapChain->SetFullscreenState(true, nullptr);
+					CGameApp::GetInstance().onResize();
+					break;
+				}
+			case SC_CLOSE:
+				PostQuitMessage(0);
+				break;
+			}
+			break;
+		}
 	/*
 		GameInput 전용 메시지 처리기
 	*/
 	case WM_KEYDOWN:
 		{
+			if (wParam == VK_F12)
+			{
+				int result = NULL;
+				CGameApp::GetInstance().GetAppInfo()->pSwapChain->GetFullscreenState(&result, nullptr);
+
+				if (result == TRUE)
+				{
+					CGameApp::GetInstance().GetAppInfo()->pSwapChain->SetFullscreenState(false, nullptr);
+				}
+				break;
+			}
 			GameInput2::GetInstance().PressKey(wParam);
 			break;
 		}
@@ -368,12 +394,6 @@ bool CGameApp::Render()
 {
 	TurnOffZBuffer();
 
-	//if (!TextureShader::GetInstance().Render(m_AppInfo.pD3D11DeviceContext, CGameAssetLoader::GetInstance().GetAsset("TestAsset")->GetIndexCount(),
-	//	m_Matrix.worldMatrix, m_Camera.GetViewMatrix(), m_Matrix.orthMatrix, CGameAssetLoader::GetInstance().GetAsset("TestAsset")->GetTexture()))
-	//{
-	//	return false;
-	//}
-
 	CGameLevelLoader::GetInstance().RenderLevel(m_AppInfo.pD3D11DeviceContext, m_WindowSize.width, m_WindowSize.height);
 
 	TurnOnZBuffer();
@@ -597,4 +617,14 @@ WindowSize CGameApp::GetWindowSize() const
 HWND CGameApp::GetHWND() const
 {
 	return m_hWnd;
+}
+
+ID3D11Device* CGameApp::GetDevice() const
+{
+	return m_AppInfo.pD3D11Device;
+}
+
+const AppInfo* CGameApp::GetAppInfo() const
+{
+	return &m_AppInfo;
 }

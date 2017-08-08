@@ -51,6 +51,9 @@
     <Filter Include="소스 파일\Assets\Enemy">
       <UniqueIdentifier>{1a3712a0-9ab2-42c1-97f7-1d4199939cdf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Assets\Objects">
+      <UniqueIdentifier>{ac6ed141-940b-4bb0-b3ba-ad2cead3873f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\error.cpp">
@@ -112,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Input\GameInput2.cpp">
       <Filter>소스 파일\Engines\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Rock.cpp">
+      <Filter>소스 파일\Assets\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +198,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Input\GameInput2.h">
       <Filter>소스 파일\Engines\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Rock.h">
+      <Filter>소스 파일\Assets\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
