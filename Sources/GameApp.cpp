@@ -271,7 +271,7 @@ bool CGameApp::Initialize(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * w
 
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
 
-	D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, 0, 0, &featureLevel, 1, D3D11_SDK_VERSION,
+	D3D11CreateDeviceAndSwapChain(m_vAdapters[1], D3D_DRIVER_TYPE_UNKNOWN, 0, D3D11_CREATE_DEVICE_SINGLETHREADED, &featureLevel, 1, D3D11_SDK_VERSION,
 		&swapChainDesc, &m_AppInfo.pSwapChain, &m_AppInfo.pD3D11Device, NULL, &m_AppInfo.pD3D11DeviceContext);
 	m_AppInfo.pSwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&m_AppInfo.pBackBuffer));
 	m_AppInfo.pD3D11Device->CreateRenderTargetView(m_AppInfo.pBackBuffer, NULL, &m_AppInfo.pRenderTargetView);

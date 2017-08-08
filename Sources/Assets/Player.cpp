@@ -1,6 +1,6 @@
 #include <Sources/Assets/Player.h>
 
-Player::Player() : m_Sprite(15.0f, 2.0f, true), m_ResourcePath(L"../Resources/sprite.bmp")
+Player::Player() : m_Sprite(15.0f, 1.0f, true), m_ResourcePath(L"../Resources/sprite.bmp")
 {
 
 }
@@ -129,7 +129,7 @@ void Player::Update(float dt, CGameCamera* pCamera)
 	static float targetX = 0.0f, targetY = 0.0f;
 
 	float x = 0.0f, y = 0.0f;
-	float speed = 150.0f;
+	float speed = 350.0f;
 
 	if (GameInput2::GetInstance().IsPressed(VK_LBUTTON))
 	{
@@ -148,6 +148,11 @@ void Player::Update(float dt, CGameCamera* pCamera)
 		isWalking = true;
 	}
 	
+	if (!isWalking)
+	{
+		return;
+	}
+
 	if (m_Pos.x < targetX)
 	{
 		x += 1.0f;

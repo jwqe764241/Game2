@@ -177,6 +177,7 @@ void GameBitmap::ReleaseBuffers()
 {
 	Utils::Release(&m_indexBuffer);
 	Utils::Release(&m_vertexBuffer);
+	ReleaseTexture();
 }
 
 bool GameBitmap::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY)

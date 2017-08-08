@@ -73,17 +73,19 @@ void GameSprite::Render(ID3D11DeviceContext* context, int screenWidth, int scree
 {
 	// 위치 정보를 업데이트하고, 렌더한다.
 	GameBitmap::Render(context, screenWidth, screenHeight, posX, posY);
-
 	// 스프라이트의 애니메이션(프레임)을 업데이트한다.
 	UpdateBuffers(context);
 
+	/*
+		이거 뭐냐 왜한거임 ㅡㅡ
+	*/
 	// 렌더한다.
-	unsigned int stride = sizeof(VertexType);
-	unsigned int offset = 0;
+	//unsigned int stride = sizeof(VertexType);
+	//unsigned int offset = 0;
 
-	context->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-	context->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//context->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+	//context->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	//context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void GameSprite::SetMotion(float index)

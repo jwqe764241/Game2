@@ -98,7 +98,7 @@ void TestLevel1::Update(float dt)
 	//float x = pos.x - ((size.width / 2) - m_Player->GetSprite()->GetFrameWidth());
 	//float y = (pos.y - ((size.height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1;
 
-	m_Player->Update(dt);
+	m_Player->Update(dt, &m_Camera);
 }
 
 bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)

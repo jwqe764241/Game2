@@ -43,7 +43,6 @@ public:
 	ID3D11ShaderResourceView* GetTexture();
 
 	BitmapSize GetBitmapSize() const;
-
 protected:
 	VertexType* GetVertices();
 
