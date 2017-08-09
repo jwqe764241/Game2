@@ -30,6 +30,8 @@ private:
 	int currSelection;
 	Button m_button[5];
 	CGameCamera m_Camera;
+
+	GameBitmap m_BackgroundBitmap;
 public:
 	LobbyLevel();
 	~LobbyLevel();

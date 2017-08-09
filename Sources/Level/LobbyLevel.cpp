@@ -24,6 +24,8 @@ bool LobbyLevel::Load()
 
 	m_button[currSelection].Update(true);
 
+	m_BackgroundBitmap.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/MainMenu.jpg", 1920, 1080);
+
 	return true;
 }
 
@@ -41,6 +43,7 @@ void LobbyLevel::Update(float dt)
 
 	static bool upStatus = false;
 	static bool downStatus = false;
+	static bool spaceStatus = false;
 	
 	if (input.IsPressed(VK_UP))
 	{
@@ -50,6 +53,11 @@ void LobbyLevel::Update(float dt)
 	else if (input.IsPressed(VK_DOWN))
 	{
 		downStatus = true;
+		return;
+	}
+	else if (input.IsPressed(VK_SPACE))
+	{
+		spaceStatus = true;
 		return;
 	}
 
@@ -65,26 +73,39 @@ void LobbyLevel::Update(float dt)
 		m_button[++currSelection].Update(true);
 		downStatus = false;
 	}
+	else if (spaceStatus)
+	{
+		switch (currSelection)
+		{
+		case ID_GAMESTART:
+			{
+				CGameLevelLoader::GetInstance().ChangeLevel(new TestLevel1());
+				break;
+			}
+		case ID_GAMEINTRO:
+			{
+				MessageBox(NULL, L"1", L"dsfsdf", MB_OK);
+				break;
+			}
+		case ID_GAMEHOWTO:
+			{
+				MessageBox(NULL, L"2", L"dsfsdf", MB_OK);
+				break;
+			}
+		case ID_GAMERANK:
+			{
+				MessageBox(NULL, L"3", L"dsfsdf", MB_OK);
+				break;
+			}
+		case ID_GAMESHUTDOWN:
+			{
+				PostQuitMessage(0);
+				break;
+			}
+		}
 
-	/*
-	if (input.IsPressed(VK_UP))
-	{
-		std::cout << "sibal" << input.IsReleased(VK_UP) << std::endl;
-		if (input.IsReleased(VK_UP) && (currSelection > 0))
-		{
-			m_button[currSelection].Update(false);
-			m_button[--currSelection].Update(true);
-		}
+		spaceStatus = false;
 	}
-	else if (input.IsPressed(VK_DOWN))
-	{
-		if (input.IsReleased(VK_DOWN) && (currSelection < 4))
-		{
-			m_button[currSelection].Update(false);
-			m_button[++currSelection].Update(true);
-		}
-	}
-	*/
 }
 
 bool LobbyLevel::Render(ID3D11DeviceContext * deviceContext, int screenWidth, int screenHeight)
@@ -95,6 +116,10 @@ bool LobbyLevel::Render(ID3D11DeviceContext * deviceContext, int screenWidth, in
 	WindowSize size = CGameApp::GetInstance().GetWindowSize();
 
 	m_Camera.Render();
+
+	m_BackgroundBitmap.Render(deviceContext, screenWidth, screenHeight, 0, 0);
+	instance.Render(deviceContext, m_BackgroundBitmap.GetIndexCount(), worldMatrix,
+		m_Camera.GetViewMatrix(), orthMatrix, m_BackgroundBitmap.GetTexture());
 
 	for (auto& button : m_button)
 	{
