@@ -57,6 +57,9 @@
     <Filter Include="소스 파일\UI">
       <UniqueIdentifier>{ab3f2880-90ed-4e98-9a56-4079cfc4a9b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Engines\Text">
+      <UniqueIdentifier>{daab8929-12bb-4853-8d88-7a8d5a0a779a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\error.cpp">
@@ -126,6 +129,9 @@
       <Filter>소스 파일\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Level\LobbyLevel.cpp">
+      <Filter>소스 파일\Assets\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Level\IntroLevel.cpp">
       <Filter>소스 파일\Assets\Levels</Filter>
     </ClCompile>
   </ItemGroup>
@@ -215,6 +221,9 @@
       <Filter>소스 파일\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Level\LobbyLevel.h">
+      <Filter>소스 파일\Assets\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Level\IntroLevel.h">
       <Filter>소스 파일\Assets\Levels</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,8 +6,18 @@
 #include <Sources/GUI/Button.h>
 #include <Sources/Interface/ILevel.h>
 
+#include <Sources/Level/TestLevel1.h>
+
 class LobbyLevel : public ILevel {
 private:
+
+	enum Menu_ID {
+		ID_GAMESTART = 0,
+		ID_GAMEINTRO,
+		ID_GAMEHOWTO,
+		ID_GAMERANK,
+		ID_GAMESHUTDOWN
+	};
 
 	D3DXVECTOR2 button_pos[5] = {
 		{1520, 50},
