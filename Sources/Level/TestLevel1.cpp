@@ -31,6 +31,8 @@ bool TestLevel1::Load()
 	
 	m_Player->SetPositionLimit(&m_LevelSize);
 
+	m_Cursor.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/cursor.png", 50, 50);
+
 	onStart();
 
 	return true;
@@ -106,6 +108,8 @@ bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int
 	TextureShader& instance = TextureShader::GetInstance();
 	D3DXMATRIX worldMatrix = CGameApp::GetInstance().GetWorldMatrix();
 	D3DXMATRIX orthMatrix = CGameApp::GetInstance().GetorthogonalMatrix();
+	WindowSize size = CGameApp::GetInstance().GetWindowSize();
+	POINT pos = GameInput2::GetInstance().GetMousePosition();
 
 	m_Camera.Render();
 
@@ -131,6 +135,10 @@ bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int
 			m_Camera.GetViewMatrix(), orthMatrix, target->GetTexture());
 	}
 
+	m_Cursor.Render(deviceContext, size.width, size.height, pos.x, pos.y);
+
+	instance.Render(deviceContext, m_Cursor.GetIndexCount(), worldMatrix, 
+		m_Camera.GetViewMatrix(), orthMatrix, m_Cursor.GetTexture());
 	return true;
 }
 

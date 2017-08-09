@@ -19,6 +19,7 @@
 
 #include <Sources/GameAssetLoader.h>
 #include <Sources/Level/GameLevelLoader.h>
+#include <Sources/Level/LobbyLevel.h>
 #include <Sources/Level/TestLevel1.h>
 //#define TEST_RENDER_BOX
 
@@ -124,7 +125,7 @@ public:
 	const AppInfo* GetAppInfo() const;
 
 	static CGameApp& GetInstance();
-
+	
 public:
 	CGameApp();
 	~CGameApp();

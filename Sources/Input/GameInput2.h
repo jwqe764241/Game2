@@ -40,5 +40,6 @@ public:
 	void UpdateMousePosition(POINT pos);
 
 	bool IsPressed(int keycode) const;
+	bool IsReleased(int keycode) const;
 	POINT GetMousePosition() const;
 };

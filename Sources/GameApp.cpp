@@ -345,7 +345,7 @@ void CGameApp::Launch()
 	LoadAssets();
 	onShowWindow();
 
-	CGameLevelLoader::GetInstance().LoadLevel(new TestLevel1());
+	CGameLevelLoader::GetInstance().LoadLevel(new LobbyLevel());
 
 	m_GameTimer.Reset();
 	m_GameTimer.Start();
@@ -376,7 +376,10 @@ void CGameApp::Launch()
 			//Error...
 		}
 
+		POINT pos = GameInput2::GetInstance().GetMousePosition();
+
 		m_AppInfo.pSwapChain->Present(0, 0);
+
 	}
 }
 
@@ -565,16 +568,10 @@ void CGameApp::onResize()
 void CGameApp::onShowWindow()
 {
 	ShowWindow(m_hWnd, SW_SHOW);
-	//ShowCursor(false);
+	ShowCursor(false);
 	SetForegroundWindow(m_hWnd);
 	SetFocus(m_hWnd);
 	UpdateWindow(m_hWnd);
-
-	//if (!GameInput::GetInstance().Initialize(m_hInstance, m_hWnd, m_WindowSize.width, m_WindowSize.height))
-	//{
-	//	MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Input", MB_OK);
-	//	return;
-	//}
 }
 
 void CGameApp::TurnOnZBuffer()

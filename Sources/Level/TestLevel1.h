@@ -34,6 +34,8 @@ private:
 	Player* m_Player;
 	CGameCamera m_Camera;
 
+	GameBitmap m_Cursor;
+
 	const D3DXVECTOR2 m_PosList[10] = {
 		{ 30, 50 },
 		{ 60, 400 },

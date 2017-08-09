@@ -50,6 +50,11 @@ bool GameInput2::IsPressed(int keycode) const
 	return m_KeyboardState[keycode] & 0x80;
 }
 
+bool GameInput2::IsReleased(int keycode) const
+{
+	return !(m_KeyboardState[keycode] & 0x80);
+}
+
 POINT GameInput2::GetMousePosition() const
 {
 	return m_MousePosition;
