@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <sstream>
 
 //디버그 모드일때
 #ifndef NDEBUG
@@ -52,7 +53,9 @@ void __cdecl ErrorHandler2(
 
 #define CUSTOM_ASSERT(condition, message)										\
 	if (!(condition)) {															\
-		ErrorHandler2(__FILE__, __FUNCTION__, __LINE__, #condition, message);	\
+		std::ostringstream a;															\
+		a << message;															\
+		ErrorHandler2(__FILE__, __FUNCTION__, __LINE__, #condition, a.str());	\
 	}																			\
 
 #define TEST____(message)					\
