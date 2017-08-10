@@ -1,15 +1,22 @@
 #pragma once
 
-#include <Sources/Interface/ILevel.h>
+#include <Sources/GameApp.h>
 #include <Sources/Camera/GameCamera.h>
+#include <Sources/Geometries/GameSprite.h>
+#include <Sources/GUI/Button.h>
+#include <Sources/Interface/ILevel.h>
+#include <Sources/Input/GameInput2.h>
+#include <Sources/Level/GameLevelLoader.h>
+#include <Sources/Level/LobbyLevel.h>\
 
-class IntroLevel : public ILevel{
+class DummyLevel : public ILevel{
 private:
 	CGameCamera m_Camera;
-	
+	GameBitmap m_BackgroundBitmap;
+	Button m_BackButton;
 public:
-	IntroLevel();
-	~IntroLevel();
+	DummyLevel();
+	~DummyLevel();
 
 	// ILevel을(를) 통해 상속됨
 	virtual bool Load() override;

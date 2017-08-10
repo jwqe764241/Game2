@@ -109,6 +109,7 @@ CGameApp::CGameApp()
 
 CGameApp::~CGameApp()
 {
+	Release();
 }
 
 bool CGameApp::Initialize(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height, float screenDepth, float screenNear)
@@ -309,6 +310,7 @@ void CGameApp::Release()
 	}
 
 	CGameLevelLoader::GetInstance().UnloadLevel();
+	CGameAssetLoader::GetInstance().Release();
 }
 
 void CGameApp::CalculateFrameStatus()

@@ -131,7 +131,7 @@
     <ClCompile Include="..\Sources\Level\LobbyLevel.cpp">
       <Filter>소스 파일\Assets\Levels</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Level\IntroLevel.cpp">
+    <ClCompile Include="..\Sources\Level\DummyLevel.cpp">
       <Filter>소스 파일\Assets\Levels</Filter>
     </ClCompile>
   </ItemGroup>
@@ -223,7 +223,7 @@
     <ClInclude Include="..\Sources\Level\LobbyLevel.h">
       <Filter>소스 파일\Assets\Levels</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Level\IntroLevel.h">
+    <ClInclude Include="..\Sources\Level\DummyLevel.h">
       <Filter>소스 파일\Assets\Levels</Filter>
     </ClInclude>
   </ItemGroup>

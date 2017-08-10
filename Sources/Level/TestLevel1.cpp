@@ -41,6 +41,7 @@ bool TestLevel1::Load()
 void TestLevel1::Unload()
 {
 	m_LevelBitmap.Release();
+	m_Cursor.Release();
 
 	for (auto target : m_EnvironmentList)
 	{

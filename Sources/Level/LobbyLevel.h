@@ -6,6 +6,7 @@
 #include <Sources/GUI/Button.h>
 #include <Sources/Interface/ILevel.h>
 
+#include <Sources/Level/DummyLevel.h>
 #include <Sources/Level/TestLevel1.h>
 
 class LobbyLevel : public ILevel {

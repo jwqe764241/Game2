@@ -35,6 +35,8 @@ void LobbyLevel::Unload()
 	{
 		button.Release();
 	}
+
+	m_BackgroundBitmap.Release();
 }
 
 void LobbyLevel::Update(float dt)
@@ -84,17 +86,17 @@ void LobbyLevel::Update(float dt)
 			}
 		case ID_GAMEINTRO:
 			{
-				MessageBox(NULL, L"1", L"dsfsdf", MB_OK);
+				CGameLevelLoader::GetInstance().ChangeLevel(new DummyLevel());
 				break;
 			}
 		case ID_GAMEHOWTO:
 			{
-				MessageBox(NULL, L"2", L"dsfsdf", MB_OK);
+				CGameLevelLoader::GetInstance().ChangeLevel(new DummyLevel());
 				break;
 			}
 		case ID_GAMERANK:
 			{
-				MessageBox(NULL, L"3", L"dsfsdf", MB_OK);
+				CGameLevelLoader::GetInstance().ChangeLevel(new DummyLevel());
 				break;
 			}
 		case ID_GAMESHUTDOWN:
@@ -105,7 +107,7 @@ void LobbyLevel::Update(float dt)
 		}
 
 		spaceStatus = false;
-	}
+	} 
 }
 
 bool LobbyLevel::Render(ID3D11DeviceContext * deviceContext, int screenWidth, int screenHeight)
@@ -113,7 +115,6 @@ bool LobbyLevel::Render(ID3D11DeviceContext * deviceContext, int screenWidth, in
 	TextureShader& instance = TextureShader::GetInstance();
 	D3DXMATRIX worldMatrix = CGameApp::GetInstance().GetWorldMatrix();
 	D3DXMATRIX orthMatrix = CGameApp::GetInstance().GetorthogonalMatrix();
-	WindowSize size = CGameApp::GetInstance().GetWindowSize();
 
 	m_Camera.Render();
 
