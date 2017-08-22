@@ -133,6 +133,14 @@ bool GameInput::IsPressed(DWORD keycode)
 	return m_keyboardState[keycode] & 0x80;
 }
 
+bool GameInput::IsMousePressed(int mousecode)
+{
+	if (m_mouseState.rgbButtons[mousecode]) {
+		return true;
+	}
+	return false;
+}
+
 void GameInput::GetMouseLocation(int& mouseX, int& mouseY)
 {
 	mouseX = m_mouseX;

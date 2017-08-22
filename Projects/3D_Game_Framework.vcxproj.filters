@@ -51,6 +51,12 @@
     <Filter Include="소스 파일\Assets\Enemy">
       <UniqueIdentifier>{1a3712a0-9ab2-42c1-97f7-1d4199939cdf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Engines\UIs">
+      <UniqueIdentifier>{c93bc079-5fc6-4eaa-9f2c-492c6bb9de42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engines\Text">
+      <UniqueIdentifier>{e5e4fe00-9b5d-4261-b449-48c3c8ea1177}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\error.cpp">
@@ -107,8 +113,20 @@
     <ClCompile Include="..\Sources\Assets\SpriteAsset.cpp">
       <Filter>소스 파일\Assets\Test</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Enemy1.cpp">
-      <Filter>소스 파일\Assets\Enemy</Filter>
+    <ClCompile Include="..\Sources\GameSettings.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\GameWindow.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Shaders\ColorShader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UIs\Button.cpp">
+      <Filter>소스 파일\Engines\UIs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Text\GameFont.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -184,8 +202,17 @@
     <ClInclude Include="..\Sources\Assets\SpriteAsset.h">
       <Filter>소스 파일\Assets\Test</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Enemy1.h">
-      <Filter>소스 파일\Assets\Enemy</Filter>
+    <ClInclude Include="..\Sources\GameSettings.h" />
+    <ClInclude Include="..\Sources\GameWindow.h" />
+    <ClInclude Include="..\Sources\Shaders\ColorShader.h" />
+    <ClInclude Include="..\Sources\UIs\Button.h">
+      <Filter>소스 파일\Engines\UIs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\UIs\TextView.h">
+      <Filter>소스 파일\Engines\UIs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Text\GameFont.h">
+      <Filter>소스 파일\Engines\Text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

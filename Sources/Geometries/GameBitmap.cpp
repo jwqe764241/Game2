@@ -75,6 +75,7 @@ void GameBitmap::Release()
 {
 	ReleaseTexture();
 	ReleaseBuffers();
+	delete[] m_vertices;
 }
 
 bool GameBitmap::Render(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY)

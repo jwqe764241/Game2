@@ -6,6 +6,9 @@
 #include <vector>
 #include <D3DX10math.h>
 
+#include <d2d1_1.h>
+#include <dwrite_1.h>
+
 #include <iostream>
 #include <sstream>
 
@@ -43,6 +46,11 @@ struct _AppInfo {
 	ID3D11DepthStencilView	*pDepthStencilView;
 	ID3D11RasterizerState	*pRasterizeState;
 	ID3D11BlendState		*pBlendState;
+
+	// D2D & DirectWrite
+	ID2D1Factory			*pD2D1Factory;
+	IDWriteFactory1			*pDWriteFactory;
+	IDWriteTextFormat		*pDWriteTextFormat;
 };
 
 struct _AppMatrix {

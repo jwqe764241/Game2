@@ -9,9 +9,9 @@ public:
 	//할당한 에셋들 해제 및 레벨 정리
 	virtual void Unload()         = 0;
 	//입력받은 키, 좌표이동 등을 업데이트
-	virtual void Update(float dt) = 0;
+	virtual void Update(float) = 0;
 	//해당 레벨을 출력
-	virtual bool Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight) = 0;
+	virtual bool Render(ID3D11DeviceContext*, int, int) = 0;
 	
 	//레벨 시작 시 
 	virtual void onStart() = 0;

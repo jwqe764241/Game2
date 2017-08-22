@@ -4,6 +4,9 @@
 
 #include <Sources/GameDefs.h>
 
+#define MOUSE_LEFT 0
+#define MOUSE_RIGHT 1
+
 class GameInput
 {
 public:
@@ -18,6 +21,8 @@ public:
 
 	bool IsEscapeProcessed();
 	bool IsPressed(DWORD keycode);
+
+	bool IsMousePressed(int);
 	void GetMouseLocation(int&, int&);
 
 private:
