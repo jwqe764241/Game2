@@ -15,7 +15,7 @@ bool TestLevel1::Load()
 	m_EnvironmentList.reserve(20);
 	m_ActorList.reserve(20);
 
-	bool a = m_LevelBitmap.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/background.png", 7680, 4320);
+	m_LevelBitmap.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/background.png", 7680, 4320);
 
 	m_LevelSize.top = 0;
 	m_LevelSize.bottom = 4320;
@@ -85,32 +85,38 @@ void TestLevel1::Update(float dt)
 
 	//GameInput2 버전
 
-	D3DXVECTOR2 pos = m_Player->GetPosition();
-	WindowSize size = CGameApp::GetInstance().GetWindowSize();
-	float halfWidth = size.width / 2;
+	D3DXVECTOR2 pos  = m_Player->GetPosition();
+	WindowSize size  = CGameApp::GetInstance().GetWindowSize();
+	float halfWidth  = size.width / 2;
 	float halfHeight = size.height / 2;
 	//고치기
-	
-	if (pos.x + m_Player->GetSprite()->GetFrameWidth() >= (halfWidth) && pos.x <= m_LevelSize.right - (halfWidth) ||
-		pos.y >= (halfHeight) && pos.y <= m_LevelSize.bottom - (halfHeight))
-	{
-		m_Camera.SetPosition(pos.x - ((size.width / 2) - m_Player->GetSprite()->GetFrameWidth()),
-			(pos.y - ((size.height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1, -10.0f);
-	}
+
+	int a1 = pos.x / 1920;
+	int a2 = pos.y / 1080;
+
+	m_Camera.SetPosition(cameraPosX[a1], cameraPosY[a2], -10.f);
+
+	//if (pos.x + m_Player->GetSprite()->GetFrameWidth() >= (halfWidth) && pos.x <= m_LevelSize.right - (halfWidth) ||
+	//	pos.y >= (halfHeight) && pos.y <= m_LevelSize.bottom - (halfHeight))
+	//{
+	//	m_Camera.SetPosition(pos.x - ((size.width / 2) - m_Player->GetSprite()->GetFrameWidth()),
+	//		(pos.y - ((size.height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1, -10.0f);
+	//}
 
 	//float x = pos.x - ((size.width / 2) - m_Player->GetSprite()->GetFrameWidth());
 	//float y = (pos.y - ((size.height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1;
 
-	m_Player->Update(dt, &m_Camera);
+	m_Player->Update(dt);
 }
 
 bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)
 {
 	TextureShader& instance = TextureShader::GetInstance();
-	D3DXMATRIX worldMatrix = CGameApp::GetInstance().GetWorldMatrix();
-	D3DXMATRIX orthMatrix = CGameApp::GetInstance().GetorthogonalMatrix();
-	WindowSize size = CGameApp::GetInstance().GetWindowSize();
-	POINT pos = GameInput2::GetInstance().GetMousePosition();
+	D3DXMATRIX worldMatrix  = CGameApp::GetInstance().GetWorldMatrix();
+	D3DXMATRIX orthMatrix   = CGameApp::GetInstance().GetorthogonalMatrix();
+	WindowSize size         = CGameApp::GetInstance().GetWindowSize();
+	D3DXVECTOR3 cameraPos   = m_Camera.GetPosition();
+	POINT pos               = GameInput2::GetInstance().GetMousePosition();
 
 	m_Camera.Render();
 
@@ -136,10 +142,11 @@ bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int
 			m_Camera.GetViewMatrix(), orthMatrix, target->GetTexture());
 	}
 
-	m_Cursor.Render(deviceContext, size.width, size.height, pos.x, pos.y);
+	m_Cursor.Render(deviceContext, size.width, size.height, pos.x + cameraPos.x, pos.y - cameraPos.y);
 
 	instance.Render(deviceContext, m_Cursor.GetIndexCount(), worldMatrix, 
 		m_Camera.GetViewMatrix(), orthMatrix, m_Cursor.GetTexture());
+
 	return true;
 }
 

@@ -19,7 +19,7 @@ private:
 	GameSprite m_Sprite;
 
 	bool isSetPositionLimit;
-		RECT m_PositionLimit;
+	RECT m_PositionLimit;
 
 public:
 	Player();

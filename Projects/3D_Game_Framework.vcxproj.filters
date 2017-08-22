@@ -134,6 +134,12 @@
     <ClCompile Include="..\Sources\Level\DummyLevel.cpp">
       <Filter>소스 파일\Assets\Levels</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Level\IslandLevel1.cpp">
+      <Filter>소스 파일\Assets\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Potal.cpp">
+      <Filter>소스 파일\Assets\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
@@ -225,6 +231,12 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Level\DummyLevel.h">
       <Filter>소스 파일\Assets\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Level\IslandLevel1.h">
+      <Filter>소스 파일\Assets\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Potal.h">
+      <Filter>소스 파일\Assets\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

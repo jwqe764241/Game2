@@ -126,25 +126,18 @@ void Player::Update(float dt, CGameCamera* pCamera)
 //해당 업데이트는 마우스 클릭 시 해당 마우스 좌표로 이동하게 하는 시뮬레이션 함수임
 {
 	static bool isWalking = false;
-	static float targetX = 0.0f, targetY = 0.0f;
+	static POINT targetPoint{ 0.0f, 0.0f };
 
 	float x = 0.0f, y = 0.0f;
 	float speed = 350.0f;
 
 	if (GameInput2::GetInstance().IsPressed(VK_LBUTTON))
 	{
-		/*
-		그냥 저냥 테스트일 뿐
-		이런 상황을 위하여 DirectInput으로 구현된 GameInput을
-		프로시저에서 처리하는 클래스로 다시 구현해야 할
-		필요가 있음
-		*/
-
-		POINT po = GameInput2::GetInstance().GetMousePosition();
+		POINT mousePos = GameInput2::GetInstance().GetMousePosition();
 		D3DXVECTOR3 cameraPos = pCamera->GetPosition();
 		//Move(D3DXVECTOR2{ po.x + cameraPos.x, po.y - cameraPos.y});
-		targetX = po.x + cameraPos.x - 32;
-		targetY = po.y - cameraPos.y - 32;
+		targetPoint.x = mousePos.x + cameraPos.x - 32;
+		targetPoint.y = mousePos.y - cameraPos.y - 32;
 		isWalking = true;
 	}
 	
@@ -153,7 +146,7 @@ void Player::Update(float dt, CGameCamera* pCamera)
 		return;
 	}
 
-	if (m_Pos.x < targetX)
+	if (m_Pos.x < targetPoint.x)
 	{
 		x += 1.0f;
 	}
@@ -162,7 +155,7 @@ void Player::Update(float dt, CGameCamera* pCamera)
 		x -= 1.0f;
 	}
 
-	if (m_Pos.y < targetY)
+	if (m_Pos.y < targetPoint.y)
 	{
 		y += 1.0f;
 	}
@@ -175,9 +168,9 @@ void Player::Update(float dt, CGameCamera* pCamera)
 
 	if (length > 0) {
 
-		if ((m_Pos.x >= (targetX - 1.0f)) && (m_Pos.x <= (targetX + 1.0f)))
+		if ((m_Pos.x >= (targetPoint.x - 1.0f)) && (m_Pos.x <= (targetPoint.x + 1.0f)))
 		{
-			if ((m_Pos.y >= (targetY - 5.0f)) && (m_Pos.y <= (targetY + 5.0f)))
+			if ((m_Pos.y >= (targetPoint.y - 1.0f)) && (m_Pos.y <= (targetPoint.y + 1.0f)))
 			{
 				isWalking = false;
 				m_Sprite.SetLooping(false);
@@ -188,14 +181,15 @@ void Player::Update(float dt, CGameCamera* pCamera)
 		speed *= dt;
 		x *= speed / length;
 		y *= speed / length;
+
 		if (isSetPositionLimit)
 		{
-			if (m_Pos.x + x >= m_PositionLimit.left && (m_Pos.x + x) + m_Sprite.GetFrameWidth() <= m_PositionLimit.right)
+			if (m_Pos.x >= m_PositionLimit.left && m_Pos.x + m_Sprite.GetFrameWidth() / 2 <= m_PositionLimit.right)
 			{
 				m_Pos.x += x;
 			}
 
-			if (m_Pos.y + y >= m_PositionLimit.top && (m_Pos.y + y) + m_Sprite.GetFrameHeight() <= m_PositionLimit.bottom)
+			if (m_Pos.y >= m_PositionLimit.top && m_Pos.y + m_Sprite.GetFrameHeight() / 2 <= m_PositionLimit.bottom)
 			{
 				m_Pos.y += y;
 			}
