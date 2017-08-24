@@ -7,7 +7,7 @@ LobbyLevel::LobbyLevel()
 
 LobbyLevel::~LobbyLevel()
 {
-
+	Unload();
 }
 
 bool LobbyLevel::Load()

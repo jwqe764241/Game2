@@ -45,9 +45,6 @@
     <Filter Include="소스 파일\Assets\Levels">
       <UniqueIdentifier>{6fe70bce-8112-4617-b3e3-ee70d4259f17}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Assets\Player">
-      <UniqueIdentifier>{9b48e7e8-1ace-4cc1-b0a1-89ded03e3035}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Assets\Enemy">
       <UniqueIdentifier>{1a3712a0-9ab2-42c1-97f7-1d4199939cdf}</UniqueIdentifier>
     </Filter>
@@ -59,6 +56,9 @@
     </Filter>
     <Filter Include="소스 파일\Engines\Text">
       <UniqueIdentifier>{daab8929-12bb-4853-8d88-7a8d5a0a779a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Assets\Objects\Player">
+      <UniqueIdentifier>{9b48e7e8-1ace-4cc1-b0a1-89ded03e3035}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,7 +111,7 @@
       <Filter>소스 파일\Assets\Levels</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Assets\Player.cpp">
-      <Filter>소스 파일\Assets\Player</Filter>
+      <Filter>소스 파일\Assets\Objects\Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Assets\SpriteAsset.cpp">
       <Filter>소스 파일\Assets\Test</Filter>
@@ -139,6 +139,12 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Assets\Potal.cpp">
       <Filter>소스 파일\Assets\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Geometries\StateBar.cpp">
+      <Filter>소스 파일\Engines\Geometries</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\PlayerUI.cpp">
+      <Filter>소스 파일\Assets\Objects\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -200,7 +206,7 @@
       <Filter>소스 파일\Assets\Levels</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Assets\Player.h">
-      <Filter>소스 파일\Assets\Player</Filter>
+      <Filter>소스 파일\Assets\Objects\Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Interface\ICharacter.h">
       <Filter>소스 파일\Assets\Interface</Filter>
@@ -237,6 +243,12 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Assets\Potal.h">
       <Filter>소스 파일\Assets\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Geometries\StateBar.h">
+      <Filter>소스 파일\Engines\Geometries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\PlayerUI.h">
+      <Filter>소스 파일\Assets\Objects\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,9 @@ private:
 	wchar_t* m_ResourcePath;
 
 	int m_Health;
+	int m_WaterValue;
+	int m_FoodValue;
+	int m_SleepValue;
 	D3DXVECTOR2 m_Pos;
 	GameSprite m_Sprite;
 
@@ -51,4 +54,9 @@ public:
 		NULL일 경우에 설정 안함, 값이 있으면 설정 함
 	*/
 	void SetPositionLimit(const RECT* limitPos);
+
+	int GetHealth() const;
+	int GetWaterValue() const;
+	int GetFoodValue() const;
+	int GetSleepValue() const;
 };

@@ -1,5 +1,9 @@
 #include <Sources/Assets/Player.h>
 
+static float waterCoolDown = 0.0f;
+static float foodCoolDown = 0.0f;
+static float sleepCoolDown = 0.0f;
+
 Player::Player() : m_Sprite(15.0f, 1.0f, true), m_ResourcePath(L"../Resources/sprite.bmp")
 {
 
@@ -19,6 +23,10 @@ void Player::Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight)
 	m_Sprite.SetLooping(false);
 	m_Sprite.SetMotion(2);
 	isSetPositionLimit = false;
+	
+	m_WaterValue = 100;
+	m_FoodValue = 100;
+	m_SleepValue = 100;
 }
 
 void Player::Release()
@@ -33,38 +41,29 @@ void Player::Reset()
 
 void Player::Update(float dt)
 {
+	waterCoolDown += dt;
+	foodCoolDown += dt;
+	sleepCoolDown += dt;
+
+	if (waterCoolDown >= 1.0f)
+	{
+		m_WaterValue -= 1;
+		waterCoolDown = 0.0f;
+	}
+	if (foodCoolDown >= 2.0f)
+	{
+		m_FoodValue -= 1;
+		foodCoolDown = 0.0f;
+	}
+	if (sleepCoolDown >= 3.0f)
+	{
+		m_SleepValue -= 1;
+		sleepCoolDown = 0.0f;
+	}
+
 	GameInput2& input = GameInput2::GetInstance();
 	float x = 0.0f, y = 0.0f;
 	float speed = 350.0f;
-	
-	/*
-	if (input.IsPressed(0x57)) 
-	{
-		m_Sprite.SetMotion(0);
-		y -= 1;
-	}
-	else if (input.IsPressed(0x41))
-	{
-		m_Sprite.SetMotion(1);
-		x -= 1;
-	}
-	else if (input.IsPressed(0x53))
-	{
-		m_Sprite.SetMotion(2);
-		y += 1;
-	}
-	else if (input.IsPressed(0x44))
-	{
-		m_Sprite.SetMotion(3);
-		x += 1;
-	}
-	else
-	{
-		m_Sprite.SetLooping(false);
-		m_Sprite.Update(dt);
-		return;
-	}
-	*/
 
 	if (input.IsPressed(VK_RIGHT))
 	{
@@ -291,4 +290,24 @@ void Player::SetPositionLimit(const RECT* limitPos)
 		isSetPositionLimit = true;
 		m_PositionLimit = (*limitPos);
 	}
+}
+
+int Player::GetHealth() const
+{
+	return m_Health;
+}
+
+int Player::GetWaterValue() const
+{
+	return m_WaterValue;
+}
+
+int Player::GetFoodValue() const
+{
+	return m_FoodValue;
+}
+
+int Player::GetSleepValue() const
+{
+	return m_SleepValue;
 }

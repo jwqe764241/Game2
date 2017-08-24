@@ -3,19 +3,24 @@
 
 CGameLevelLoader::CGameLevelLoader() : m_CurrentLevel(nullptr)
 {
+	/*m_PreLoadedLevel.insert(std::pair<int, ILevel*>(LevelID::LEVEL_MAIN, new LobbyLevel()));
+	m_PreLoadedLevel.insert(std::pair<int, ILevel*>(LevelID::LEVEL_DUMMY, new DummyLevel()));
+	m_PreLoadedLevel.insert(std::pair<int, ILevel*>(LevelID::LEVEL_TEST1, new TestLevel1()));
 
+	for (auto& level : m_PreLoadedLevel)
+	{
+		level.second->Load();
+	}*/
 }
-
-//CGameLevelLoader::CGameLevelLoader(ILevel* pLevel)
-//{
-//	if (pLevel) 
-//	{
-//		m_CurrentLevel = pLevel;
-//	}
-//}
 
 CGameLevelLoader::~CGameLevelLoader()
 {
+	/*for (auto& level : m_PreLoadedLevel)
+	{
+		delete level.second;
+		level.second = nullptr;
+	}*/
+
 	UnloadLevel();
 }
 
@@ -45,11 +50,15 @@ bool CGameLevelLoader::LoadLevel(ILevel* level)
 	}
 }
 
+//void CGameLevelLoader::LoadLevel(LevelID id)
+//{
+//	m_CurrentLevel = m_PreLoadedLevel.find(id)->second;
+//}
+
 void CGameLevelLoader::UnloadLevel()
 {
 	if (m_CurrentLevel) 
 	{
-		m_CurrentLevel->Unload();
 		delete m_CurrentLevel;
 		m_CurrentLevel = nullptr;
 	}
@@ -73,6 +82,12 @@ bool CGameLevelLoader::ChangeLevel(ILevel* level)
 		return false;
 	}
 }
+
+//void CGameLevelLoader::ChangeLevel(LevelID id)
+//{
+//	UnloadLevel();
+//	LoadLevel(id);
+//}
 
 void CGameLevelLoader::UpdateLevel(float dt)
 {

@@ -7,7 +7,7 @@ DummyLevel::DummyLevel()
 
 DummyLevel::~DummyLevel()
 {
-
+	Unload();
 }
 
 bool DummyLevel::Load()
@@ -69,6 +69,7 @@ bool DummyLevel::Render(ID3D11DeviceContext * deviceContext, int screenWidth, in
 
 void DummyLevel::onStart()
 {
+
 }
 
 void DummyLevel::onEnd()

@@ -9,6 +9,9 @@
 #include <Sources/Input/GameInput2.h>
 #include <Sources/Interface/IRenderable.h>
 #include <Sources/Interface/ILevel.h>
+#include <Sources/Assets/Potal.h>
+
+#include <Sources/Geometries/StateBar.h>
 
 /*
 	일단 리스트 2개이고, for문 2개지만 아마 어떻게 해결 할 방법이 있을 것이다 ㅋㅋ...
@@ -18,14 +21,7 @@
 	근데 이렇게 기능들을 추가해버리면 과연 거기가서 칠 수 있으련지
 */
 
-//const D3DXVECTOR2 CameraPos[] = {
-//	{ 0 ,0 },
-//	{ 1920, 0 },
-//	{ 3840, 0 },
-//	{ 5760, 0 }
-//};
-
-class TestLevel1 : public ILevel{
+class TestLevel1 : public ILevel {
 private:
 	const int cameraPosX[4] = {
 		0, 1920, 3840, 5760
@@ -34,15 +30,24 @@ private:
 	const int cameraPosY[4] = {
 		0, -1080, -2160, -3240
 	};
+
+
+	const POINT toolsPosition[5] = {
+		{3500, 2500},
+		{1500, 100},
+		{7300, 4000},
+		{300, 4000},
+		{6300, 1000}
+	};
+
 private:
-	/*
-		풀 같은 것들
-	*/
+	StateBar stateBar[5];
+
+
 	EnvironmentList m_EnvironmentList;
-	/*
-		몬스터 같은 것들
-	*/
 	ActorList m_ActorList;
+
+
 	Player* m_Player;
 	CGameCamera m_Camera;
 

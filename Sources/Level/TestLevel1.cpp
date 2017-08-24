@@ -7,7 +7,7 @@ TestLevel1::TestLevel1()
 
 TestLevel1::~TestLevel1()
 {
-
+	Unload();
 }
 
 bool TestLevel1::Load()
@@ -24,7 +24,6 @@ bool TestLevel1::Load()
 
 	//플레이어 생성
 	m_Player = dynamic_cast<Player*>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_PLAYER, 576, 256));
-	//m_Camera.SetPosition(0.0f, 0.0f, -1.0f);
 
 	WindowSize size = CGameApp::GetInstance().GetWindowSize();
 	m_Camera.SetPosition(0.0f, 0.0f, -10.0f);
@@ -32,6 +31,12 @@ bool TestLevel1::Load()
 	m_Player->SetPositionLimit(&m_LevelSize);
 
 	m_Cursor.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/cursor.png", 50, 50);
+
+	stateBar[0].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/HealthState.png", 200, 50, 100, 100);
+	stateBar[1].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/WaterState.png", 200, 50, 100, 100);
+	stateBar[2].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/FoodState.png", 200, 50, 100, 100);
+	stateBar[3].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/SleepState.png", 200, 50, 100, 100);
+	stateBar[4].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/EmptyState.png", 200, 50, 100, 100);
 
 	onStart();
 
@@ -53,6 +58,11 @@ void TestLevel1::Unload()
 		target->Release();
 	}
 	
+	for (auto& target : stateBar)
+	{
+		target.Release();
+	}
+
 	Utils::Release(&m_Player);
 }
 
@@ -107,6 +117,10 @@ void TestLevel1::Update(float dt)
 	//float y = (pos.y - ((size.height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1;
 
 	m_Player->Update(dt);
+		stateBar[0].SetValue(m_Player->GetHealth());
+		stateBar[1].SetValue(m_Player->GetWaterValue());
+		stateBar[2].SetValue(m_Player->GetFoodValue());
+		stateBar[3].SetValue(m_Player->GetSleepValue());
 }
 
 bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)
@@ -140,6 +154,19 @@ bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int
 
 		instance.Render(deviceContext, target->GetIndexCount(), worldMatrix, 
 			m_Camera.GetViewMatrix(), orthMatrix, target->GetTexture());
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		//빈 상태 먼저 렌더
+		stateBar[4].Render(deviceContext, screenWidth, screenHeight, (cameraPos.x + 25) + (200 * i) + (25 * i), (cameraPos.y * -1) + 25);
+		instance.Render(deviceContext, stateBar[i].GetIndexCount(), worldMatrix,
+			m_Camera.GetViewMatrix(), orthMatrix, stateBar[4].GetTexture());
+
+		//현재 상태 렌더
+		stateBar[i].Render(deviceContext, screenWidth, screenHeight, (cameraPos.x + 25) + (200 * i) + (25 * i), (cameraPos.y * -1) + 25);
+		instance.Render(deviceContext, stateBar[i].GetIndexCount(), worldMatrix,
+			m_Camera.GetViewMatrix(), orthMatrix, stateBar[i].GetTexture());
 	}
 
 	m_Cursor.Render(deviceContext, size.width, size.height, pos.x + cameraPos.x, pos.y - cameraPos.y);
