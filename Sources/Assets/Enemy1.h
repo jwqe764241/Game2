@@ -3,7 +3,6 @@
 #include <D3D11.h>
 
 #include <Sources/Geometries/GameSprite.h>
-#include <Sources/Interface/IRenderable.h>
 #include <Sources/Interface/ICharacter.h>
 
 class Enemy1 : public ICharacter{

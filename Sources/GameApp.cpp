@@ -1,7 +1,5 @@
 #include <Sources/GameApp.h>
 
-#include "Sources\Assets\SpriteAsset.h"
-
 ////윈도우 프로시저
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {

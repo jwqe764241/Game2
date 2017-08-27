@@ -143,7 +143,10 @@
     <ClCompile Include="..\Sources\Geometries\StateBar.cpp">
       <Filter>소스 파일\Engines\Geometries</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Assets\PlayerUI.cpp">
+    <ClCompile Include="..\Sources\Assets\Tool.cpp">
+      <Filter>소스 파일\Assets\Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\StateUI.cpp">
       <Filter>소스 파일\Assets\Objects\Player</Filter>
     </ClCompile>
   </ItemGroup>
@@ -247,7 +250,10 @@
     <ClInclude Include="..\Sources\Geometries\StateBar.h">
       <Filter>소스 파일\Engines\Geometries</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Assets\PlayerUI.h">
+    <ClInclude Include="..\Sources\Assets\Tool.h">
+      <Filter>소스 파일\Assets\Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\StateUI.h">
       <Filter>소스 파일\Assets\Objects\Player</Filter>
     </ClInclude>
   </ItemGroup>

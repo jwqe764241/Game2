@@ -1,14 +1,38 @@
-#include <Sources/Geometries/StateBar.h>
+#include <Sources/Assets/Tool.h>
 
-void StateBar::Initialize(ID3D11Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight, int maxValue, int curValue)
+Tool::Tool(wchar_t* toolName, int toolID)
 {
-	this->maxValue = maxValue;
-	this->curValue = curValue;
-
-	GameBitmap::Initialize(device, filePath, bitmapWidth, bitmapHeight);
+	m_ToolName = toolName;
+	m_ToolID = toolID;
 }
 
-bool StateBar::Render(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY)
+Tool::~Tool() 
+{
+	Release();
+}
+
+void Tool::Initialize(ID3D11Device* device, wchar_t* filePath, int bitmapWidth, int bitmapHeight, POINT pos)
+{
+	GameBitmap::Initialize(device, filePath, bitmapWidth, bitmapHeight);
+	m_Pos = pos;
+}
+
+bool Tool::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)
+{
+	bool result;
+
+	result = UpdateBuffers(deviceContext, screenWidth, screenHeight, m_Pos.x, m_Pos.y);
+	if (!result)
+	{
+		return false;
+	}
+
+	RenderBuffers(deviceContext);
+
+	return true;
+}
+
+bool Tool::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight, int posX, int posY)
 {
 	bool result;
 
@@ -23,7 +47,7 @@ bool StateBar::Render(ID3D11DeviceContext *deviceContext, int screenWidth, int s
 	return true;
 }
 
-void StateBar::RenderBuffers(ID3D11DeviceContext * deviceContext)
+void Tool::RenderBuffers(ID3D11DeviceContext * deviceContext)
 {
 	unsigned int stride = sizeof(VertexType);
 	unsigned int offset = 0;
@@ -33,7 +57,7 @@ void StateBar::RenderBuffers(ID3D11DeviceContext * deviceContext)
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-bool StateBar::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY)
+bool Tool::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY)
 {
 	Utils::RECT_F rect;
 	VertexType* vertices = GetVertices();
@@ -49,7 +73,7 @@ bool StateBar::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth
 	m_prevPosY = posY;
 
 	rect.left = static_cast<float>((screenWidth / 2) * -1) + static_cast<float>(posX);
-	rect.right = rect.left + static_cast<float>(2 * curValue);
+	rect.right = rect.left + static_cast<float>(m_bitmapWidth);
 	rect.top = static_cast<float>(screenHeight / 2) - static_cast<float>(posY);
 	rect.bottom = rect.top - static_cast<float>(m_bitmapHeight);
 
@@ -98,23 +122,33 @@ bool StateBar::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth
 	return true;
 }
 
-void StateBar::Release()
+
+void Tool::Release()
 {
 	GameBitmap::Release();
 }
 
-void StateBar::SetValue(int value)
+ID3D11ShaderResourceView* Tool::GetTexture()
 {
-	if (value >= maxValue)
-	{
-		curValue = maxValue;
-	}
-	else if (value <= 0)
-	{
-		curValue = 0;
-	}
-	else
-	{
-		curValue = value;
-	}
+	return GameBitmap::GetTexture();
+}
+
+int Tool::GetIndexCount()
+{
+	return GameBitmap::GetIndexCount();
+}
+
+wchar_t* Tool::GetToolName() const
+{
+	return m_ToolName;
+}
+
+int Tool::GetToolID() const
+{
+	return m_ToolID;
+}
+
+POINT Tool::GetPosition() const
+{
+	return m_Pos;
 }

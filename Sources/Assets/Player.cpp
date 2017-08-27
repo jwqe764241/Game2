@@ -14,6 +14,11 @@ Player::~Player()
 
 }
 
+void Player::AddTool(Tool * pTool)
+{
+	m_ToolSink.push_back(pTool);
+}
+
 void Player::Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight)
 {
 	m_Pos.x = 0;
@@ -31,6 +36,11 @@ void Player::Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight)
 
 void Player::Release()
 {
+	for (auto& target : m_ToolSink)
+	{
+		Utils::Release(&target);
+	}
+
 	m_Sprite.Release();
 }
 
@@ -271,6 +281,11 @@ D3DXVECTOR2 Player::GetPosition() const
 void Player::SetPosition(const D3DXVECTOR2 pos)
 {
 	m_Pos = pos;
+}
+
+std::vector<Tool *>& Player::GetToolList()
+{
+	return m_ToolSink;
 }
 
 GameSprite* Player::GetSprite()

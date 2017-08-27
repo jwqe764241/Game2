@@ -1,11 +1,8 @@
 #pragma once
 
-#include <D3D11.h>
 #include <vector>
+#include <D3D11.h>
 #include <Sources/Interface/ICharacter.h>
-
-using EnvironmentList = std::vector<IRenderable *>;
-using ActorList = std::vector<ICharacter *>;
 
 class ILevel {
 public:

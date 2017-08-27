@@ -18,6 +18,8 @@ GameInput2& GameInput2::GetInstance()
 
 void GameInput2::Initialize(const HWND hWnd)
 {
+	assert(hWnd != 0 && "hWnd cannot be 0 value");
+
 	memset(&m_KeyboardState, 0x00, sizeof(unsigned char) * 256);
 	memset(&m_MousePosition, 0x00, sizeof(POINT));
 }

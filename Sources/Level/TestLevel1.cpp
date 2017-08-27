@@ -12,11 +12,13 @@ TestLevel1::~TestLevel1()
 
 bool TestLevel1::Load()
 {
+	WindowSize size = CGameApp::GetInstance().GetWindowSize();
+
 	m_EnvironmentList.reserve(20);
 	m_ActorList.reserve(20);
+	m_Tools.reserve(6);
 
 	m_LevelBitmap.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/background.png", 7680, 4320);
-
 	m_LevelSize.top = 0;
 	m_LevelSize.bottom = 4320;
 	m_LevelSize.left = 0;
@@ -24,19 +26,29 @@ bool TestLevel1::Load()
 
 	//플레이어 생성
 	m_Player = dynamic_cast<Player*>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_PLAYER, 576, 256));
-
-	WindowSize size = CGameApp::GetInstance().GetWindowSize();
-	m_Camera.SetPosition(0.0f, 0.0f, -10.0f);
-	
 	m_Player->SetPositionLimit(&m_LevelSize);
 
-	m_Cursor.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/cursor.png", 50, 50);
+	m_Camera.SetPosition(0.0f, 0.0f, -10.0f);
 
-	stateBar[0].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/HealthState.png", 200, 50, 100, 100);
-	stateBar[1].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/WaterState.png", 200, 50, 100, 100);
-	stateBar[2].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/FoodState.png", 200, 50, 100, 100);
-	stateBar[3].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/SleepState.png", 200, 50, 100, 100);
-	stateBar[4].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/EmptyState.png", 200, 50, 100, 100);
+	m_Cursor.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/cursor.png", 50, 50);
+	m_PlayerUI.Initialize(&m_Player->GetToolList());
+
+	//위험
+	m_Tools.push_back(new Tool(L"saw", 1));
+	m_Tools.push_back(new Tool(L"pickaxe", 2));
+	m_Tools.push_back(new Tool(L"hammer", 3));
+	m_Tools.push_back(new Tool(L"bottle", 4));
+	m_Tools.push_back(new Tool(L"axe", 5));
+
+	m_Tools[0]->Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/tools/saw.png", 50, 50, toolsPosition[0]);
+	m_Tools[1]->Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/tools/pickaxe.png", 50, 50, toolsPosition[1]);
+	m_Tools[2]->Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/tools/hammer.png", 50, 50, toolsPosition[2]);
+	m_Tools[3]->Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/tools/bottle.png", 50, 50, toolsPosition[3]);
+	m_Tools[4]->Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/tools/axe.png", 50, 50, toolsPosition[4]);
+
+	Tool* spoon = new Tool(L"spoon", 0);
+	spoon->Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/tools/spoon.png", 50, 50, toolsPosition[0]);
+	m_Player->AddTool(spoon);
 
 	onStart();
 
@@ -48,28 +60,28 @@ void TestLevel1::Unload()
 	m_LevelBitmap.Release();
 	m_Cursor.Release();
 
-	for (auto target : m_EnvironmentList)
+	for (auto& target : m_EnvironmentList)
 	{
 		target->Release();
 	}
 
-	for (auto target : m_ActorList)
+	for (auto& target : m_ActorList)
 	{
 		target->Release();
 	}
-	
-	for (auto& target : stateBar)
+
+	for (auto& target : m_Tools)
 	{
-		target.Release();
+		Utils::Release(&target);
 	}
 
 	Utils::Release(&m_Player);
 }
 
-void TestLevel1::Update(float dt) 
+void TestLevel1::Update(float dt)
 {
 	for (auto target : m_EnvironmentList)
-	{ 
+	{
 		target->Update(dt);
 	}
 
@@ -95,16 +107,16 @@ void TestLevel1::Update(float dt)
 
 	//GameInput2 버전
 
-	D3DXVECTOR2 pos  = m_Player->GetPosition();
-	WindowSize size  = CGameApp::GetInstance().GetWindowSize();
-	float halfWidth  = size.width / 2;
+	D3DXVECTOR2 pos = m_Player->GetPosition();
+	WindowSize size = CGameApp::GetInstance().GetWindowSize();
+	float halfWidth = size.width / 2;
 	float halfHeight = size.height / 2;
 	//고치기
 
-	int a1 = pos.x / 1920;
-	int a2 = pos.y / 1080;
+	int xOffset = pos.x / 1920;
+	int yOffset = pos.y / 1080;
 
-	m_Camera.SetPosition(cameraPosX[a1], cameraPosY[a2], -10.f);
+	m_Camera.SetPosition(cameraPosX[xOffset], cameraPosY[yOffset], -10.f);
 
 	//if (pos.x + m_Player->GetSprite()->GetFrameWidth() >= (halfWidth) && pos.x <= m_LevelSize.right - (halfWidth) ||
 	//	pos.y >= (halfHeight) && pos.y <= m_LevelSize.bottom - (halfHeight))
@@ -117,10 +129,32 @@ void TestLevel1::Update(float dt)
 	//float y = (pos.y - ((size.height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1;
 
 	m_Player->Update(dt);
-		stateBar[0].SetValue(m_Player->GetHealth());
-		stateBar[1].SetValue(m_Player->GetWaterValue());
-		stateBar[2].SetValue(m_Player->GetFoodValue());
-		stateBar[3].SetValue(m_Player->GetSleepValue());
+	m_PlayerUI.Update(m_Player->GetHealth(),
+		m_Player->GetWaterValue(),
+		m_Player->GetFoodValue(),
+		m_Player->GetSleepValue());
+
+	for (auto itor = m_Tools.begin(); itor != m_Tools.end();)
+	{
+		bool collisionResult = Utils::CheckCollision(
+			Utils::RECT_F{ pos.x, pos.y, pos.x + m_Player->GetSprite()->GetFrameWidth(), pos.y + m_Player->GetSprite()->GetFrameHeight() },
+			Utils::RECT_F{ static_cast<float>((*itor)->GetPosition().x), static_cast<float>((*itor)->GetPosition().y),
+			static_cast<float>((*itor)->GetPosition().x) + 50, static_cast<float>((*itor)->GetPosition().y) + 50 }
+		);
+
+		if (collisionResult)
+		{
+			if (itor != m_Tools.end())
+			{
+				m_Player->AddTool((*itor));
+				itor = m_Tools.erase(itor);
+
+				break;
+			}
+		}
+		
+		itor++;
+	}
 }
 
 bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)
@@ -148,7 +182,7 @@ bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int
 	/*
 		렌더 리스트에 등록된 스프라이트 렌더
 	*/
-	for (auto target : m_EnvironmentList)
+	for (auto& target : m_EnvironmentList)
 	{
 		target->Render(deviceContext, screenWidth, screenHeight);
 
@@ -156,18 +190,16 @@ bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int
 			m_Camera.GetViewMatrix(), orthMatrix, target->GetTexture());
 	}
 
-	for (int i = 0; i < 4; i++)
+	for (auto& target : m_Tools)
 	{
-		//빈 상태 먼저 렌더
-		stateBar[4].Render(deviceContext, screenWidth, screenHeight, (cameraPos.x + 25) + (200 * i) + (25 * i), (cameraPos.y * -1) + 25);
-		instance.Render(deviceContext, stateBar[i].GetIndexCount(), worldMatrix,
-			m_Camera.GetViewMatrix(), orthMatrix, stateBar[4].GetTexture());
+		target->Render(deviceContext, screenWidth, screenHeight);
 
-		//현재 상태 렌더
-		stateBar[i].Render(deviceContext, screenWidth, screenHeight, (cameraPos.x + 25) + (200 * i) + (25 * i), (cameraPos.y * -1) + 25);
-		instance.Render(deviceContext, stateBar[i].GetIndexCount(), worldMatrix,
-			m_Camera.GetViewMatrix(), orthMatrix, stateBar[i].GetTexture());
+		instance.Render(deviceContext, target->GetIndexCount(), worldMatrix,
+			m_Camera.GetViewMatrix(), orthMatrix, target->GetTexture());
 	}
+
+	m_PlayerUI.Render(deviceContext, screenWidth, screenHeight, worldMatrix, m_Camera.GetViewMatrix(),
+		orthMatrix, cameraPos, instance);
 
 	m_Cursor.Render(deviceContext, size.width, size.height, pos.x + cameraPos.x, pos.y - cameraPos.y);
 
@@ -185,4 +217,9 @@ void TestLevel1::onStart()
 void TestLevel1::onEnd()
 {
 
+}
+
+void TestLevel1::onGameOver()
+{
+	
 }

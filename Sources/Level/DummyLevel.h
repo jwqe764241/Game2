@@ -7,7 +7,7 @@
 #include <Sources/Interface/ILevel.h>
 #include <Sources/Input/GameInput2.h>
 #include <Sources/Level/GameLevelLoader.h>
-#include <Sources/Level/LobbyLevel.h>\
+#include <Sources/Level/LobbyLevel.h>
 
 class DummyLevel : public ILevel{
 private:

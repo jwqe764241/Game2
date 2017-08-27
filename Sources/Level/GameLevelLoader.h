@@ -4,9 +4,6 @@
 #include <D3D11.h>
 #include <Sources/Interface/ILevel.h>
 
-#include <Sources/Level/DummyLevel.h>
-#include <Sources/Level/LobbyLevel.h>
-#include <Sources/Level/TestLevel1.h>
 
 class CGameLevelLoader {
 private:

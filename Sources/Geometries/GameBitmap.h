@@ -5,6 +5,7 @@
 
 #include <Sources/Utils/error.h>
 #include <Sources/Shaders/GameTexture.h>
+#include <Sources/GameDefs.h>
 
 class GameBitmap {
 protected:
@@ -12,14 +13,6 @@ protected:
 		D3DXVECTOR3 position;
 		D3DXVECTOR2 texture;
 	};
-
-	struct _RECT_F {
-		float left;
-		float right;
-		float top;
-		float bottom;
-	};
-
 	struct _BitmapSize
 	{
 		int width;
@@ -27,7 +20,6 @@ protected:
 	};
 
 	using VertexType = _VertexType;
-	using Rect_F     = _RECT_F;
 	using BitmapSize = _BitmapSize;
 
 public:

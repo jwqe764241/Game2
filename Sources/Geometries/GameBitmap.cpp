@@ -182,7 +182,7 @@ void GameBitmap::ReleaseBuffers()
 
 bool GameBitmap::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY)
 {
-	Rect_F rect;
+	Utils::RECT_F rect;
 	VertexType* vertices = GetVertices();
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT result;

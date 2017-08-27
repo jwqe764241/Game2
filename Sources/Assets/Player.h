@@ -1,13 +1,13 @@
 #pragma once
 
 #include <D3DX11.h>
-
-//#include <Sources/Input/GameInput.h>
+#include <vector>
+#include <Sources/GameDefs.h>
 #include <Sources/Input/GameInput2.h>
 #include <Sources/Geometries/GameSprite.h>
-#include <Sources/Interface/IRenderable.h>
 #include <Sources/Interface/ICharacter.h>
 #include <Sources/Camera/GameCamera.h>
+#include <Sources/Assets/Tool.h>
 
 class Player : public ICharacter
 {
@@ -24,9 +24,13 @@ private:
 	bool isSetPositionLimit;
 	RECT m_PositionLimit;
 
+	std::vector<Tool *> m_ToolSink;
+
 public:
 	Player();
 	~Player();
+
+	void AddTool(Tool * pTool);
 
 	virtual void Load(ID3D11Device* device, int bitmapWidth, int bitmapHeight) override;
 	virtual void Release() override;
@@ -54,6 +58,7 @@ public:
 		NULL일 경우에 설정 안함, 값이 있으면 설정 함
 	*/
 	void SetPositionLimit(const RECT* limitPos);
+	std::vector<Tool *>& GetToolList();
 
 	int GetHealth() const;
 	int GetWaterValue() const;
