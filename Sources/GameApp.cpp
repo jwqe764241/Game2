@@ -448,20 +448,19 @@ void CGameApp::onResize()
 	m_AppInfo.pD3D10Device->CreateTexture2D(&depthBufferDesc, NULL, &m_AppInfo.pBackBuffer);
 	
 	//
-	/*D3D10_BLEND_DESC blendStateDesc;
-	ZeroMemory(&blendStateDesc, sizeof(D3D11_BLEND_DESC));
+	D3D10_BLEND_DESC blendStateDesc;
+	ZeroMemory(&blendStateDesc, sizeof(D3D10_BLEND_DESC));
 		blendStateDesc.AlphaToCoverageEnable = FALSE;
-		blendStateDesc.IndependentBlendEnable = FALSE;
-		blendStateDesc.RenderTarget[0].BlendEnable = TRUE;
-		blendStateDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-		blendStateDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-		blendStateDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-		blendStateDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
-		blendStateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_DEST_ALPHA;
-		blendStateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-		blendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+		blendStateDesc.BlendEnable[0] = TRUE;
+		blendStateDesc.SrcBlend = D3D10_BLEND_SRC_ALPHA;
+		blendStateDesc.DestBlend = D3D10_BLEND_INV_SRC_ALPHA;
+		blendStateDesc.BlendOp = D3D10_BLEND_OP_ADD;
+		blendStateDesc.SrcBlendAlpha = D3D10_BLEND_ZERO;
+		blendStateDesc.DestBlendAlpha = D3D10_BLEND_ZERO;
+		blendStateDesc.BlendOpAlpha = D3D10_BLEND_OP_ADD;
+		blendStateDesc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
 	m_AppInfo.pD3D10Device->CreateBlendState(&blendStateDesc, &m_AppInfo.pBlendState);
-	m_AppInfo.pD3D10RenderView->OMSetBlendState(m_AppInfo.pBlendState, NULL, 0xFFFFFF);*/
+	m_AppInfo.pD3D10Device->OMSetBlendState(m_AppInfo.pBlendState, NULL, 0xFFFFFF);
 
 
 	//깊이 스텐실 버퍼 생성 -> Z버퍼 켬
