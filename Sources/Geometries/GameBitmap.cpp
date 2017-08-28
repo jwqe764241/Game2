@@ -10,7 +10,7 @@ GameBitmap::~GameBitmap()
 
 }
 
-bool GameBitmap::Initialize(ID3D11Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight) 
+bool GameBitmap::Initialize(ID3D10Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight) 
 {
 	m_bitmapWidth  = bitmapWidth;
 	m_bitmapHeight = bitmapHeight;
@@ -77,17 +77,17 @@ void GameBitmap::Release()
 	ReleaseBuffers();
 }
 
-bool GameBitmap::Render(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY)
+bool GameBitmap::Render(ID3D10Device *device, int screenWidth, int screenHeight, int posX, int posY)
 {
 	bool result;
 
-	result = UpdateBuffers(deviceContext, screenWidth, screenHeight, posX, posY);
+	result = UpdateBuffers(device, screenWidth, screenHeight, posX, posY);
 	if (!result) 
 	{
 		return false;
 	}
 
-	RenderBuffers(deviceContext);
+	RenderBuffers(device);
 
 	return true;
 }
@@ -97,7 +97,7 @@ int GameBitmap::GetIndexCount()
 	return m_indexCount;
 }
 
-ID3D11ShaderResourceView* GameBitmap::GetTexture()
+ID3D10ShaderResourceView* GameBitmap::GetTexture()
 {
 	return m_Texture->GetTexture();
 }
@@ -112,12 +112,12 @@ GameBitmap::BitmapSize GameBitmap::GetBitmapSize() const
 	return GameBitmap::BitmapSize{ m_bitmapWidth, m_bitmapHeight };
 }
 
-bool GameBitmap::InitializeBuffers(ID3D11Device *device)
+bool GameBitmap::InitializeBuffers(ID3D10Device *device)
 {
 	VertexType *vertices;
 	unsigned long* indices;
-	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
-	D3D11_SUBRESOURCE_DATA vertexData, indexData;
+	D3D10_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
+	D3D10_SUBRESOURCE_DATA vertexData, indexData;
 	HRESULT result;
 
 	m_vertexCount = 6;
@@ -133,23 +133,23 @@ bool GameBitmap::InitializeBuffers(ID3D11Device *device)
 		indices[i] = i;
 	}
 
-	vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	vertexBufferDesc.Usage = D3D10_USAGE_DYNAMIC;
 	vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_vertexCount;
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	vertexBufferDesc.BindFlags = D3D10_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
 	vertexBufferDesc.MiscFlags = 0;
-	vertexBufferDesc.StructureByteStride = 0;
+	//vertexBufferDesc.StructureByteStride = 0;
 
 	vertexData.pSysMem = m_vertices;
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
 
-	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.Usage = D3D10_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth = sizeof(unsigned long) * m_indexCount;
-	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.BindFlags = D3D10_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
-	indexBufferDesc.StructureByteStride = 0;
+	//indexBufferDesc.StructureByteStride = 0;
 
 	indexData.pSysMem = indices;
 	indexData.SysMemPitch = 0;
@@ -180,11 +180,10 @@ void GameBitmap::ReleaseBuffers()
 	ReleaseTexture();
 }
 
-bool GameBitmap::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY)
+bool GameBitmap::UpdateBuffers(ID3D10Device *device, int screenWidth, int screenHeight, int posX, int posY)
 {
 	Utils::RECT_F rect;
 	VertexType* vertices = GetVertices();
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT result;
 
 	if ((m_prevPosX == posX) && (m_prevPosY == posY))
@@ -226,18 +225,15 @@ bool GameBitmap::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWid
 	vertices[5].position.y = rect.bottom;
 	//vertices[5].position = D3DXVECTOR3(rect.right, rect.bottom, 0.0f);
 
-
-	result = deviceContext->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	void * pVertices;
+	result = m_vertexBuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, &pVertices);
 	if (FAILED(result))
 	{
 		return false;
 	}
+	memcpy(pVertices, (void*)vertices, (sizeof(VertexType) * m_vertexCount));
 
-	VertexType* pVertices = reinterpret_cast<VertexType*>(mappedResource.pData);
-
-	memcpy(pVertices, reinterpret_cast<void*>(vertices), (sizeof(VertexType) * m_vertexCount));
-
-	deviceContext->Unmap(m_vertexBuffer, 0);
+	m_vertexBuffer->Unmap();
 
 	//delete[] vertices;
 	//vertices = 0;
@@ -245,17 +241,17 @@ bool GameBitmap::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWid
 	return true;
 }
 
-void GameBitmap::RenderBuffers(ID3D11DeviceContext *deviceContext)
+void GameBitmap::RenderBuffers(ID3D10Device *device)
 {
 	unsigned int stride = sizeof(VertexType);
 	unsigned int offset = 0;
 
-	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	device->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+	device->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-bool GameBitmap::LoadTexture(ID3D11Device *device, wchar_t *filePath)
+bool GameBitmap::LoadTexture(ID3D10Device *device, wchar_t *filePath)
 {
 	bool result;
 

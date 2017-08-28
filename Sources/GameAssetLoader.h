@@ -27,7 +27,7 @@ public:
 	~CGameAssetLoader();
 	
 	static CGameAssetLoader& GetInstance();
-	void Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, int* screenWidth, int* screenHeight);
+	void Initialize(ID3D10Device* device, int* screenWidth, int* screenHeight);
 	void Release();
 
 	//에셋 불러온 후 Map에 저장
@@ -43,8 +43,7 @@ private:
 
 	std::vector<TargetInterface *> m_AllocList;
 
-	ID3D11Device * m_DeviceRef;
-	ID3D11DeviceContext* m_DeviceContextRef;
+	ID3D10Device * m_DeviceRef;
 
 	int* m_ScreenWidthRef;
 	int* m_ScreenHeightRef;	

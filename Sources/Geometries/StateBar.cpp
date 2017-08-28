@@ -1,6 +1,6 @@
 #include <Sources/Geometries/StateBar.h>
 
-void StateBar::Initialize(ID3D11Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight, int maxValue, int curValue)
+void StateBar::Initialize(ID3D10Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight, int maxValue, int curValue)
 {
 	this->maxValue = maxValue;
 	this->curValue = curValue;
@@ -8,36 +8,35 @@ void StateBar::Initialize(ID3D11Device *device, wchar_t *filePath, int bitmapWid
 	GameBitmap::Initialize(device, filePath, bitmapWidth, bitmapHeight);
 }
 
-bool StateBar::Render(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY)
+bool StateBar::Render(ID3D10Device *device, int screenWidth, int screenHeight, int posX, int posY)
 {
 	bool result;
 
-	result = UpdateBuffers(deviceContext, screenWidth, screenHeight, posX, posY);
+	result = UpdateBuffers(device, screenWidth, screenHeight, posX, posY);
 	if (!result)
 	{
 		return false;
 	}
 
-	RenderBuffers(deviceContext);
+	RenderBuffers(device);
 
 	return true;
 }
 
-void StateBar::RenderBuffers(ID3D11DeviceContext * deviceContext)
+void StateBar::RenderBuffers(ID3D10Device * device)
 {
 	unsigned int stride = sizeof(VertexType);
 	unsigned int offset = 0;
 
-	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	device->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+	device->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-bool StateBar::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY)
+bool StateBar::UpdateBuffers(ID3D10Device *device, int screenWidth, int screenHeight, int posX, int posY)
 {
 	Utils::RECT_F rect;
 	VertexType* vertices = GetVertices();
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT result;
 
 	//if ((m_prevPosX == posX) && (m_prevPosY == posY))
@@ -80,17 +79,15 @@ bool StateBar::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth
 	//vertices[5].position = D3DXVECTOR3(rect.right, rect.bottom, 0.0f);
 
 
-	result = deviceContext->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	void * pVertices;
+	result = m_vertexBuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, &pVertices);
 	if (FAILED(result))
 	{
 		return false;
 	}
+	memcpy(pVertices, (void*)vertices, (sizeof(VertexType) * m_vertexCount));
 
-	VertexType* pVertices = reinterpret_cast<VertexType*>(mappedResource.pData);
-
-	memcpy(pVertices, reinterpret_cast<void*>(vertices), (sizeof(VertexType) * m_vertexCount));
-
-	deviceContext->Unmap(m_vertexBuffer, 0);
+	m_vertexBuffer->Unmap();
 
 	//delete[] vertices;
 	//vertices = 0;

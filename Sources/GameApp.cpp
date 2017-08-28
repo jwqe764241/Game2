@@ -268,12 +268,10 @@ bool CGameApp::Initialize(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * w
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	swapChainDesc.Flags = 0;
 
-	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
-
-	D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, 0, D3D11_CREATE_DEVICE_SINGLETHREADED, &featureLevel, 1, D3D11_SDK_VERSION,
-		&swapChainDesc, &m_AppInfo.pSwapChain, &m_AppInfo.pD3D11Device, NULL, &m_AppInfo.pD3D11DeviceContext);
-	m_AppInfo.pSwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&m_AppInfo.pBackBuffer));
-	m_AppInfo.pD3D11Device->CreateRenderTargetView(m_AppInfo.pBackBuffer, NULL, &m_AppInfo.pRenderTargetView);
+	D3D10CreateDeviceAndSwapChain(NULL, D3D10_DRIVER_TYPE_HARDWARE, 0, 0, D3D10_SDK_VERSION,
+		&swapChainDesc, &m_AppInfo.pSwapChain, &m_AppInfo.pD3D10Device);
+	m_AppInfo.pSwapChain->GetBuffer(NULL, __uuidof(ID3D10Texture2D), reinterpret_cast<void**>(&m_AppInfo.pBackBuffer));
+	m_AppInfo.pD3D10Device->CreateRenderTargetView(m_AppInfo.pBackBuffer, NULL, &m_AppInfo.pRenderTargetView);
 
 	GameInput2::GetInstance().Initialize(m_hWnd);
 
@@ -294,8 +292,8 @@ void CGameApp::Release()
 	Utils::Release(&m_AppInfo.pBackBuffer);
 	Utils::Release(&m_AppInfo.pRenderTargetView);
 	Utils::Release(&m_AppInfo.pSwapChain);
-	Utils::Release(&m_AppInfo.pD3D11DeviceContext);
-	Utils::Release(&m_AppInfo.pD3D11Device);
+	Utils::Release(&m_AppInfo.pD3D10RenderView);
+	Utils::Release(&m_AppInfo.pD3D10Device);
 
 	for (IDXGIAdapter* adapter : m_vAdapters)
 	{
@@ -366,9 +364,9 @@ void CGameApp::Launch()
 		{
 			return;
 		}
-		m_AppInfo.pD3D11DeviceContext->ClearRenderTargetView(m_AppInfo.pRenderTargetView, GameColors::BLUE);
+		m_AppInfo.pD3D10Device->ClearRenderTargetView(m_AppInfo.pRenderTargetView, GameColors::BLUE);
 
-		m_AppInfo.pD3D11DeviceContext->ClearDepthStencilView(m_AppInfo.pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+		m_AppInfo.pD3D10Device->ClearDepthStencilView(m_AppInfo.pDepthStencilView, D3D10_CLEAR_DEPTH, 1.0f, 0);
 
 		Update();
 		if (!Render())
@@ -397,7 +395,7 @@ bool CGameApp::Render()
 {
 	TurnOffZBuffer();
 
-	CGameLevelLoader::GetInstance().RenderLevel(m_AppInfo.pD3D11DeviceContext, m_WindowSize.width, m_WindowSize.height);
+	CGameLevelLoader::GetInstance().RenderLevel(m_AppInfo.pD3D10Device, m_WindowSize.width, m_WindowSize.height);
 
 	TurnOnZBuffer();
 
@@ -407,8 +405,7 @@ bool CGameApp::Render()
 
 void CGameApp::onResize()
 {
-	GAME_ASSERT(m_AppInfo.pD3D11DeviceContext, "D3D11Device is nullptr");
-	GAME_ASSERT(m_AppInfo.pD3D11Device, "D3D11Device is nullptr");
+	GAME_ASSERT(m_AppInfo.pD3D10Device, "D3D11Device is nullptr");
 	GAME_ASSERT(m_AppInfo.pSwapChain, "SwapChain is nullptr");
 
 	//재할당 전 해제
@@ -422,13 +419,13 @@ void CGameApp::onResize()
 
 	//스왑체인 버퍼 사이즈 재설정
 	m_AppInfo.pSwapChain->ResizeBuffers(1, m_WindowSize.width, m_WindowSize.height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
-	ID3D11Texture2D* dxgiTextureBuffer = nullptr;
-	m_AppInfo.pSwapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&dxgiTextureBuffer));
-	m_AppInfo.pD3D11Device->CreateRenderTargetView(dxgiTextureBuffer, 0, &m_AppInfo.pRenderTargetView);
+	ID3D10Texture2D* dxgiTextureBuffer = nullptr;
+	m_AppInfo.pSwapChain->GetBuffer(NULL, __uuidof(ID3D10Texture2D), reinterpret_cast<void**>(&dxgiTextureBuffer));
+	m_AppInfo.pD3D10Device->CreateRenderTargetView(dxgiTextureBuffer, 0, &m_AppInfo.pRenderTargetView);
 	Utils::Release(&dxgiTextureBuffer);
 
 	//깊이 버퍼 재설정
-	D3D11_TEXTURE2D_DESC depthBufferDesc;
+	D3D10_TEXTURE2D_DESC depthBufferDesc;
 		depthBufferDesc.Width     = m_WindowSize.width;
 		depthBufferDesc.Height    = m_WindowSize.height;
 		depthBufferDesc.MipLevels = 1;
@@ -444,14 +441,14 @@ void CGameApp::onResize()
 			depthBufferDesc.SampleDesc.Count   = 1;
 			depthBufferDesc.SampleDesc.Quality = 0;
 		}
-		depthBufferDesc.Usage          = D3D11_USAGE_DEFAULT;
-		depthBufferDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
+		depthBufferDesc.Usage          = D3D10_USAGE_DEFAULT;
+		depthBufferDesc.BindFlags      = D3D10_BIND_DEPTH_STENCIL;
 		depthBufferDesc.CPUAccessFlags = NULL;
 		depthBufferDesc.MiscFlags      = NULL;
-	m_AppInfo.pD3D11Device->CreateTexture2D(&depthBufferDesc, NULL, &m_AppInfo.pBackBuffer);
+	m_AppInfo.pD3D10Device->CreateTexture2D(&depthBufferDesc, NULL, &m_AppInfo.pBackBuffer);
 	
 	//
-	D3D11_BLEND_DESC blendStateDesc;
+	/*D3D10_BLEND_DESC blendStateDesc;
 	ZeroMemory(&blendStateDesc, sizeof(D3D11_BLEND_DESC));
 		blendStateDesc.AlphaToCoverageEnable = FALSE;
 		blendStateDesc.IndependentBlendEnable = FALSE;
@@ -463,89 +460,89 @@ void CGameApp::onResize()
 		blendStateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_DEST_ALPHA;
 		blendStateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 		blendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-	m_AppInfo.pD3D11Device->CreateBlendState(&blendStateDesc, &m_AppInfo.pBlendState);
-	m_AppInfo.pD3D11DeviceContext->OMSetBlendState(m_AppInfo.pBlendState, NULL, 0xFFFFFF);
+	m_AppInfo.pD3D10Device->CreateBlendState(&blendStateDesc, &m_AppInfo.pBlendState);
+	m_AppInfo.pD3D10RenderView->OMSetBlendState(m_AppInfo.pBlendState, NULL, 0xFFFFFF);*/
 
 
 	//깊이 스텐실 버퍼 생성 -> Z버퍼 켬
-	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
-	ZeroMemory(&depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
+	D3D10_DEPTH_STENCIL_DESC depthStencilDesc;
+	ZeroMemory(&depthStencilDesc, sizeof(D3D10_DEPTH_STENCIL_DESC));
 		depthStencilDesc.DepthEnable    = true;
-		depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-		depthStencilDesc.DepthFunc      = D3D11_COMPARISON_LESS;
+		depthStencilDesc.DepthWriteMask = D3D10_DEPTH_WRITE_MASK_ALL;
+		depthStencilDesc.DepthFunc      = D3D10_COMPARISON_LESS;
 		///
 		depthStencilDesc.StencilEnable    = true;
 		depthStencilDesc.StencilWriteMask = 0xFF;
 		depthStencilDesc.StencilReadMask  = 0xFF;
 		///
-		depthStencilDesc.FrontFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
-		depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-		depthStencilDesc.FrontFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
-		depthStencilDesc.FrontFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
+		depthStencilDesc.FrontFace.StencilFailOp      = D3D10_STENCIL_OP_KEEP;
+		depthStencilDesc.FrontFace.StencilDepthFailOp = D3D10_STENCIL_OP_INCR;
+		depthStencilDesc.FrontFace.StencilPassOp      = D3D10_STENCIL_OP_KEEP;
+		depthStencilDesc.FrontFace.StencilFunc        = D3D10_COMPARISON_ALWAYS;
 		///
-		depthStencilDesc.BackFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
-		depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-		depthStencilDesc.BackFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
-		depthStencilDesc.BackFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
-	m_AppInfo.pD3D11Device->CreateDepthStencilState(&depthStencilDesc, &m_AppInfo.pDepthStencilState);
+		depthStencilDesc.BackFace.StencilFailOp      = D3D10_STENCIL_OP_KEEP;
+		depthStencilDesc.BackFace.StencilDepthFailOp = D3D10_STENCIL_OP_DECR;
+		depthStencilDesc.BackFace.StencilPassOp      = D3D10_STENCIL_OP_KEEP;
+		depthStencilDesc.BackFace.StencilFunc        = D3D10_COMPARISON_ALWAYS;
+	m_AppInfo.pD3D10Device->CreateDepthStencilState(&depthStencilDesc, &m_AppInfo.pDepthStencilState);
 
 	//깊이 스텐실 버퍼 생성 -> Z버퍼 끔
-	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
+	D3D10_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
 	ZeroMemory(&depthDisabledStencilDesc, sizeof(depthDisabledStencilDesc));
-		depthDisabledStencilDesc.DepthEnable = false;
-		depthDisabledStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-		depthDisabledStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+		depthDisabledStencilDesc.DepthEnable    = false;
+		depthDisabledStencilDesc.DepthWriteMask = D3D10_DEPTH_WRITE_MASK_ALL;
+		depthDisabledStencilDesc.DepthFunc      = D3D10_COMPARISON_LESS;
 		///
-		depthDisabledStencilDesc.StencilEnable = true;
+		depthDisabledStencilDesc.StencilEnable    = true;
 		depthDisabledStencilDesc.StencilWriteMask = 0xFF;
-		depthDisabledStencilDesc.StencilReadMask = 0xFF;
+		depthDisabledStencilDesc.StencilReadMask  = 0xFF;
 		///
-		depthDisabledStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-		depthDisabledStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-		depthDisabledStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		depthDisabledStencilDesc.FrontFace.StencilFailOp      = D3D10_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D10_STENCIL_OP_INCR;
+		depthDisabledStencilDesc.FrontFace.StencilPassOp      = D3D10_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.FrontFace.StencilFunc        = D3D10_COMPARISON_ALWAYS;
 		///
-		depthDisabledStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-		depthDisabledStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-		depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-	m_AppInfo.pD3D11Device->CreateDepthStencilState(&depthDisabledStencilDesc, &m_AppInfo.pDepthDisableStencilState);
+		depthDisabledStencilDesc.BackFace.StencilFailOp      = D3D10_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D10_STENCIL_OP_DECR;
+		depthDisabledStencilDesc.BackFace.StencilPassOp      = D3D10_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.BackFace.StencilFunc        = D3D10_COMPARISON_ALWAYS;
+	m_AppInfo.pD3D10Device->CreateDepthStencilState(&depthDisabledStencilDesc, &m_AppInfo.pDepthDisableStencilState);
 	//기본 Z버퍼 사용 버퍼로 설정
-	m_AppInfo.pD3D11DeviceContext->OMSetDepthStencilState(m_AppInfo.pDepthStencilState, 1);
+	m_AppInfo.pD3D10Device->OMSetDepthStencilState(m_AppInfo.pDepthStencilState, 1);
 
 	//깊이 스텐실 뷰 생성 및 설정
-	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
-	ZeroMemory(&depthStencilViewDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
+	D3D10_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+	ZeroMemory(&depthStencilViewDesc, sizeof(D3D10_DEPTH_STENCIL_VIEW_DESC));
 		depthStencilViewDesc.Format             = DXGI_FORMAT_D24_UNORM_S8_UINT;
-		depthStencilViewDesc.ViewDimension      = D3D11_DSV_DIMENSION_TEXTURE2D;
+		depthStencilViewDesc.ViewDimension      = D3D10_DSV_DIMENSION_TEXTURE2D;
 		depthStencilViewDesc.Texture2D.MipSlice = 0;
-	m_AppInfo.pD3D11Device->CreateDepthStencilView(m_AppInfo.pBackBuffer, &depthStencilViewDesc, &m_AppInfo.pDepthStencilView);
-	m_AppInfo.pD3D11DeviceContext->OMSetRenderTargets(1, &m_AppInfo.pRenderTargetView, m_AppInfo.pDepthStencilView);
+	m_AppInfo.pD3D10Device->CreateDepthStencilView(m_AppInfo.pBackBuffer, &depthStencilViewDesc, &m_AppInfo.pDepthStencilView);
+	m_AppInfo.pD3D10Device->OMSetRenderTargets(1, &m_AppInfo.pRenderTargetView, m_AppInfo.pDepthStencilView);
 
 	//레스터라이저 설정
-	D3D11_RASTERIZER_DESC rasterDesc;
+	D3D10_RASTERIZER_DESC rasterDesc;
 		rasterDesc.AntialiasedLineEnable = false;
-		rasterDesc.CullMode = D3D11_CULL_BACK;
-		rasterDesc.DepthBias = 0;
-		rasterDesc.DepthBiasClamp = 0.0f;
-		rasterDesc.DepthClipEnable = true;
-		rasterDesc.FillMode = D3D11_FILL_SOLID;
+		rasterDesc.CullMode              = D3D10_CULL_BACK;
+		rasterDesc.DepthBias             = 0;
+		rasterDesc.DepthBiasClamp        = 0.0f;
+		rasterDesc.DepthClipEnable       = true;
+		rasterDesc.FillMode              = D3D10_FILL_SOLID;
 		rasterDesc.FrontCounterClockwise = false;
-		rasterDesc.MultisampleEnable = false;
-		rasterDesc.ScissorEnable = false;
-		rasterDesc.SlopeScaledDepthBias = 0.0f;
-	m_AppInfo.pD3D11Device->CreateRasterizerState(&rasterDesc, &m_AppInfo.pRasterizeState);
-	m_AppInfo.pD3D11DeviceContext->RSSetState(m_AppInfo.pRasterizeState);
+		rasterDesc.MultisampleEnable     = false;
+		rasterDesc.ScissorEnable         = false;
+		rasterDesc.SlopeScaledDepthBias  = 0.0f;
+	m_AppInfo.pD3D10Device->CreateRasterizerState(&rasterDesc, &m_AppInfo.pRasterizeState);
+	m_AppInfo.pD3D10Device->RSSetState(m_AppInfo.pRasterizeState);
 
 	//뷰포트 설정
-	D3D11_VIEWPORT viewportSettings;
+	D3D10_VIEWPORT viewportSettings;
 		viewportSettings.TopLeftX = 0.0f;
 		viewportSettings.TopLeftY = 0.0f;
 		viewportSettings.Width    = static_cast<float>(m_WindowSize.width);
 		viewportSettings.Height   = static_cast<float>(m_WindowSize.height);
 		viewportSettings.MinDepth = 0.0f;
 		viewportSettings.MaxDepth = 1.0f;
-	m_AppInfo.pD3D11DeviceContext->RSSetViewports(1, &viewportSettings);
+	m_AppInfo.pD3D10Device->RSSetViewports(1, &viewportSettings);
 
 	float fieldOfView  = static_cast<float>(D3DX_PI) / 4.0f;
 	float screenAspect = static_cast<float>(m_WindowSize.width) / static_cast<float>(m_WindowSize.height);
@@ -554,13 +551,13 @@ void CGameApp::onResize()
 	D3DXMatrixIdentity(&m_Matrix.worldMatrix);
 	D3DXMatrixOrthoLH(&m_Matrix.orthMatrix, static_cast<float>(m_WindowSize.width), static_cast<float>(m_WindowSize.height), m_screenNear, m_screenDepth);
 
-	if (!TextureShader::GetInstance().Initialize(m_AppInfo.pD3D11Device, m_hWnd))
+	if (!TextureShader::GetInstance().Initialize(m_AppInfo.pD3D10Device, m_hWnd))
 	{
 		MessageBox(m_hWnd, L"Error!!", L"Cannot Initialize Texture Shaders!", MB_OK);
 		return;
 	}
 
-	CGameAssetLoader::GetInstance().Initialize(m_AppInfo.pD3D11Device, m_AppInfo.pD3D11DeviceContext, &m_WindowSize.width, &m_WindowSize.height);
+	CGameAssetLoader::GetInstance().Initialize(m_AppInfo.pD3D10Device, &m_WindowSize.width, &m_WindowSize.height);
 
 	onShowWindow();
 }
@@ -576,12 +573,12 @@ void CGameApp::onShowWindow()
 
 void CGameApp::TurnOnZBuffer()
 {
-	m_AppInfo.pD3D11DeviceContext->OMSetDepthStencilState(m_AppInfo.pDepthStencilState, 1);
+	m_AppInfo.pD3D10Device->OMSetDepthStencilState(m_AppInfo.pDepthStencilState, 1);
 }
 
 void CGameApp::TurnOffZBuffer()
 {
-	m_AppInfo.pD3D11DeviceContext->OMSetDepthStencilState(m_AppInfo.pDepthDisableStencilState, 1);
+	m_AppInfo.pD3D10Device->OMSetDepthStencilState(m_AppInfo.pDepthDisableStencilState, 1);
 }
 
 CGameApp& CGameApp::GetInstance()
@@ -616,9 +613,9 @@ HWND CGameApp::GetHWND() const
 	return m_hWnd;
 }
 
-ID3D11Device* CGameApp::GetDevice() const
+ID3D10Device* CGameApp::GetDevice() const
 {
-	return m_AppInfo.pD3D11Device;
+	return m_AppInfo.pD3D10Device;
 }
 
 const AppInfo* CGameApp::GetAppInfo() const

@@ -13,7 +13,7 @@ GameSprite::~GameSprite()
 {
 }
 
-void GameSprite::Initialize(ID3D11Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight, float numberOfMotions)
+void GameSprite::Initialize(ID3D10Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight, float numberOfMotions)
 {
 	m_currentFrame = 0;
 	m_previousFrame = -1.0f;
@@ -69,12 +69,12 @@ void GameSprite::Update(float dt)
 		2. 그에 따라 렌더 작업도 2번 수행한다.
 	추후에 이 것을 수정해야될 듯 싶다.
 */
-void GameSprite::Render(ID3D11DeviceContext* context, int screenWidth, int screenHeight, float posX, float posY)
+void GameSprite::Render(ID3D10Device * device, int screenWidth, int screenHeight, float posX, float posY)
 {
 	// 위치 정보를 업데이트하고, 렌더한다.
-	GameBitmap::Render(context, screenWidth, screenHeight, posX, posY);
+	GameBitmap::Render(device, screenWidth, screenHeight, posX, posY);
 	// 스프라이트의 애니메이션(프레임)을 업데이트한다.
-	UpdateBuffers(context);
+	UpdateBuffers(device);
 
 	/*
 		이거 뭐냐 왜한거임 ㅡㅡ
@@ -83,9 +83,9 @@ void GameSprite::Render(ID3D11DeviceContext* context, int screenWidth, int scree
 	//unsigned int stride = sizeof(VertexType);
 	//unsigned int offset = 0;
 
-	//context->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-	//context->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	//context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//device->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+	//device->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	//device->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void GameSprite::SetMotion(float index)
@@ -126,12 +126,13 @@ float GameSprite::GetFrameHeight() const
 	return m_frameHeight;
 }
 
-void GameSprite::UpdateBuffers(ID3D11DeviceContext * deviceContext)
+void GameSprite::UpdateBuffers(ID3D10Device * deviceContext)
 {
 	// 이전 프레임과 동일한 프레임인 경우. 함수를 나온다.
+	HRESULT result;
+
 	if (m_currentFrame == m_previousFrame) return;
 	
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	GameBitmap::VertexType* vertices = GameBitmap::GetVertices();
 
 	vertices[0].texture.x = m_currentFrame / m_maxFrames;
@@ -152,16 +153,14 @@ void GameSprite::UpdateBuffers(ID3D11DeviceContext * deviceContext)
 	vertices[5].texture.x = (m_currentFrame + 1.0) / m_maxFrames;
 	vertices[5].texture.y = (m_currentMotion + 1.0) / m_numOfMotions;
 
-	HRESULT result;
-	result = deviceContext->Map(m_vertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource);
+	void* pVertices;
+	result = m_vertexBuffer->Map(D3D10_MAP_WRITE_DISCARD, NULL, &pVertices);
 	if (FAILED(result)) return;
-
-	GameBitmap::VertexType* pVertices = reinterpret_cast<GameBitmap::VertexType*>(mappedResource.pData);
 
 	int verticesSize = sizeof(GameBitmap::VertexType) * m_vertexCount;
 	memcpy_s(pVertices, verticesSize, (void*)vertices, verticesSize);
 
-	deviceContext->Unmap(m_vertexBuffer, NULL);
+	m_vertexBuffer->Unmap();
 
 	m_previousFrame = m_currentFrame;
 }

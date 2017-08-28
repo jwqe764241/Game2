@@ -261,5 +261,8 @@
     <FxCompile Include="..\Sources\Shaders\texture_vs.vs">
       <Filter>소스 파일\Engines\shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\Sources\Shaders\texture.fx">
+      <Filter>소스 파일\Engines\shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

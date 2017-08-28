@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
-#include <D3DX11.h>
-#include <D3D11.h>
+#include <d3d10_1.h>
 
 namespace GameColors {
 	constexpr FLOAT RED[4]     = {1.0f, 0.0f, 0.0f, 1.0f};

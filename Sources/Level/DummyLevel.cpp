@@ -48,7 +48,7 @@ void DummyLevel::Update(float dt)
 	}
 }
 
-bool DummyLevel::Render(ID3D11DeviceContext * deviceContext, int screenWidth, int screenHeight)
+bool DummyLevel::Render(ID3D10Device * device, int screenWidth, int screenHeight)
 {
 	TextureShader& instance = TextureShader::GetInstance();
 	D3DXMATRIX worldMatrix = CGameApp::GetInstance().GetWorldMatrix();
@@ -56,12 +56,12 @@ bool DummyLevel::Render(ID3D11DeviceContext * deviceContext, int screenWidth, in
 
 	m_Camera.Render();
 
-	m_BackgroundBitmap.Render(deviceContext, screenWidth, screenHeight, 0, 0);
-	instance.Render(deviceContext, m_BackgroundBitmap.GetIndexCount(), worldMatrix,
+	m_BackgroundBitmap.Render(device, screenWidth, screenHeight, 0, 0);
+	instance.Render(device, m_BackgroundBitmap.GetIndexCount(), worldMatrix,
 		m_Camera.GetViewMatrix(), orthMatrix, m_BackgroundBitmap.GetTexture());
 
-	m_BackButton.Render(deviceContext, screenWidth, screenHeight);
-	instance.Render(deviceContext, m_BackButton.GetIndexCount(), worldMatrix,
+	m_BackButton.Render(device, screenWidth, screenHeight);
+	instance.Render(device, m_BackButton.GetIndexCount(), worldMatrix,
 		m_Camera.GetViewMatrix(), orthMatrix, m_BackButton.GetTexture());
 
 	return true;

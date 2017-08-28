@@ -10,7 +10,7 @@ Button::~Button()
 	Release();
 }
 
-void Button::Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight)
+void Button::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
 {
 	m_statusBitmap[0] = new GameBitmap();
 	m_statusBitmap[1] = new GameBitmap();
@@ -45,9 +45,9 @@ void Button::Update(bool selected)
 	m_pCurrBitmap = m_statusBitmap[selected];
 }
 
-void Button::Render(ID3D11DeviceContext * deviceContext, int screenWidth, int screenHeight)
+void Button::Render(ID3D10Device * device, int screenWidth, int screenHeight)
 {
-	m_pCurrBitmap->Render(deviceContext, screenWidth, screenHeight, m_pos.x, m_pos.y);
+	m_pCurrBitmap->Render(device, screenWidth, screenHeight, m_pos.x, m_pos.y);
 }
 
 int Button::GetIndexCount()
@@ -55,7 +55,7 @@ int Button::GetIndexCount()
 	return m_pCurrBitmap->GetIndexCount();
 }
 
-ID3D11ShaderResourceView * Button::GetTexture()
+ID3D10ShaderResourceView * Button::GetTexture()
 {
 	return m_pCurrBitmap->GetTexture();
 }

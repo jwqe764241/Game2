@@ -17,11 +17,10 @@ CGameAssetLoader& CGameAssetLoader::GetInstance()
 	return instance;
 }
 
-void CGameAssetLoader::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, int* screenWidth, int* screenHeight)
+void CGameAssetLoader::Initialize(ID3D10Device* device, int* screenWidth, int* screenHeight)
 {
 	m_AllocList.reserve(50);
 	m_DeviceRef = device;
-	m_DeviceContextRef = deviceContext;
 	m_ScreenWidthRef = screenWidth;
 	m_ScreenHeightRef = screenHeight;
 }

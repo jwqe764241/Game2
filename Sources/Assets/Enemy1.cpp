@@ -10,7 +10,7 @@ Enemy1::~Enemy1()
 
 }
 
-void Enemy1::Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight)
+void Enemy1::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
 {
 	m_Pos.x = 0;
 	m_Pos.y = 0;
@@ -35,9 +35,9 @@ void Enemy1::Update(float dt)
 	m_Sprite.Update(dt);
 }
 
-void Enemy1::Render(ID3D11DeviceContext * deviceContext, int screenWidth, int screenHeight)
+void Enemy1::Render(ID3D10Device * device, int screenWidth, int screenHeight)
 {
-	m_Sprite.Render(deviceContext, screenWidth, screenHeight, m_Pos.x, m_Pos.y);
+	m_Sprite.Render(device, screenWidth, screenHeight, m_Pos.x, m_Pos.y);
 }
 
 int Enemy1::GetIndexCount()
@@ -45,7 +45,7 @@ int Enemy1::GetIndexCount()
 	return m_Sprite.GetIndexCount();
 }
 
-ID3D11ShaderResourceView * Enemy1::GetTexture()
+ID3D10ShaderResourceView * Enemy1::GetTexture()
 {
 	return m_Sprite.GetTexture();
 }

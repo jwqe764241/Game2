@@ -1,7 +1,6 @@
 #pragma once
 
-#include <d3d11.h>
-#include <D3DX10math.h>
+#include <d3d10_1.h>
 
 #include "Sources\Shaders\GameTexture.h"
 #include "Sources\Geometries\GameBitmap.h"
@@ -13,9 +12,9 @@ public:
 	GameSprite(float framesPerSecond, float animationSpeed = 1.0f, bool isLooping = false);
 	virtual ~GameSprite();
 
-	void Initialize(ID3D11Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight, float numberOfMotions);
+	void Initialize(ID3D10Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight, float numberOfMotions);
 	void Update(float dt);
-	void Render(ID3D11DeviceContext* context, int screenWidth, int screenHeight, float posX, float posY);
+	void Render(ID3D10Device* device, int screenWidth, int screenHeight, float posX, float posY);
 
 	void SetMotion(float index);
 	void SetLooping(bool condition);
@@ -29,7 +28,7 @@ public:
 	float GetFrameHeight() const;
 
 protected:
-	void UpdateBuffers(ID3D11DeviceContext *deviceContext);
+	void UpdateBuffers(ID3D10Device *device);
 
 private:
 	float m_currentFrame;
