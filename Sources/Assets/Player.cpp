@@ -19,7 +19,7 @@ void Player::AddTool(Tool * pTool)
 	m_ToolSink.push_back(pTool);
 }
 
-void Player::Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight)
+void Player::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
 {
 	m_Pos.x = 0;
 	m_Pos.y = 0;
@@ -215,9 +215,9 @@ void Player::Update(float dt, CGameCamera* pCamera)
 	m_Sprite.Update(dt);
 }
 
-void Player::Render(ID3D11DeviceContext * deviceContext, int screenWidth, int screenHeight)
+void Player::Render(ID3D10Device * device, int screenWidth, int screenHeight)
 {
-	m_Sprite.Render(deviceContext, screenWidth, screenHeight, m_Pos.x, m_Pos.y);
+	m_Sprite.Render(device, screenWidth, screenHeight, m_Pos.x, m_Pos.y);
 }
 
 void Player::Idle()
@@ -268,7 +268,7 @@ int Player::GetIndexCount()
 	return m_Sprite.GetIndexCount();
 }
 
-ID3D11ShaderResourceView* Player::GetTexture()
+ID3D10ShaderResourceView* Player::GetTexture()
 {
 	return m_Sprite.GetTexture();
 }

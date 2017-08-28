@@ -1,6 +1,9 @@
 #include "TextureShader.h"
 
-TextureShader::TextureShader() : m_VertexShader(nullptr), m_PixelShader(nullptr), m_InputLayout(nullptr), m_MatrixBuffer(nullptr), m_SampleState(nullptr)
+TextureShader::TextureShader() :
+	m_effect(nullptr), m_technique(nullptr), m_layout(nullptr),
+	m_worldMatrixPtr(nullptr), m_viewMatrixPtr(nullptr), m_projectionMatrixPtr(nullptr),
+	m_texturePtr(nullptr)
 {
 }
 
@@ -16,9 +19,9 @@ TextureShader& TextureShader::GetInstance()
 	return instance;
 }
 
-bool TextureShader::Initialize(ID3D11Device *device, HWND hwnd)
+bool TextureShader::Initialize(ID3D10Device *device, HWND hwnd)
 {
-	if (!InitializeShader(device, hwnd, L"..\\Sources\\Shaders\\texture_vs.vs", L"..\\Sources\\Shaders\\texture_ps.ps")) 
+	if (!InitializeShader(device, hwnd, L"..\\Sources\\Shaders\\texture.fx") )
 	{
 		return false;
 	}
@@ -31,81 +34,72 @@ void TextureShader::Release()
 	ReleaseShader();
 }
 
-bool TextureShader::Render(ID3D11DeviceContext * deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView *texture)
+bool TextureShader::Render(ID3D10Device* device, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D10ShaderResourceView *texture)
 {
-	if (!SetParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture)) 
+	if (!SetParameters(worldMatrix, viewMatrix, projectionMatrix, texture)) 
 	{
 		return false;
 	}
 
-	RenderShader(deviceContext, indexCount);
+	RenderShader(device, indexCount);
 	return true;
 }
 
-bool TextureShader::InitializeShader(ID3D11Device * device, HWND hwnd, wchar_t * vertexShaderPath, wchar_t * pixelShaderPath)
+bool TextureShader::InitializeShader(ID3D10Device* device, HWND hwnd, wchar_t *filePath)
 {
 	HRESULT result;
-	ID3D10Blob *error = nullptr, *vsBuffer = nullptr, *psBuffer = nullptr;
+	ID3D10Blob *error = nullptr;
 
-	result = D3DX11CompileFromFile(vertexShaderPath, NULL, NULL, "VS", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, &vsBuffer, &error, NULL);
+	result = D3DX10CreateEffectFromFile(filePath, NULL, NULL, "fx_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, 
+		device, NULL, NULL, &m_effect, &error, NULL);
 	if (FAILED(result)) 
 	{
-		HandlingError(error, hwnd, L"vertex_shader_error_out.txt", vertexShaderPath, L"check vertex_shader_error_out.txt!");
+		HandlingError(error, hwnd, L"shader_error_out.txt", filePath, L"check shader_error_out.txt!");
 		return false;
 	}
 
-	result = D3DX11CompileFromFile(pixelShaderPath , NULL, NULL, "PS", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, &psBuffer, &error, NULL);
-	if (FAILED(result)) 
+	m_technique = m_effect->GetTechniqueByName("TextureTechnique");
+	if (!m_technique)
 	{
-		HandlingError(error, hwnd, L"pixel_shader_error_out.txt", pixelShaderPath, L"check pixel_shader_error_out.txt!");
 		return false;
 	}
 
-	result = device->CreateVertexShader(vsBuffer->GetBufferPointer(), vsBuffer->GetBufferSize(), NULL, &m_VertexShader);
-	if (FAILED(result)) 
-	{
-		MessageBox(hwnd, L"Cannot Create VertexShader", L"Error", MB_OK);
-		return false;
-	}
-
-	result = device->CreatePixelShader(psBuffer->GetBufferPointer(), psBuffer->GetBufferSize(), NULL, &m_PixelShader);
-	if (FAILED(result)) 
-	{
-		MessageBox(hwnd, L"Cannot Create PixelShader", L"Error", MB_OK);
-		return false;
-	}
-
-
-	D3D11_INPUT_ELEMENT_DESC polyLayout[2];
-		polyLayout[0].SemanticName = "POSITION";
-		polyLayout[0].SemanticIndex = 0;
-		polyLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		polyLayout[0].InputSlot = 0;
-		polyLayout[0].AlignedByteOffset = 0;
-		polyLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	D3D10_INPUT_ELEMENT_DESC polyLayout[2];
+		polyLayout[0].SemanticName         = "POSITION";
+		polyLayout[0].SemanticIndex        = 0;
+		polyLayout[0].Format               = DXGI_FORMAT_R32G32B32_FLOAT;
+		polyLayout[0].InputSlot            = 0;
+		polyLayout[0].AlignedByteOffset    = 0;
+		polyLayout[0].InputSlotClass       = D3D10_INPUT_PER_VERTEX_DATA;
 		polyLayout[0].InstanceDataStepRate = 0;
 
-		polyLayout[1].SemanticName = "TEXCOORD";
-		polyLayout[1].SemanticIndex = 0;
-		polyLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-		polyLayout[1].InputSlot = 0;
-		polyLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-		polyLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		polyLayout[1].SemanticName         = "TEXCOORD";
+		polyLayout[1].SemanticIndex        = 0;
+		polyLayout[1].Format               = DXGI_FORMAT_R32G32_FLOAT;
+		polyLayout[1].InputSlot            = 0;
+		polyLayout[1].AlignedByteOffset    = D3D10_APPEND_ALIGNED_ELEMENT;
+		polyLayout[1].InputSlotClass       = D3D10_INPUT_PER_VERTEX_DATA;
 		polyLayout[1].InstanceDataStepRate = 0;
 
 	int numElements = sizeof(polyLayout) / sizeof(polyLayout[0]);
 
-	result = device->CreateInputLayout(polyLayout, numElements, vsBuffer->GetBufferPointer(), vsBuffer->GetBufferSize(), &m_InputLayout);
+	D3D10_PASS_DESC passDesc;
+	m_technique->GetPassByIndex(0)->GetDesc(&passDesc);
+
+	result = device->CreateInputLayout(polyLayout, numElements, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &m_layout);
 	if (FAILED(result)) 
 	{
 		MessageBox(hwnd, L"Cannot Create InputLayout", L"Error", MB_OK);
 		return false;
 	}
 
-	Utils::Release(&vsBuffer);
-	Utils::Release(&psBuffer);
+	m_worldMatrixPtr = m_effect->GetVariableByName("worldMatrix")->AsMatrix();
+	m_viewMatrixPtr = m_effect->GetVariableByName("viewMatrix")->AsMatrix();
+	m_projectionMatrixPtr = m_effect->GetVariableByName("projectionMatrix")->AsMatrix();
 
-	D3D11_BUFFER_DESC matrixBufferDesc;
+	m_texturePtr = m_effect->GetVariableByName("shaderTexture")->AsShaderResource();
+
+	/*D3D10_BUFFER_DESC matrixBufferDesc;
 		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 		matrixBufferDesc.ByteWidth = sizeof(Matrix);
 		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -139,18 +133,21 @@ bool TextureShader::InitializeShader(ID3D11Device * device, HWND hwnd, wchar_t *
 	{
 		MessageBox(hwnd, L"Cannot Create Sampler State", L"Error", MB_OK);
 		return false;
-	}
+	}*/
 
 	return true;
 }
 
 void TextureShader::ReleaseShader()
 {
-	Utils::Release(&m_SampleState);
-	Utils::Release(&m_MatrixBuffer);
-	Utils::Release(&m_InputLayout);
-	Utils::Release(&m_PixelShader);
-	Utils::Release(&m_VertexShader);
+	Utils::Release(&m_effect);
+	Utils::Release(&m_layout);
+
+	m_technique           = 0;
+	m_worldMatrixPtr      = 0;
+	m_viewMatrixPtr       = 0;
+	m_projectionMatrixPtr = 0;
+	m_texturePtr          = 0;
 }
 
 void TextureShader::HandlingError(ID3D10Blob *error, HWND hwnd, wchar_t *outFileName, wchar_t *text, wchar_t *caption)
@@ -174,9 +171,9 @@ void TextureShader::HandlingError(ID3D10Blob *error, HWND hwnd, wchar_t *outFile
 	}
 }
 
-bool TextureShader::SetParameters(ID3D11DeviceContext * deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView *texture)
+bool TextureShader::SetParameters(D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D10ShaderResourceView *texture)
 {
-	HRESULT result;
+	/*HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	
 	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
@@ -196,16 +193,29 @@ bool TextureShader::SetParameters(ID3D11DeviceContext * deviceContext, D3DXMATRI
 
 	deviceContext->Unmap(m_MatrixBuffer, 0);
 	deviceContext->VSSetConstantBuffers(0, 1, &m_MatrixBuffer);
-	deviceContext->PSSetShaderResources(0, 1, &texture);
+	deviceContext->PSSetShaderResources(0, 1, &texture);*/
+
+	m_worldMatrixPtr->SetMatrix(reinterpret_cast<float *>(&worldMatrix));
+	m_viewMatrixPtr->SetMatrix(reinterpret_cast<float *>(&viewMatrix));
+	m_projectionMatrixPtr->SetMatrix(reinterpret_cast<float *>(&projectionMatrix));
+
+	m_texturePtr->SetResource(texture);
 
 	return true;
 }
 
-void TextureShader::RenderShader(ID3D11DeviceContext * deviceContext, int indexCount)
+void TextureShader::RenderShader(ID3D10Device* device, int indexCount)
 {
-	deviceContext->IASetInputLayout(m_InputLayout);
-	deviceContext->VSSetShader(m_VertexShader, NULL, 0);
-	deviceContext->PSSetShader(m_PixelShader, NULL, 0);
-	deviceContext->PSSetSamplers(0, 1, &m_SampleState);
-	deviceContext->DrawIndexed(indexCount, 0, 0);
+	D3D10_TECHNIQUE_DESC techniqueDesc;
+
+	device->IASetInputLayout(m_layout);
+
+	m_technique->GetDesc(&techniqueDesc);
+
+	for (int i = 0; i<techniqueDesc.Passes; ++i)
+	{
+		m_technique->GetPassByIndex(i)->Apply(0);
+		device->DrawIndexed(indexCount, 0, 0);
+	}
+
 }

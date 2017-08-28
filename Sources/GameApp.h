@@ -2,10 +2,10 @@
 
 #include <Windows.h>
 #include <windowsx.h>
-#include <D3DX11.h>
-#include <D3D11.h>
+#include <d3d10_1.h>
+#include <D3DX10.h>
 #include <vector>
-#include <D3DX10math.h>
+#include <d3dx10math.h>
 
 #include <iostream>
 #include <sstream>
@@ -36,16 +36,16 @@ struct _AdapterInfo {
 };
 
 struct _AppInfo {
-	ID3D11Device			*pD3D11Device;
-	ID3D11DeviceContext		*pD3D11DeviceContext;
+	ID3D10Device			*pD3D10Device;
+	ID3D10RenderTargetView	*pD3D10RenderView;
 	IDXGISwapChain			*pSwapChain;
-	ID3D11RenderTargetView	*pRenderTargetView;
-	ID3D11Texture2D			*pBackBuffer;
-	ID3D11DepthStencilState *pDepthStencilState;
-	ID3D11DepthStencilState *pDepthDisableStencilState;
-	ID3D11DepthStencilView	*pDepthStencilView;
-	ID3D11RasterizerState	*pRasterizeState;
-	ID3D11BlendState		*pBlendState;
+	ID3D10RenderTargetView	*pRenderTargetView;
+	ID3D10Texture2D			*pBackBuffer;
+	ID3D10DepthStencilState *pDepthStencilState;
+	ID3D10DepthStencilState *pDepthDisableStencilState;
+	ID3D10DepthStencilView	*pDepthStencilView;
+	ID3D10RasterizerState	*pRasterizeState;
+	ID3D10BlendState		*pBlendState;
 };
 
 struct _AppMatrix {
@@ -71,9 +71,9 @@ private:
 	//Compoenents--
 
 	//--Settings
-	D3D_DRIVER_TYPE		m_DriverType   = D3D_DRIVER_TYPE_HARDWARE;
-	D3D_FEATURE_LEVEL	m_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
-	UINT				m_SDKVersion = D3D11_SDK_VERSION;
+	//D3D_DRIVER_TYPE		m_DriverType   = D3D_DRIVER_TYPE_HARDWARE;
+	//D3D_FEATURE_LEVEL	m_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
+	//UINT				m_SDKVersion = D3D10_SDK_VERSION;
 	UINT				m_MultiSampleQualityLevel = 0;
 
 	bool m_isVsync    = false;
@@ -117,7 +117,7 @@ public:
 
 	WindowSize GetWindowSize() const;
 	HWND GetHWND() const;
-	ID3D11Device* GetDevice() const;
+	ID3D10Device* GetDevice() const;
 	
 	/*
 		임시적인 함수임

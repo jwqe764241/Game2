@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <D3D11.h>
+#include <d3d10_1.h>
 #include <Sources/Interface/ICharacter.h>
 
 class ILevel {
@@ -13,7 +13,7 @@ public:
 	//입력받은 키, 좌표이동 등을 업데이트
 	virtual void Update(float dt) = 0;
 	//해당 레벨을 출력
-	virtual bool Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight) = 0;
+	virtual bool Render(ID3D10Device* device, int screenWidth, int screenHeight) = 0;
 	
 	//레벨 시작 시 
 	virtual void onStart() = 0;

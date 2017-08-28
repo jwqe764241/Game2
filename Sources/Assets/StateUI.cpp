@@ -40,27 +40,27 @@ void StateUI::Update(int healthValue, int waterValue, int foodValue, int sleepVa
 	stateBar[3].SetValue(sleepValue);
 }
 
-void StateUI::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight,
+void StateUI::Render(ID3D10Device* device, int screenWidth, int screenHeight,
 	D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX orthMatrix, D3DXVECTOR3 cameraPos, TextureShader& instance)
 {
 	for (int i = 0; i < 4; i++)
 	{
 		//ºó »óÅÂ ¸ÕÀú ·»´õ
-		stateBar[4].Render(deviceContext, screenWidth, screenHeight, (cameraPos.x + 25) + (225 * i), (cameraPos.y * -1) + 25);
-		instance.Render(deviceContext, stateBar[i].GetIndexCount(), worldMatrix,
+		stateBar[4].Render(device, screenWidth, screenHeight, (cameraPos.x + 25) + (225 * i), (cameraPos.y * -1) + 25);
+		instance.Render(device, stateBar[i].GetIndexCount(), worldMatrix,
 			viewMatrix, orthMatrix, stateBar[4].GetTexture());
 
 		//ÇöÀç »óÅÂ ·»´õ
-		stateBar[i].Render(deviceContext, screenWidth, screenHeight, (cameraPos.x + 25) + (225 * i), (cameraPos.y * -1) + 25);
-		instance.Render(deviceContext, stateBar[i].GetIndexCount(), worldMatrix,
+		stateBar[i].Render(device, screenWidth, screenHeight, (cameraPos.x + 25) + (225 * i), (cameraPos.y * -1) + 25);
+		instance.Render(device, stateBar[i].GetIndexCount(), worldMatrix,
 			viewMatrix, orthMatrix, stateBar[i].GetTexture());
 	}
 
 	for (int i = 0; i < m_ToolList->size(); i++)
 	{
-		(*m_ToolList)[i]->Render(deviceContext, screenWidth, screenHeight, (cameraPos.x + 25) + (75 * i), (cameraPos.y * -1) + 1000);
+		(*m_ToolList)[i]->Render(device, screenWidth, screenHeight, (cameraPos.x + 25) + (75 * i), (cameraPos.y * -1) + 1000);
 
-		instance.Render(deviceContext, (*m_ToolList)[i]->GetIndexCount(), worldMatrix,
+		instance.Render(device, (*m_ToolList)[i]->GetIndexCount(), worldMatrix,
 			viewMatrix, orthMatrix, (*m_ToolList)[i]->GetTexture());
 	}
 }

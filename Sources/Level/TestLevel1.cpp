@@ -157,7 +157,7 @@ void TestLevel1::Update(float dt)
 	}
 }
 
-bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)
+bool TestLevel1::Render(ID3D10Device* device, int screenWidth, int screenHeight)
 {
 	TextureShader& instance = TextureShader::GetInstance();
 	D3DXMATRIX worldMatrix  = CGameApp::GetInstance().GetWorldMatrix();
@@ -168,15 +168,15 @@ bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int
 
 	m_Camera.Render();
 
-	m_LevelBitmap.Render(deviceContext, screenWidth, screenHeight, 0, 0);
-	instance.Render(deviceContext, m_LevelBitmap.GetIndexCount(), worldMatrix, 
+	m_LevelBitmap.Render(device, screenWidth, screenHeight, 0, 0);
+	instance.Render(device, m_LevelBitmap.GetIndexCount(), worldMatrix, 
 		m_Camera.GetViewMatrix(), orthMatrix, m_LevelBitmap.GetTexture());
 
 	/*
 		테스트 전용이므로 플레이어 먼저 렌더
 	*/
-	m_Player->Render(deviceContext, screenWidth, screenHeight);
-	instance.Render(deviceContext, m_Player->GetIndexCount(), worldMatrix, 
+	m_Player->Render(device, screenWidth, screenHeight);
+	instance.Render(device, m_Player->GetIndexCount(), worldMatrix, 
 		m_Camera.GetViewMatrix(), orthMatrix, m_Player->GetTexture());
 
 	/*
@@ -184,26 +184,26 @@ bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int
 	*/
 	for (auto& target : m_EnvironmentList)
 	{
-		target->Render(deviceContext, screenWidth, screenHeight);
+		target->Render(device, screenWidth, screenHeight);
 
-		instance.Render(deviceContext, target->GetIndexCount(), worldMatrix, 
+		instance.Render(device, target->GetIndexCount(), worldMatrix, 
 			m_Camera.GetViewMatrix(), orthMatrix, target->GetTexture());
 	}
 
 	for (auto& target : m_Tools)
 	{
-		target->Render(deviceContext, screenWidth, screenHeight);
+		target->Render(device, screenWidth, screenHeight);
 
-		instance.Render(deviceContext, target->GetIndexCount(), worldMatrix,
+		instance.Render(device, target->GetIndexCount(), worldMatrix,
 			m_Camera.GetViewMatrix(), orthMatrix, target->GetTexture());
 	}
 
-	m_PlayerUI.Render(deviceContext, screenWidth, screenHeight, worldMatrix, m_Camera.GetViewMatrix(),
+	m_PlayerUI.Render(device, screenWidth, screenHeight, worldMatrix, m_Camera.GetViewMatrix(),
 		orthMatrix, cameraPos, instance);
 
-	m_Cursor.Render(deviceContext, size.width, size.height, pos.x + cameraPos.x, pos.y - cameraPos.y);
+	m_Cursor.Render(device, size.width, size.height, pos.x + cameraPos.x, pos.y - cameraPos.y);
 
-	instance.Render(deviceContext, m_Cursor.GetIndexCount(), worldMatrix, 
+	instance.Render(device, m_Cursor.GetIndexCount(), worldMatrix, 
 		m_Camera.GetViewMatrix(), orthMatrix, m_Cursor.GetTexture());
 
 	return true;

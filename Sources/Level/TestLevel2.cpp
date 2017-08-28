@@ -29,7 +29,7 @@ void TestLevel2::Update(float dt)
 
 }
 
-bool TestLevel2::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)
+bool TestLevel2::Render(ID3D10Device* device, int screenWidth, int screenHeight)
 {
 
 	return true;

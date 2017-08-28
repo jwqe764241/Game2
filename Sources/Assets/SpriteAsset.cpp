@@ -8,7 +8,7 @@ SpriteAsset::~SpriteAsset()
 {
 }
 
-void SpriteAsset::Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight)
+void SpriteAsset::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
 {
 	m_PosX = 20;
 	m_PosY = 20;
@@ -29,9 +29,9 @@ void SpriteAsset::Update(float dt)
 	m_Object.Update(dt);
 }
 
-void SpriteAsset::Render(ID3D11DeviceContext * deviceContext, int screenWidth, int screenHeight)
+void SpriteAsset::Render(ID3D10Device * device, int screenWidth, int screenHeight)
 {
-	m_Object.Render(deviceContext, screenWidth, screenHeight, m_PosX, m_PosY);
+	m_Object.Render(device, screenWidth, screenHeight, m_PosX, m_PosY);
 }
 
 int SpriteAsset::GetIndexCount()
@@ -39,7 +39,7 @@ int SpriteAsset::GetIndexCount()
 	return m_Object.GetIndexCount();
 }
 
-ID3D11ShaderResourceView * SpriteAsset::GetTexture()
+ID3D10ShaderResourceView * SpriteAsset::GetTexture()
 {
 	return m_Object.GetTexture();
 }

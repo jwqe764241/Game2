@@ -110,7 +110,7 @@ void LobbyLevel::Update(float dt)
 	} 
 }
 
-bool LobbyLevel::Render(ID3D11DeviceContext * deviceContext, int screenWidth, int screenHeight)
+bool LobbyLevel::Render(ID3D10Device * device, int screenWidth, int screenHeight)
 {	
 	TextureShader& instance = TextureShader::GetInstance();
 	D3DXMATRIX worldMatrix = CGameApp::GetInstance().GetWorldMatrix();
@@ -118,15 +118,15 @@ bool LobbyLevel::Render(ID3D11DeviceContext * deviceContext, int screenWidth, in
 
 	m_Camera.Render();
 
-	m_BackgroundBitmap.Render(deviceContext, screenWidth, screenHeight, 0, 0);
-	instance.Render(deviceContext, m_BackgroundBitmap.GetIndexCount(), worldMatrix,
+	m_BackgroundBitmap.Render(device, screenWidth, screenHeight, 0, 0);
+	instance.Render(device, m_BackgroundBitmap.GetIndexCount(), worldMatrix,
 		m_Camera.GetViewMatrix(), orthMatrix, m_BackgroundBitmap.GetTexture());
 
 	for (auto& button : m_button)
 	{
-		button.Render(deviceContext, screenWidth, screenHeight);
+		button.Render(device, screenWidth, screenHeight);
 
-		instance.Render(deviceContext, button.GetIndexCount(), worldMatrix,
+		instance.Render(device, button.GetIndexCount(), worldMatrix,
 			m_Camera.GetViewMatrix(), orthMatrix, button.GetTexture());
 	}
 

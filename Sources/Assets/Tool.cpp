@@ -11,57 +11,56 @@ Tool::~Tool()
 	Release();
 }
 
-void Tool::Initialize(ID3D11Device* device, wchar_t* filePath, int bitmapWidth, int bitmapHeight, POINT pos)
+void Tool::Initialize(ID3D10Device* device, wchar_t* filePath, int bitmapWidth, int bitmapHeight, POINT pos)
 {
 	GameBitmap::Initialize(device, filePath, bitmapWidth, bitmapHeight);
 	m_Pos = pos;
 }
 
-bool Tool::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)
+bool Tool::Render(ID3D10Device* device, int screenWidth, int screenHeight)
 {
 	bool result;
 
-	result = UpdateBuffers(deviceContext, screenWidth, screenHeight, m_Pos.x, m_Pos.y);
+	result = UpdateBuffers(device, screenWidth, screenHeight, m_Pos.x, m_Pos.y);
 	if (!result)
 	{
 		return false;
 	}
 
-	RenderBuffers(deviceContext);
+	RenderBuffers(device);
 
 	return true;
 }
 
-bool Tool::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight, int posX, int posY)
+bool Tool::Render(ID3D10Device* device, int screenWidth, int screenHeight, int posX, int posY)
 {
 	bool result;
 
-	result = UpdateBuffers(deviceContext, screenWidth, screenHeight, posX, posY);
+	result = UpdateBuffers(device, screenWidth, screenHeight, posX, posY);
 	if (!result)
 	{
 		return false;
 	}
 
-	RenderBuffers(deviceContext);
+	RenderBuffers(device);
 
 	return true;
 }
 
-void Tool::RenderBuffers(ID3D11DeviceContext * deviceContext)
+void Tool::RenderBuffers(ID3D10Device * device)
 {
 	unsigned int stride = sizeof(VertexType);
 	unsigned int offset = 0;
 
-	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	device->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+	device->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-bool Tool::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY)
+bool Tool::UpdateBuffers(ID3D10Device *device, int screenWidth, int screenHeight, int posX, int posY)
 {
 	Utils::RECT_F rect;
 	VertexType* vertices = GetVertices();
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT result;
 
 	//if ((m_prevPosX == posX) && (m_prevPosY == posY))
@@ -103,18 +102,14 @@ bool Tool::UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth, in
 	vertices[5].position.y = rect.bottom;
 	//vertices[5].position = D3DXVECTOR3(rect.right, rect.bottom, 0.0f);
 
+	void* pVertices;
+	result = m_vertexBuffer->Map(D3D10_MAP_WRITE_DISCARD, NULL, &pVertices);
+	if (FAILED(result)) return false;
 
-	result = deviceContext->Map(m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	if (FAILED(result))
-	{
-		return false;
-	}
+	int verticesSize = sizeof(GameBitmap::VertexType) * m_vertexCount;
+	memcpy_s(pVertices, verticesSize, (void*)vertices, verticesSize);
 
-	VertexType* pVertices = reinterpret_cast<VertexType*>(mappedResource.pData);
-
-	memcpy(pVertices, reinterpret_cast<void*>(vertices), (sizeof(VertexType) * m_vertexCount));
-
-	deviceContext->Unmap(m_vertexBuffer, 0);
+	m_vertexBuffer->Unmap();
 
 	//delete[] vertices;
 	//vertices = 0;
@@ -128,7 +123,7 @@ void Tool::Release()
 	GameBitmap::Release();
 }
 
-ID3D11ShaderResourceView* Tool::GetTexture()
+ID3D10ShaderResourceView* Tool::GetTexture()
 {
 	return GameBitmap::GetTexture();
 }

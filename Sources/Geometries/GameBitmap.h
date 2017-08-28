@@ -1,6 +1,6 @@
 #pragma once
 
-#include <D3DX11.h>
+#include <d3d10_1.h>
 #include <D3DX10math.h>
 
 #include <Sources/Utils/error.h>
@@ -27,28 +27,28 @@ public:
 	GameBitmap(GameBitmap& other);
 	~GameBitmap();
 
-	bool Initialize(ID3D11Device *device, wchar_t* filePath, int bitmapWidth, int bitmapHeight);
+	bool Initialize(ID3D10Device *device, wchar_t* filePath, int bitmapWidth, int bitmapHeight);
 	void Release();
-	bool Render(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY);
+	bool Render(ID3D10Device *device, int screenWidth, int screenHeight, int posX, int posY);
 
 	int GetIndexCount();
-	ID3D11ShaderResourceView* GetTexture();
+	ID3D10ShaderResourceView* GetTexture();
 
 	BitmapSize GetBitmapSize() const;
 protected:
 	VertexType* GetVertices();
 
 private:
-	bool InitializeBuffers(ID3D11Device* device);
+	bool InitializeBuffers(ID3D10Device* device);
 	void ReleaseBuffers();
-	bool UpdateBuffers(ID3D11DeviceContext *deviceContext, int screenWidth, int screenHeight, int posX, int posY);
-	void RenderBuffers(ID3D11DeviceContext *deviceContext);
+	bool UpdateBuffers(ID3D10Device *device, int screenWidth, int screenHeight, int posX, int posY);
+	void RenderBuffers(ID3D10Device *device);
 
-	bool LoadTexture(ID3D11Device *device, wchar_t *filePath);
+	bool LoadTexture(ID3D10Device *device, wchar_t *filePath);
 	void ReleaseTexture();
 
 protected:
-	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
+	ID3D10Buffer *m_vertexBuffer, *m_indexBuffer;
 	int m_vertexCount, m_indexCount;
 	GameTexture *m_Texture;
 

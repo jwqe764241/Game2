@@ -17,6 +17,6 @@ public:
 	void Initialize(std::vector<Tool *>* toolList);
 	void Release();
 	void Update(int healthValue, int waterValue, int foodValue, int sleepValue);
-	void Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight,
+	void Render(ID3D10Device* device, int screenWidth, int screenHeight,
 		D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX orthMatrix, D3DXVECTOR3 cameraPos, TextureShader& instance);
 };

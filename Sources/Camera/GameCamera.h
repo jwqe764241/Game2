@@ -1,6 +1,6 @@
 #pragma once
 
-#include <D3DX10math.h>
+#include <d3dx10math.h>
 
 class CGameCamera {
 public:
