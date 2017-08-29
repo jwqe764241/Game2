@@ -13,7 +13,7 @@ StateUI::~StateUI()
 	Release();
 }
 
-void StateUI::Initialize(std::vector<Tool *>* toolList)
+void StateUI::Initialize(ID3D10Device * pDevice, std::vector<Tool *>* pToolList, std::vector<Item *>* pItemList)
 {
 	stateBar[0].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/HealthState.png", 200, 50, 100, 100);
 	stateBar[1].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/WaterState.png", 200, 50, 100, 100);
@@ -21,7 +21,10 @@ void StateUI::Initialize(std::vector<Tool *>* toolList)
 	stateBar[3].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/SleepState.png", 200, 50, 100, 100);
 	stateBar[4].Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/EmptyState.png", 200, 50, 100, 100);
 
-	m_ToolList = toolList;
+	m_ToolList = pToolList;
+	m_ItemList = pItemList;
+
+	writer.Initialize(pDevice, 48, 0);
 }
 
 void StateUI::Release()
@@ -56,11 +59,17 @@ void StateUI::Render(ID3D10Device* device, int screenWidth, int screenHeight,
 			viewMatrix, orthMatrix, stateBar[i].GetTexture());
 	}
 
-	for (int i = 0; i < m_ToolList->size(); i++)
+	if (GameInput2::GetInstance().IsPressed(0x54))
 	{
-		(*m_ToolList)[i]->Render(device, screenWidth, screenHeight, (cameraPos.x + 25) + (75 * i), (cameraPos.y * -1) + 1000);
+		for (int i = 0; i < m_ToolList->size(); i++)
+		{
+			(*m_ToolList)[i]->Render(device, screenWidth, screenHeight, (cameraPos.x + 25) + (75 * i), (cameraPos.y * -1) + 1000);
 
-		instance.Render(device, (*m_ToolList)[i]->GetIndexCount(), worldMatrix,
-			viewMatrix, orthMatrix, (*m_ToolList)[i]->GetTexture());
+			instance.Render(device, (*m_ToolList)[i]->GetIndexCount(), worldMatrix,
+				viewMatrix, orthMatrix, (*m_ToolList)[i]->GetTexture());
+		}
+
+		writer.DrawString(L"얻은 도구들", RECT{ 25, 925, 1920, 1080 }, DT_LEFT | DT_TOP, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
+
 }

@@ -137,9 +137,6 @@
     <ClCompile Include="..\Sources\Level\IslandLevel1.cpp">
       <Filter>소스 파일\Assets\Levels</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Potal.cpp">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Geometries\StateBar.cpp">
       <Filter>소스 파일\Engines\Geometries</Filter>
     </ClCompile>
@@ -147,6 +144,15 @@
       <Filter>소스 파일\Assets\Objects\Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Assets\StateUI.cpp">
+      <Filter>소스 파일\Assets\Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\GameTextWriter.cpp">
+      <Filter>소스 파일\Engines\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Item.cpp">
+      <Filter>소스 파일\Assets\Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Potal.cpp">
       <Filter>소스 파일\Assets\Objects\Player</Filter>
     </ClCompile>
   </ItemGroup>
@@ -254,6 +260,12 @@
       <Filter>소스 파일\Assets\Objects\Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Assets\StateUI.h">
+      <Filter>소스 파일\Assets\Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\GameTextWriter.h">
+      <Filter>소스 파일\Engines\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Item.h">
       <Filter>소스 파일\Assets\Objects\Player</Filter>
     </ClInclude>
   </ItemGroup>

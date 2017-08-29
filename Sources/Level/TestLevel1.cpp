@@ -18,7 +18,7 @@ bool TestLevel1::Load()
 	m_ActorList.reserve(20);
 	m_Tools.reserve(6);
 
-	m_LevelBitmap.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/background.png", 7680, 4320);
+	m_LevelBitmap.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/background.dds", 7680, 4320);
 	m_LevelSize.top = 0;
 	m_LevelSize.bottom = 4320;
 	m_LevelSize.left = 0;
@@ -30,23 +30,32 @@ bool TestLevel1::Load()
 
 	m_Camera.SetPosition(0.0f, 0.0f, -10.0f);
 
-	m_Cursor.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/cursor.png", 50, 50);
-	m_PlayerUI.Initialize(&m_Player->GetToolList());
+	m_Cursor.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/cursor.dds", 50, 50);
+	m_PlayerUI.Initialize(CGameApp::GetInstance().GetDevice(), &m_Player->GetToolList());
 
 	//À§Çè
+	for (int i = 0; i < g_PreDefinedToolAmount; ++i)
+	{
+		m_Tools.push_back(new Tool(g_ToolList[i].tool_name, i));
+		m_Tools[i]->Initialize(CGameApp::GetInstance().GetDevice(), g_ToolList[i].resource_path, 50, 50, toolsPosition[i]);
+	}
+
+/*
 	m_Tools.push_back(new Tool(L"saw", 1));
 	m_Tools.push_back(new Tool(L"pickaxe", 2));
 	m_Tools.push_back(new Tool(L"hammer", 3));
 	m_Tools.push_back(new Tool(L"bottle", 4));
 	m_Tools.push_back(new Tool(L"axe", 5));
 
-	m_Tools[0]->Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/tools/saw.png", 50, 50, toolsPosition[0]);
+	m_Tools[0]->Initialize(CGameApp::GetInstance().GetDevice(), , 50, 50, toolsPosition[0]);
 	m_Tools[1]->Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/tools/pickaxe.png", 50, 50, toolsPosition[1]);
 	m_Tools[2]->Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/tools/hammer.png", 50, 50, toolsPosition[2]);
 	m_Tools[3]->Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/tools/bottle.png", 50, 50, toolsPosition[3]);
 	m_Tools[4]->Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/tools/axe.png", 50, 50, toolsPosition[4]);
 
-	Tool* spoon = new Tool(L"spoon", 0);
+*/
+
+	Tool* spoon = new Tool(L"spoon", 5);
 	spoon->Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/tools/spoon.png", 50, 50, toolsPosition[0]);
 	m_Player->AddTool(spoon);
 

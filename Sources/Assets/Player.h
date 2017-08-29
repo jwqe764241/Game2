@@ -8,6 +8,7 @@
 #include <Sources/Interface/ICharacter.h>
 #include <Sources/Camera/GameCamera.h>
 #include <Sources/Assets/Tool.h>
+#include <Sources/Assets/Item.h>
 
 class Player : public ICharacter
 {
@@ -25,6 +26,7 @@ private:
 	RECT m_PositionLimit;
 
 	std::vector<Tool *> m_ToolSink;
+	std::vector<Item *> m_ItemSink;
 
 public:
 	Player();

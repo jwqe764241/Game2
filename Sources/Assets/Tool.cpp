@@ -1,5 +1,10 @@
 #include <Sources/Assets/Tool.h>
 
+bool operator==(Tool& lhs, Tool& rhs)
+{
+	return lhs.m_ToolName == rhs.m_ToolName;
+}
+
 Tool::Tool(wchar_t* toolName, int toolID)
 {
 	m_ToolName = toolName;

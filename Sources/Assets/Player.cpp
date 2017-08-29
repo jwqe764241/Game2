@@ -21,6 +21,8 @@ void Player::AddTool(Tool * pTool)
 
 void Player::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
 {
+	m_ItemSink.reserve(10);
+
 	m_Pos.x = 0;
 	m_Pos.y = 0;
 	m_Health = 100;
@@ -32,6 +34,12 @@ void Player::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
 	m_WaterValue = 100;
 	m_FoodValue = 100;
 	m_SleepValue = 100;
+
+	for (int i = 0; i < g_PreDefinedItemAmount; ++i)
+	{
+		m_ItemSink.push_back(new Item(i, g_ItemResourcePathList[i].item_name));
+		m_ItemSink[i]->Initialize(device, g_ItemResourcePathList[i].resource_path, 50, 50);
+	}
 }
 
 void Player::Release()
