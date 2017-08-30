@@ -155,6 +155,9 @@
     <ClCompile Include="..\Sources\Assets\Potal.cpp">
       <Filter>소스 파일\Assets\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Pond.cpp">
+      <Filter>소스 파일\Assets\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
@@ -270,6 +273,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Interface\IInteraction.h">
       <Filter>소스 파일\Assets\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Pond.h">
+      <Filter>소스 파일\Assets\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

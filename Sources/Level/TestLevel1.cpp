@@ -45,6 +45,9 @@ bool TestLevel1::Load()
 		m_EnvironmentList[i]->Load(CGameApp::GetInstance().GetDevice(), environmentList[i].filePath, environmentList[i].width, environmentList[i].height, environmentList[i].x, environmentList[i].y);
 	}
 
+	m_EnvironmentList.push_back(new Pond());
+	m_EnvironmentList[3]->Load(CGameApp::GetInstance().GetDevice(), L"../Resources/Pond.png", 788, 277, 6300, 100);
+
 	onStart();
 
 	return true;
@@ -98,12 +101,6 @@ void TestLevel1::Update(float dt)
 
 	m_Camera.SetPosition(cameraPosX[xOffset], cameraPosY[yOffset], -10.f);
 
-	m_Player->Update(dt);
-	m_PlayerUI.Update(m_Player->GetHealth(),
-		m_Player->GetWaterValue(),
-		m_Player->GetFoodValue(),
-		m_Player->GetSleepValue());
-
 	for (auto itor = m_EnvironmentList.begin(); itor != m_EnvironmentList.end(); ++itor)
 	{
 		if (GameInput2::GetInstance().IsPressed(VK_SPACE))
@@ -136,6 +133,12 @@ void TestLevel1::Update(float dt)
 		
 		++itor;
 	}
+
+	m_Player->Update(dt);
+	m_PlayerUI.Update(m_Player->GetHealth(),
+		m_Player->GetWaterValue(),
+		m_Player->GetFoodValue(),
+		m_Player->GetSleepValue());
 }
 
 bool TestLevel1::Render(ID3D10Device* device, int screenWidth, int screenHeight)

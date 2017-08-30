@@ -72,4 +72,8 @@ public:
 	int GetWaterValue() const;
 	int GetFoodValue() const;
 	int GetSleepValue() const;
+
+	void SetWaterValue(int value);
+	void SetFoodValue(int value);
+	void SetSleepValue(int value);
 };

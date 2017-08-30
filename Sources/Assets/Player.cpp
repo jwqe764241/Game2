@@ -378,3 +378,39 @@ int Player::GetSleepValue() const
 {
 	return m_SleepValue;
 }
+
+void Player::SetWaterValue(int value)
+{
+	if (value >= 100)
+	{
+		m_WaterValue = 100;
+	}
+	else
+	{
+		m_WaterValue = value;
+	}
+}
+
+void Player::SetFoodValue(int value)
+{
+	if (value >= 100)
+	{
+		m_FoodValue = 100;
+	}
+	else
+	{
+		m_FoodValue = value;
+	}
+}
+
+void Player::SetSleepValue(int value)
+{
+	if (value >= 100)
+	{
+		m_SleepValue = 100;
+	}
+	else
+	{
+		m_SleepValue = value;
+	}
+}
