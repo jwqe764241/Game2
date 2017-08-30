@@ -158,6 +158,12 @@
     <ClCompile Include="..\Sources\Assets\Pond.cpp">
       <Filter>소스 파일\Assets\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Tree.cpp">
+      <Filter>소스 파일\Assets\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Deer.cpp">
+      <Filter>소스 파일\Assets\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
@@ -275,6 +281,12 @@
       <Filter>소스 파일\Assets\Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Assets\Pond.h">
+      <Filter>소스 파일\Assets\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Tree.h">
+      <Filter>소스 파일\Assets\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Deer.h">
       <Filter>소스 파일\Assets\Objects</Filter>
     </ClInclude>
   </ItemGroup>

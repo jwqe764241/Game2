@@ -54,18 +54,16 @@ void Rock::SetPosition(const D3DXVECTOR2 pos)
 
 void Rock::OnAction(Player * player, float dt)
 {
-	static float coolDown = 0.0f;
-
 	coolDown += dt;
 
 	if (coolDown >= 1.0f)
 	{
 		player->AddItem(m_ItemIDCanGet, 2);
-		coolDown = 0.0f;
+		RefreshCooldown();
 	}
 }
 
-bool Rock::CheckItem(Player * player)
+bool Rock::CheckTool(Player * player)
 {
 	auto result = std::find_if(player->GetToolList().begin(), player->GetToolList().end(),
 		[this](const Tool* p) { return p->GetToolID() == m_RequiredToolID; });
@@ -83,4 +81,9 @@ bool Rock::CheckCollision(Player * player)
 		Utils::RECT_F{ playerPosition.x, playerPosition.y, playerPosition.x + playerSize.width, playerPosition.y + playerSize.height },
 		Utils::RECT_F{ m_Position.x - 20, m_Position.y - 20, m_Position.x + bitmapSize.width, m_Position.y + bitmapSize.height }
 	);
+}
+
+void Rock::RefreshCooldown()
+{
+	coolDown = 0.0f;
 }

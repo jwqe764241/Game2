@@ -9,9 +9,12 @@
 #include <Sources/Input/GameInput2.h>
 #include <Sources/Assets/StateUI.h>
 #include <Sources/Interface/ILevel.h>
+#include <Sources/Assets/Tool.h>
+
 #include <Sources/Assets/Rock.h>
 #include <Sources/Assets/Pond.h>
-#include <Sources/Assets/Tool.h>
+#include <Sources/Assets/Tree.h>
+#include <Sources/Assets/Deer.h>
 
 /*
 	일단 리스트 2개이고, for문 2개지만 아마 어떻게 해결 할 방법이 있을 것이다 ㅋㅋ...
@@ -48,16 +51,30 @@ private:
 		{6300, 1000}
 	};
 	
-	const environmentElement environmentList[3] = {
+	const environmentElement environmentList[8] = {
 		{ L"../Resources/Rock1.png", 171, 97, 1600, 100},
 		{ L"../Resources/Rock2.png", 171, 125, 1700, 200},
-		{ L"../Resources/Rock3.png", 165, 121, 1700, 300}
+		{ L"../Resources/Rock3.png", 165, 121, 1700, 300},
+		{ L"../Resources/pond.png", 788, 277, 6300, 100 },
+		{ L"../Resources/Tree.png", 1000, 888, 6300, 1000 },
+		{ L"../Resources/Tree.png", 1000, 888, 6000, 825 },
+		{ L"../Resources/Tree.png", 1000, 888, 5200, 1200 },
+		{ L"../Resources/Tree.png", 1000, 888, 5800, 1500 },
+	};
+
+	const POINT deerPosition[5] = {
+		{4000, 2000},
+		{3900, 1750},
+		{4200, 1900},
+		{4150, 2150},
+		{4450, 2000}
 	};
 
 private:
 	std::vector<Tool *> m_Tools;
 	std::vector<ICharacter *> m_ActorList;
 	std::vector<IInteraction *> m_EnvironmentList;
+	std::vector<Deer *> m_DeerList;
 	
 	Player* m_Player;
 

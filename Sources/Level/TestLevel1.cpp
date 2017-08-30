@@ -17,6 +17,7 @@ bool TestLevel1::Load()
 	m_EnvironmentList.reserve(20);
 	m_ActorList.reserve(20);
 	m_Tools.reserve(6);
+	m_DeerList.reserve(10);
 
 	m_LevelBitmap.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/background.png", 7680, 4320);
 	m_LevelSize.top = 0;
@@ -27,6 +28,7 @@ bool TestLevel1::Load()
 	//플레이어 생성
 	m_Player = dynamic_cast<Player*>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_PLAYER, 576, 256));
 	m_Player->SetPositionLimit(&m_LevelSize);
+	m_Player->SetPosition({ 1920 / 2, 1080 / 2 });
 
 	m_Camera.SetPosition(0.0f, 0.0f, -10.0f);
 
@@ -39,14 +41,29 @@ bool TestLevel1::Load()
 		m_Tools[i]->Initialize(CGameApp::GetInstance().GetDevice(), g_ToolList[i].resource_path, 50, 50, toolsPosition[i]);
 	}
 
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 8; ++i)
 	{
-		m_EnvironmentList.push_back(new Rock());
+		if (i >= 0 && i <= 2)
+		{
+			m_EnvironmentList.push_back(new Rock());
+		}
+		else if (i == 3)
+		{
+			m_EnvironmentList.push_back(new Pond());
+		}
+		else if (i >= 4 && i <= 7)
+		{
+			m_EnvironmentList.push_back(new Tree());
+		}
+
 		m_EnvironmentList[i]->Load(CGameApp::GetInstance().GetDevice(), environmentList[i].filePath, environmentList[i].width, environmentList[i].height, environmentList[i].x, environmentList[i].y);
 	}
 
-	m_EnvironmentList.push_back(new Pond());
-	m_EnvironmentList[3]->Load(CGameApp::GetInstance().GetDevice(), L"../Resources/Pond.png", 788, 277, 6300, 100);
+	for (int i = 0; i < 5; ++i)
+	{
+		m_DeerList.push_back(new Deer());
+		m_DeerList[i]->Load(CGameApp::GetInstance().GetDevice(), L"../Resources/deer.png", 96, 128, deerPosition[i].x, deerPosition[i].y);
+	}
 
 	onStart();
 
@@ -73,6 +90,11 @@ void TestLevel1::Unload()
 		Utils::Release(&target);
 	}
 
+	for (auto& target : m_DeerList)
+	{
+		Utils::Release(&target);
+	}
+
 	Utils::Release(&m_Player);
 }
 
@@ -87,8 +109,6 @@ void TestLevel1::Update(float dt)
 	{
 		target->Update(dt);
 	}
-
-	//GameInput2 버전
 
 	D3DXVECTOR2 pos = m_Player->GetPosition();
 	WindowSize size = CGameApp::GetInstance().GetWindowSize();
@@ -105,10 +125,32 @@ void TestLevel1::Update(float dt)
 	{
 		if (GameInput2::GetInstance().IsPressed(VK_SPACE))
 		{
-			if ((*itor)->CheckCollision(m_Player) && (*itor)->CheckItem(m_Player)) {
+			if ((*itor)->CheckCollision(m_Player) && (*itor)->CheckTool(m_Player)) {
 				(*itor)->OnAction(m_Player, dt);
 				break;
 			}
+		}
+		else
+		{
+			(*itor)->RefreshCooldown();
+		}
+	}
+
+	for (auto itor = m_DeerList.begin(); itor != m_DeerList.end(); ++itor)
+	{
+		(*itor)->Update(dt);
+
+		if (GameInput2::GetInstance().IsPressed(VK_SPACE))
+		{
+
+			if ((*itor)->CheckCollision(m_Player) && (*itor)->CheckTool(m_Player)) {
+				(*itor)->OnAction(m_Player, dt);
+				break;
+			}
+		}
+		else
+		{
+			(*itor)->RefreshCooldown();
 		}
 	}
 
@@ -164,6 +206,14 @@ bool TestLevel1::Render(ID3D10Device* device, int screenWidth, int screenHeight)
 		target->Render(device, screenWidth, screenHeight);
 
 		instance.Render(device, target->GetIndexCount(), worldMatrix, 
+			m_Camera.GetViewMatrix(), orthMatrix, target->GetTexture());
+	}
+
+	for (auto& target : m_DeerList)
+	{
+		target->Render(device, screenWidth, screenHeight);
+
+		instance.Render(device, target->GetIndexCount(), worldMatrix,
 			m_Camera.GetViewMatrix(), orthMatrix, target->GetTexture());
 	}
 

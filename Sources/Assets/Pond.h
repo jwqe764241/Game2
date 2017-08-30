@@ -8,6 +8,7 @@ private:
 	D3DXVECTOR2 m_Position;
 
 	int m_RequiredToolID = 3;
+	float coolDown = 0.0f;
 
 public:
 	// IInteraction을(를) 통해 상속됨
@@ -22,6 +23,8 @@ public:
 	virtual D3DXVECTOR2 GetPosition() const override;
 	virtual void SetPosition(const D3DXVECTOR2 pos) override;
 	virtual void OnAction(Player * player, float dt) override;
-	virtual bool CheckItem(Player * player) override;
+	virtual bool CheckTool(Player * player) override;
 	virtual bool CheckCollision(Player * player) override;
+
+	virtual void RefreshCooldown() override;
 };

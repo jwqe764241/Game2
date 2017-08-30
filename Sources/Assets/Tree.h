@@ -1,18 +1,15 @@
 #pragma once
 
-#include <d3d10_1.h>
-#include <algorithm>
-#include <Sources/Geometries/GameBitmap.h>
 #include <Sources/Interface/IInteraction.h>
-#include <Sources/GameDefs.h>
+#include <Sources/Geometries/GameBitmap.h>
 
-class Rock : public IInteraction{
+class Tree : public IInteraction {
 private:
 	GameBitmap m_Bitmap;
 	D3DXVECTOR2 m_Position;
 
-	int m_RequiredToolID = 1;
-	int m_ItemIDCanGet = 6;
+	int m_RequiredToolID = 4;
+	int m_ItemIDCanGet[4] = {0 ,1, 2, 3};
 
 	float coolDown = 0.0f;
 
@@ -28,7 +25,6 @@ public:
 	virtual ID3D10ShaderResourceView * GetTexture() override;
 	virtual D3DXVECTOR2 GetPosition() const override;
 	virtual void SetPosition(const D3DXVECTOR2 pos) override;
-
 	virtual void OnAction(Player * player, float dt) override;
 	virtual bool CheckTool(Player * player) override;
 	virtual bool CheckCollision(Player * player) override;

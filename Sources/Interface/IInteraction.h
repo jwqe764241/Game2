@@ -18,6 +18,8 @@ public:
 	virtual void SetPosition(const D3DXVECTOR2 pos) override = 0;
 
 	virtual void OnAction(Player * player, float dt) = 0;
-	virtual bool CheckItem(Player * player) = 0;
+	virtual bool CheckTool(Player * player) = 0;
 	virtual bool CheckCollision(Player * player) = 0;
+
+	virtual void RefreshCooldown() = 0;
 };
