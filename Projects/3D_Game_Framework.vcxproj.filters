@@ -268,6 +268,9 @@
     <ClInclude Include="..\Sources\Assets\Item.h">
       <Filter>소스 파일\Assets\Objects\Player</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Interface\IInteraction.h">
+      <Filter>소스 파일\Assets\Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Sources\Shaders\texture_vs.vs">

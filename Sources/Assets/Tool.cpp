@@ -111,7 +111,7 @@ bool Tool::UpdateBuffers(ID3D10Device *device, int screenWidth, int screenHeight
 	result = m_vertexBuffer->Map(D3D10_MAP_WRITE_DISCARD, NULL, &pVertices);
 	if (FAILED(result)) return false;
 
-	int verticesSize = sizeof(GameBitmap::VertexType) * m_vertexCount;
+	int verticesSize = sizeof(VertexType) * m_vertexCount;
 	memcpy_s(pVertices, verticesSize, (void*)vertices, verticesSize);
 
 	m_vertexBuffer->Unmap();

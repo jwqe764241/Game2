@@ -7,21 +7,20 @@
 #include <Sources/Shaders/GameTexture.h>
 #include <Sources/GameDefs.h>
 
+struct _VertexType {
+	D3DXVECTOR3 position;
+	D3DXVECTOR2 texture;
+};
+struct _BitmapSize
+{
+	int width;
+	int height;
+};
+
+using VertexType = _VertexType;
+using BitmapSize = _BitmapSize;
+
 class GameBitmap {
-protected:
-	struct _VertexType {
-		D3DXVECTOR3 position;
-		D3DXVECTOR2 texture;
-	};
-	struct _BitmapSize
-	{
-		int width;
-		int height;
-	};
-
-	using VertexType = _VertexType;
-	using BitmapSize = _BitmapSize;
-
 public:
 	GameBitmap();
 	GameBitmap(GameBitmap& other);

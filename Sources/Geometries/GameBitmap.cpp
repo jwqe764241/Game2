@@ -102,14 +102,14 @@ ID3D10ShaderResourceView* GameBitmap::GetTexture()
 	return m_Texture->GetTexture();
 }
 
-GameBitmap::VertexType * GameBitmap::GetVertices()
+VertexType * GameBitmap::GetVertices()
 {
 	return m_vertices;
 }
 
-GameBitmap::BitmapSize GameBitmap::GetBitmapSize() const
+BitmapSize GameBitmap::GetBitmapSize() const
 {
-	return GameBitmap::BitmapSize{ m_bitmapWidth, m_bitmapHeight };
+	return BitmapSize{ m_bitmapWidth, m_bitmapHeight };
 }
 
 bool GameBitmap::InitializeBuffers(ID3D10Device *device)

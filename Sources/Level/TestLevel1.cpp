@@ -39,6 +39,12 @@ bool TestLevel1::Load()
 		m_Tools[i]->Initialize(CGameApp::GetInstance().GetDevice(), g_ToolList[i].resource_path, 50, 50, toolsPosition[i]);
 	}
 
+	for (int i = 0; i < 3; ++i)
+	{
+		m_EnvironmentList.push_back(new Rock());
+		m_EnvironmentList[i]->Load(CGameApp::GetInstance().GetDevice(), environmentList[i].filePath, environmentList[i].width, environmentList[i].height, environmentList[i].x, environmentList[i].y);
+	}
+
 	onStart();
 
 	return true;
@@ -98,6 +104,17 @@ void TestLevel1::Update(float dt)
 		m_Player->GetFoodValue(),
 		m_Player->GetSleepValue());
 
+	for (auto itor = m_EnvironmentList.begin(); itor != m_EnvironmentList.end(); ++itor)
+	{
+		if (GameInput2::GetInstance().IsPressed(VK_SPACE))
+		{
+			if ((*itor)->CheckCollision(m_Player) && (*itor)->CheckItem(m_Player)) {
+				(*itor)->OnAction(m_Player, dt);
+				break;
+			}
+		}
+	}
+
 	for (auto itor = m_Tools.begin(); itor != m_Tools.end();)
 	{
 		bool collisionResult = Utils::CheckCollision(
@@ -117,7 +134,7 @@ void TestLevel1::Update(float dt)
 			}
 		}
 		
-		itor++;
+		++itor;
 	}
 }
 
@@ -137,13 +154,6 @@ bool TestLevel1::Render(ID3D10Device* device, int screenWidth, int screenHeight)
 		m_Camera.GetViewMatrix(), orthMatrix, m_LevelBitmap.GetTexture());
 
 	/*
-		테스트 전용이므로 플레이어 먼저 렌더
-	*/
-	m_Player->Render(device, screenWidth, screenHeight);
-	instance.Render(device, m_Player->GetIndexCount(), worldMatrix, 
-		m_Camera.GetViewMatrix(), orthMatrix, m_Player->GetTexture());
-
-	/*
 		렌더 리스트에 등록된 스프라이트 렌더
 	*/
 	for (auto& target : m_EnvironmentList)
@@ -153,6 +163,10 @@ bool TestLevel1::Render(ID3D10Device* device, int screenWidth, int screenHeight)
 		instance.Render(device, target->GetIndexCount(), worldMatrix, 
 			m_Camera.GetViewMatrix(), orthMatrix, target->GetTexture());
 	}
+
+	m_Player->Render(device, screenWidth, screenHeight);
+	instance.Render(device, m_Player->GetIndexCount(), worldMatrix,
+		m_Camera.GetViewMatrix(), orthMatrix, m_Player->GetTexture());
 
 	for (auto& target : m_Tools)
 	{

@@ -4,6 +4,12 @@ static float waterCoolDown = 0.0f;
 static float foodCoolDown = 0.0f;
 static float sleepCoolDown = 0.0f;
 
+template<typename T, typename U>
+int GetPos(T& container, U& value_to_find)
+{
+	return std::distance(container.begin(), std::find_if(container.begin(), container.end(), [&value_to_find](const U* p) { return *p == value_to_find; }));
+}
+
 Player::Player() : m_Sprite(15.0f, 1.0f, true), m_ResourcePath(L"../Resources/sprite.bmp")
 {
 
@@ -63,17 +69,17 @@ void Player::Update(float dt)
 	foodCoolDown += dt;
 	sleepCoolDown += dt;
 
-	if (waterCoolDown >= 1.0f)
+	if (waterCoolDown >= 3.0f)
 	{
 		m_WaterValue -= 1;
 		waterCoolDown = 0.0f;
 	}
-	if (foodCoolDown >= 2.0f)
+	if (foodCoolDown >= 4.0f) 
 	{
 		m_FoodValue -= 1;
 		foodCoolDown = 0.0f;
 	}
-	if (sleepCoolDown >= 3.0f)
+	if (sleepCoolDown >= 5.0f)
 	{
 		m_SleepValue -= 1;
 		sleepCoolDown = 0.0f;
@@ -307,9 +313,7 @@ void Player::AddItem(int itemID, int amount)
 
 	Item item(itemID, "Dummy");
 
-	auto result = std::find_if(m_ItemSink.begin(), m_ItemSink.end(), [&item](const Item* p) { return *p == item; });
-
-	int pos = std::distance(m_ItemSink.begin(), result);
+	int pos = GetPos(m_ItemSink, item);
 
 	m_ItemSink[pos]->AddAmount(amount);
 }
@@ -320,9 +324,7 @@ bool Player::SubItem(int itemID, int amount)
 
 	Item item(itemID, "Dummy");
 
-	auto result = std::find_if(m_ItemSink.begin(), m_ItemSink.end(), [&item](const Item* p) { return *p == item; });
-
-	int pos = std::distance(m_ItemSink.begin(), result);
+	int pos = GetPos(m_ItemSink, item);
 
 	return m_ItemSink[pos]->SubAmount(amount);
 }
@@ -333,9 +335,7 @@ int Player::GetItemAmount(int itemID)
 
 	Item item(itemID, "Dummy");
 
-	auto result = std::find_if(m_ItemSink.begin(), m_ItemSink.end(), [&item](const Item* p) { return *p == item; });
-
-	int pos = std::distance(m_ItemSink.begin(), result);
+	int pos = GetPos(m_ItemSink, item);
 
 	return m_ItemSink[pos]->GetAmount();
 }

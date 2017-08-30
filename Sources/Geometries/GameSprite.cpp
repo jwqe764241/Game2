@@ -133,7 +133,7 @@ void GameSprite::UpdateBuffers(ID3D10Device * deviceContext)
 
 	if (m_currentFrame == m_previousFrame) return;
 	
-	GameBitmap::VertexType* vertices = GameBitmap::GetVertices();
+	VertexType* vertices = GameBitmap::GetVertices();
 
 	vertices[0].texture.x = m_currentFrame / m_maxFrames;
 	vertices[0].texture.y = m_currentMotion / m_numOfMotions;
@@ -157,7 +157,7 @@ void GameSprite::UpdateBuffers(ID3D10Device * deviceContext)
 	result = m_vertexBuffer->Map(D3D10_MAP_WRITE_DISCARD, NULL, &pVertices);
 	if (FAILED(result)) return;
 
-	int verticesSize = sizeof(GameBitmap::VertexType) * m_vertexCount;
+	int verticesSize = sizeof(VertexType) * m_vertexCount;
 	memcpy_s(pVertices, verticesSize, (void*)vertices, verticesSize);
 
 	m_vertexBuffer->Unmap();

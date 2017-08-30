@@ -9,6 +9,7 @@
 #include <Sources/Input/GameInput2.h>
 #include <Sources/Assets/StateUI.h>
 #include <Sources/Interface/ILevel.h>
+#include <Sources/Assets/Rock.h>
 #include <Sources/Assets/Tool.h>
 
 /*
@@ -19,6 +20,14 @@
 	근데 이렇게 기능들을 추가해버리면 과연 거기가서 칠 수 있으련지
 */
 
+struct environmentElement
+{
+	wchar_t * filePath;
+	float width;
+	float height;
+	int x;
+	int y;
+};
 
 class TestLevel1 : public ILevel {
 private:
@@ -37,11 +46,17 @@ private:
 		{300, 4000},
 		{6300, 1000}
 	};
+	
+	const environmentElement environmentList[3] = {
+		{ L"../Resources/Rock1.png", 171, 97, 1600, 100},
+		{ L"../Resources/Rock2.png", 171, 125, 1700, 200},
+		{ L"../Resources/Rock3.png", 165, 121, 1700, 300}
+	};
 
 private:
 	std::vector<Tool *> m_Tools;
 	std::vector<ICharacter *> m_ActorList;
-	std::vector<IRenderable *> m_EnvironmentList;
+	std::vector<IInteraction *> m_EnvironmentList;
 	
 	Player* m_Player;
 
