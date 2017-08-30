@@ -24,7 +24,8 @@ void StateUI::Initialize(ID3D10Device * pDevice, std::vector<Tool *>* pToolList,
 	m_ToolList = pToolList;
 	m_ItemList = pItemList;
 
-	writer.Initialize(pDevice, 48, 0);
+	writer_48size.Initialize(pDevice, 48, 0);
+	writer_25size.Initialize(pDevice, 25, 0);
 }
 
 void StateUI::Release()
@@ -69,7 +70,29 @@ void StateUI::Render(ID3D10Device* device, int screenWidth, int screenHeight,
 				viewMatrix, orthMatrix, (*m_ToolList)[i]->GetTexture());
 		}
 
-		writer.DrawString(L"얻은 도구들", RECT{ 25, 925, 1920, 1080 }, DT_LEFT | DT_TOP, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		writer_48size.DrawString(L"얻은 도구들", RECT{ 25, 925, 1920, 1080 }, DT_LEFT | DT_TOP, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
+	if (GameInput2::GetInstance().IsPressed(0x49))
+	{
+		for (int i = 0; i < m_ItemList->size(); i++)
+		{
+			(*m_ItemList)[i]->Render(device, screenWidth, screenHeight,
+				cameraPos.x + ItemRenderPosition[i].x, (cameraPos.y * -1) + ItemRenderPosition[i].y);
+
+			instance.Render(device, (*m_ItemList)[i]->GetIndexCount(), worldMatrix,
+				viewMatrix, orthMatrix, (*m_ItemList)[i]->GetTexture());
+
+			wchar_t buff[10];
+			_itow((*m_ItemList)[i]->GetAmount(), buff, 10);
+
+			writer_25size.DrawString(buff, RECT{
+				ItemRenderPosition[i].x + 25, ItemRenderPosition[i].y + 25,
+				ItemRenderPosition[i].x + 50, ItemRenderPosition[i].y + 50 },
+				DT_RIGHT | DT_BOTTOM, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		}
+
+		writer_48size.DrawString(L"인벤토리", RECT{ ItemRenderBasePosX - 40, ItemRenderBasePosY - 70, 1920 - 20, ItemRenderBasePosY - 20 }, DT_CENTER, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+	
 }

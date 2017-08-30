@@ -2,6 +2,7 @@
 
 #include <d3d10_1.h>
 #include <vector>
+#include <algorithm>
 #include <Sources/GameDefs.h>
 #include <Sources/Input/GameInput2.h>
 #include <Sources/Geometries/GameSprite.h>
@@ -61,6 +62,11 @@ public:
 	*/
 	void SetPositionLimit(const RECT* limitPos);
 	std::vector<Tool *>& GetToolList();
+	std::vector<Item *>& GetItemList();
+
+	void AddItem(int itemID, int amount);
+	bool SubItem(int itemID, int amount);
+	int  GetItemAmount(int itemID);
 
 	int GetHealth() const;
 	int GetWaterValue() const;

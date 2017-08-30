@@ -296,6 +296,50 @@ std::vector<Tool *>& Player::GetToolList()
 	return m_ToolSink;
 }
 
+std::vector<Item *>& Player::GetItemList()
+{
+	return m_ItemSink;
+}
+
+void Player::AddItem(int itemID, int amount)
+{
+	//ÇÔ¼ö·Î ¹­±â
+
+	Item item(itemID, "Dummy");
+
+	auto result = std::find_if(m_ItemSink.begin(), m_ItemSink.end(), [&item](const Item* p) { return *p == item; });
+
+	int pos = std::distance(m_ItemSink.begin(), result);
+
+	m_ItemSink[pos]->AddAmount(amount);
+}
+
+bool Player::SubItem(int itemID, int amount)
+{
+	//ÇÔ¼ö·Î ¹­±â
+
+	Item item(itemID, "Dummy");
+
+	auto result = std::find_if(m_ItemSink.begin(), m_ItemSink.end(), [&item](const Item* p) { return *p == item; });
+
+	int pos = std::distance(m_ItemSink.begin(), result);
+
+	return m_ItemSink[pos]->SubAmount(amount);
+}
+
+int Player::GetItemAmount(int itemID)
+{
+	//ÇÔ¼ö·Î ¹­±â
+
+	Item item(itemID, "Dummy");
+
+	auto result = std::find_if(m_ItemSink.begin(), m_ItemSink.end(), [&item](const Item* p) { return *p == item; });
+
+	int pos = std::distance(m_ItemSink.begin(), result);
+
+	return m_ItemSink[pos]->GetAmount();
+}
+
 GameSprite* Player::GetSprite()
 {
 	return &m_Sprite;

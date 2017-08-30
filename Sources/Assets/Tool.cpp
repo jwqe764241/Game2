@@ -1,8 +1,8 @@
 #include <Sources/Assets/Tool.h>
 
-bool operator==(Tool& lhs, Tool& rhs)
+bool operator==(const Tool& lhs, const Tool& rhs)
 {
-	return lhs.m_ToolName == rhs.m_ToolName;
+	return lhs.m_ToolID == rhs.m_ToolID;
 }
 
 Tool::Tool(wchar_t* toolName, int toolID)

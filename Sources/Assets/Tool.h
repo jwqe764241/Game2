@@ -45,5 +45,5 @@ public:
 	int GetToolID() const;
 	POINT GetPosition() const;
 
-	friend bool operator==(Tool& lhs, Tool& rhs);
+	friend bool operator==(const Tool& lhs, const Tool& rhs);
 };

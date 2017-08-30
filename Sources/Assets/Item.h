@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstring>
 #include <string>
 #include <Sources/Geometries/GameBitmap.h>
 
@@ -26,12 +27,11 @@ static const ItemResourceElement g_ItemResourcePathList[g_PreDefinedItemAmount]
 };
 
 
-class Item {
+class Item : public GameBitmap{
 private:
-	GameBitmap m_ItemBitmap;
 	int m_Amount;
 
-	int m_ID;
+	int m_ItemID;
 	std::string m_ItemName;
 public:
 	Item() = delete;
@@ -39,11 +39,18 @@ public:
 	~Item();
 
 	bool Initialize(ID3D10Device * device, wchar_t * filePath, int bitmapWidth, int bitmapHeight);
+	bool Render(ID3D10Device* device, int screenWidth, int screenHeight, int posX, int posY);
+	void RenderBuffers(ID3D10Device * device);
+	bool UpdateBuffers(ID3D10Device *device, int screenWidth, int screenHeight, int posX, int posY);
 	void Release();
+
 	void AddAmount(int amount);
 	bool SubAmount(int amount);
 	int  GetAmount();
 	ID3D10ShaderResourceView* GetTexture();
+
+	int GetID() const;
+	std::string GetItemName() const;
 
 	friend bool operator== (const Item& lhs, const Item& rhs);
 };

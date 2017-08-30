@@ -8,13 +8,27 @@
 #include <Sources/Geometries/StateBar.h>
 #include <Sources/Shaders/TextureShader.h>
 
+static constexpr int ItemRenderBasePosX = 1725;
+static constexpr int ItemRenderBasePosXOffset = 80;
+static constexpr int ItemRenderBasePosY = 400;
+static constexpr int ItemRenderBasePosYOffset = 60;
+
+static const POINT ItemRenderPosition[g_PreDefinedItemAmount]
+{
+	{ ItemRenderBasePosX, ItemRenderBasePosY },		                            { ItemRenderBasePosX + ItemRenderBasePosXOffset, ItemRenderBasePosY },
+	{ ItemRenderBasePosX, ItemRenderBasePosY + ItemRenderBasePosYOffset },      { ItemRenderBasePosX + ItemRenderBasePosXOffset, ItemRenderBasePosY + ItemRenderBasePosYOffset },
+	{ ItemRenderBasePosX, ItemRenderBasePosY + (ItemRenderBasePosYOffset * 2)}, { ItemRenderBasePosX + ItemRenderBasePosXOffset, (ItemRenderBasePosY + ItemRenderBasePosYOffset * 2)},
+	{ ItemRenderBasePosX, ItemRenderBasePosY + (ItemRenderBasePosYOffset * 3)}, { ItemRenderBasePosX + ItemRenderBasePosXOffset, ItemRenderBasePosY + (ItemRenderBasePosYOffset * 3)}
+};
+
 class StateUI {
 private:
 	StateBar stateBar[5];
 	std::vector<Tool *>* m_ToolList;
 	std::vector<Item *>* m_ItemList;
 
-	GameTextWriter writer;
+	GameTextWriter writer_48size;
+	GameTextWriter writer_25size;
 
 public: 
 	StateUI();
