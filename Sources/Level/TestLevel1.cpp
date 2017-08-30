@@ -33,7 +33,6 @@ bool TestLevel1::Load()
 	m_Cursor.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/cursor.dds", 50, 50);
 	m_PlayerUI.Initialize(CGameApp::GetInstance().GetDevice(), &m_Player->GetToolList(), &m_Player->GetItemList());
 
-
 	for (int i = 0; i < g_PreDefinedToolAmount; ++i)
 	{
 		m_Tools.push_back(new Tool(g_ToolList[i].tool_name, i));
@@ -92,16 +91,6 @@ void TestLevel1::Update(float dt)
 	int yOffset = pos.y / 1080;
 
 	m_Camera.SetPosition(cameraPosX[xOffset], cameraPosY[yOffset], -10.f);
-
-	//if (pos.x + m_Player->GetSprite()->GetFrameWidth() >= (halfWidth) && pos.x <= m_LevelSize.right - (halfWidth) ||
-	//	pos.y >= (halfHeight) && pos.y <= m_LevelSize.bottom - (halfHeight))
-	//{
-	//	m_Camera.SetPosition(pos.x - ((size.width / 2) - m_Player->GetSprite()->GetFrameWidth()),
-	//		(pos.y - ((size.height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1, -10.0f);
-	//}
-
-	//float x = pos.x - ((size.width / 2) - m_Player->GetSprite()->GetFrameWidth());
-	//float y = (pos.y - ((size.height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1;
 
 	m_Player->Update(dt);
 	m_PlayerUI.Update(m_Player->GetHealth(),

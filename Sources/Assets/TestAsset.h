@@ -31,7 +31,6 @@ public:
 	virtual ID3D10ShaderResourceView* GetTexture() override;
 	virtual D3DXVECTOR2 GetPosition() const override;
 	virtual void SetPosition(const D3DXVECTOR2 pos) override;
-	virtual GameSprite* GetSprite() override;
 
 	GameBitmap m_Bitmap;
 };

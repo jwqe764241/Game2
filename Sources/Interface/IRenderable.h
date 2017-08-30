@@ -27,11 +27,4 @@ public:
 	virtual D3DXVECTOR2 GetPosition() const = 0;
 	//포지션 설정하기
 	virtual void SetPosition(const D3DXVECTOR2 pos) = 0;
-	/*
-		Renderable은 기본적으로 GameSprite를
-		멤버변수로 가지고 있을 것이고,
-		GameSprite의 값을 이용하여 타 에셋을 조정할 수
-		있으므로 해당 함수를 추가하게 됨
-	*/
-	virtual GameSprite* GetSprite() = 0;
 };

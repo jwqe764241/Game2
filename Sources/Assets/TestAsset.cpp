@@ -62,8 +62,3 @@ void TestAsset::SetPosition(const D3DXVECTOR2 pos)
 	m_PosX = pos.x;
 	m_PosY = pos.y;
 }
-
-GameSprite* TestAsset::GetSprite()
-{
-	return nullptr;
-}

@@ -69,8 +69,3 @@ void Button::SetPosition(const D3DXVECTOR2 pos)
 {
 	m_pos = pos;
 }
-
-GameSprite * Button::GetSprite()
-{
-	return nullptr;
-}

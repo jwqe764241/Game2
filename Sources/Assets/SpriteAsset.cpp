@@ -54,8 +54,3 @@ void SpriteAsset::SetPosition(const D3DXVECTOR2 pos)
 	m_PosX = pos.x;
 	m_PosY = pos.y;
 }
-
-GameSprite* SpriteAsset::GetSprite()
-{
-	return &m_Object;
-}

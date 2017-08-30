@@ -153,7 +153,7 @@
       <Filter>소스 파일\Assets\Objects\Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Assets\Potal.cpp">
-      <Filter>소스 파일\Assets\Objects\Player</Filter>
+      <Filter>소스 파일\Assets\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
