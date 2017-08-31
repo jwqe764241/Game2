@@ -16,6 +16,8 @@
 #include <Sources/Assets/Tree.h>
 #include <Sources/Assets/Deer.h>
 
+#include <Sources/Level/GameOverLevel.h>
+
 /*
 	일단 리스트 2개이고, for문 2개지만 아마 어떻게 해결 할 방법이 있을 것이다 ㅋㅋ...
 	맘에 안들긴 함

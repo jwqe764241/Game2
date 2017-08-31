@@ -56,6 +56,9 @@ void Deer::Update(float dt)
 
 		accrueX += x;
 	}
+
+	m_Sprite.SetLooping(true);
+	m_Sprite.Update(dt);
 }
 
 void Deer::Render(ID3D10Device * device, int screenWidth, int screenHeight)

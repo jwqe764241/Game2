@@ -181,6 +181,23 @@ void TestLevel1::Update(float dt)
 		m_Player->GetWaterValue(),
 		m_Player->GetFoodValue(),
 		m_Player->GetSleepValue());
+
+	if (m_Player->GetHealth() <= 0)
+	{
+		onGameOver();
+	}
+	else if (m_Player->GetWaterValue() <= 0)
+	{
+		onGameOver();
+	}
+	else if (m_Player->GetFoodValue() <= 0)
+	{
+		onGameOver();
+	}
+	else if (m_Player->GetSleepValue() <= 0)
+	{
+		onGameOver();
+	}
 }
 
 bool TestLevel1::Render(ID3D10Device* device, int screenWidth, int screenHeight)
@@ -254,5 +271,5 @@ void TestLevel1::onEnd()
 
 void TestLevel1::onGameOver()
 {
-	
+	CGameLevelLoader::GetInstance().ChangeLevel(new GameOverLevel());
 }

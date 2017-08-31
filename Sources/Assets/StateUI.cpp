@@ -60,8 +60,8 @@ void StateUI::Render(ID3D10Device* device, int screenWidth, int screenHeight,
 			viewMatrix, orthMatrix, stateBar[i].GetTexture());
 	}
 
-	if (GameInput2::GetInstance().IsPressed(0x54))
-	{
+	//if (GameInput2::GetInstance().IsPressed(0x54))
+	//{
 		for (int i = 0; i < m_ToolList->size(); i++)
 		{
 			(*m_ToolList)[i]->Render(device, screenWidth, screenHeight, (cameraPos.x + 25) + (75 * i), (cameraPos.y * -1) + 1000);
@@ -71,10 +71,10 @@ void StateUI::Render(ID3D10Device* device, int screenWidth, int screenHeight,
 		}
 
 		writer_48size.DrawString(L"얻은 도구들", RECT{ 25, 925, 1920, 1080 }, DT_LEFT | DT_TOP, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	}
+	//}
 
-	if (GameInput2::GetInstance().IsPressed(0x49))
-	{
+	//if (GameInput2::GetInstance().IsPressed(0x49))
+	//{
 		for (int i = 0; i < m_ItemList->size(); i++)
 		{
 			(*m_ItemList)[i]->Render(device, screenWidth, screenHeight,
@@ -93,6 +93,6 @@ void StateUI::Render(ID3D10Device* device, int screenWidth, int screenHeight,
 		}
 
 		writer_48size.DrawString(L"인벤토리", RECT{ ItemRenderBasePosX - 40, ItemRenderBasePosY - 70, 1920 - 20, ItemRenderBasePosY - 20 }, DT_CENTER, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	}
+	//}
 	
 }

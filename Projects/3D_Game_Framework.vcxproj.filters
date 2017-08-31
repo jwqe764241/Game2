@@ -164,6 +164,9 @@
     <ClCompile Include="..\Sources\Assets\Deer.cpp">
       <Filter>소스 파일\Assets\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Level\GameOverLevel.cpp">
+      <Filter>소스 파일\Assets\Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
@@ -288,6 +291,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Assets\Deer.h">
       <Filter>소스 파일\Assets\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Level\GameOverLevel.h">
+      <Filter>소스 파일\Assets\Levels</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
