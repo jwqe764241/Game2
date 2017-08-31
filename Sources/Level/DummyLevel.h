@@ -13,7 +13,9 @@ class DummyLevel : public ILevel{
 private:
 	CGameCamera m_Camera;
 	GameBitmap m_BackgroundBitmap;
+
 	Button m_BackButton;
+
 public:
 	DummyLevel();
 	~DummyLevel();

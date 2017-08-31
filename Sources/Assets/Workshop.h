@@ -8,6 +8,9 @@ private:
 	GameBitmap m_Bitmap;
 	D3DXVECTOR2 m_Position;
 
+	int m_RequiredToolID = 0;
+	float coolDown = 0.0f;
+
 public:
 	// IInteraction을(를) 통해 상속됨
 	virtual void Load(ID3D10Device* device, int bitmapWidth, int bitmapHeight) override;

@@ -162,6 +162,7 @@ void TestLevel1::Update(float dt)
 			static_cast<float>((*itor)->GetPosition().x) + 50, static_cast<float>((*itor)->GetPosition().y) + 50 }
 		);
 
+
 		if (collisionResult)
 		{
 			if (itor != m_Tools.end())

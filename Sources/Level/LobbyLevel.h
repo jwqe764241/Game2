@@ -11,7 +11,6 @@
 
 class LobbyLevel : public ILevel {
 private:
-
 	enum Menu_ID {
 		ID_GAMESTART = 0,
 		ID_GAMEINTRO,
@@ -21,18 +20,20 @@ private:
 	};
 
 	D3DXVECTOR2 button_pos[5] = {
-		{1520, 50},
-		{1520, 250},
-		{1520, 450},
-		{1520, 650},
-		{1520, 850}
+		{ 1520, 50 },
+		{ 1520, 250 },
+		{ 1520, 450 },
+		{ 1520, 650 },
+		{ 1520, 850 }
 	};
 
-	int currSelection;
-	Button m_button[5];
+private:
+	GameBitmap m_BackgroundBitmap;
 	CGameCamera m_Camera;
 
-	GameBitmap m_BackgroundBitmap;
+	Button m_button[5];
+	int currSelection;
+
 public:
 	LobbyLevel();
 	~LobbyLevel();

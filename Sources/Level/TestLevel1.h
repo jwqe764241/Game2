@@ -18,13 +18,6 @@
 
 #include <Sources/Level/GameOverLevel.h>
 
-/*
-	일단 리스트 2개이고, for문 2개지만 아마 어떻게 해결 할 방법이 있을 것이다 ㅋㅋ...
-	맘에 안들긴 함
-
-	렌더 우선순위를 어떻게 관리할 수 있나 생각중이긴 한데 (몇개 있긴 하다)
-	근데 이렇게 기능들을 추가해버리면 과연 거기가서 칠 수 있으련지
-*/
 
 struct environmentElement
 {
@@ -77,18 +70,16 @@ private:
 	std::vector<ICharacter *> m_ActorList;
 	std::vector<IInteraction *> m_EnvironmentList;
 	std::vector<Deer *> m_DeerList;
-	
+
+	GameBitmap m_LevelBitmap;
+	GameBitmap m_Cursor;
+	CGameCamera m_Camera;
+
+	RECT m_LevelSize;
+
 	Player* m_Player;
 
 	StateUI m_PlayerUI;
-
-	CGameCamera m_Camera;
-
-	GameBitmap m_Cursor;
-
-	RECT m_LevelSize;
-	GameBitmap m_LevelBitmap;
-
 
 public:
 	TestLevel1();

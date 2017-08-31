@@ -11,9 +11,10 @@ class GameOverLevel : public ILevel {
 private:
 	GameBitmap m_Background;
 	CGameCamera m_Camera;
-	Button m_Button[2];
 
+	Button m_Button[2];
 	int currSelection;
+
 	GameTextWriter writer_48size;
 
 public:
