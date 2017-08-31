@@ -61,7 +61,7 @@ void GameOverLevel::Update(float dt)
 		upStatus = false;
 	}
 	else if (downStatus && (currSelection < 1))
-	{
+ 	{
 		m_Button[currSelection].Update(false);
 		m_Button[++currSelection].Update(true);
 		downStatus = false;

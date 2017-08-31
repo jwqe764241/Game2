@@ -182,19 +182,26 @@ void TestLevel1::Update(float dt)
 		m_Player->GetFoodValue(),
 		m_Player->GetSleepValue());
 
+	int overCondition = 0;
+
 	if (m_Player->GetHealth() <= 0)
 	{
-		onGameOver();
+		overCondition++;
 	}
-	else if (m_Player->GetWaterValue() <= 0)
+	if (m_Player->GetWaterValue() <= 0)
 	{
-		onGameOver();
+		overCondition++;
 	}
-	else if (m_Player->GetFoodValue() <= 0)
+	if (m_Player->GetFoodValue() <= 0)
 	{
-		onGameOver();
+		overCondition++;
 	}
-	else if (m_Player->GetSleepValue() <= 0)
+	if (m_Player->GetSleepValue() <= 0)
+	{
+		overCondition++;
+	}
+
+	if (overCondition >= 2)
 	{
 		onGameOver();
 	}
