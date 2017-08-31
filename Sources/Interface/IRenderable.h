@@ -7,7 +7,7 @@ class IRenderable
 {
 public:
 	//비트맵, 버퍼 등, 렌더 가능한 것들에 대한 자원들 로드
-	virtual void Load(ID3D10Device* device, int bitmapWidth, int bitmapHeight) final = 0;
+	virtual void Load(ID3D10Device* device, int bitmapWidth, int bitmapHeight) = 0;
 	//렌더 가능한 것들에서 사용된 자원 해제
 	virtual void Release()        = 0;
 	//렌더 가능한 것들의 상태를 초기화

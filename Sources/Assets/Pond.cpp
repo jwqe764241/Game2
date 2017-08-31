@@ -1,5 +1,9 @@
 #include <Sources/Assets/Pond.h>
 
+void Pond::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
+{
+}
+
 void Pond::Load(ID3D10Device * device, wchar_t * filePath, int bitmapWidth, int bitmapHeight, int x, int y)
 {
 	m_Bitmap.Initialize(device, filePath, bitmapWidth, bitmapHeight);

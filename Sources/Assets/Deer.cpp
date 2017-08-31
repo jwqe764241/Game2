@@ -5,6 +5,10 @@ Deer::Deer() : m_Sprite(15.0f, 1.0f)
 
 }
 
+void Deer::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
+{
+}
+
 void Deer::Load(ID3D10Device * device, wchar_t * filePath, int bitmapWidth, int bitmapHeight, int x, int y)
 {
 	m_Sprite.Initialize(device, filePath, bitmapWidth, bitmapHeight, 4);

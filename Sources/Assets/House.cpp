@@ -1,8 +1,15 @@
 #include <Sources/Assets/House.h>
 
+void House::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
+{
+}
+
 void House::Load(ID3D10Device * device, wchar_t * filePath, int bitmapWidth, int bitmapHeight, int x, int y)
 {
-	m_Bitmap.
+	m_Bitmap.Initialize(device, filePath, bitmapWidth, bitmapHeight);
+	
+	m_Position.x = x;
+	m_Position.y = y;
 }
 
 void House::Release()

@@ -1,5 +1,9 @@
 #include <Sources/Assets/Well.h>
 
+void Well::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
+{
+}
+
 void Well::Load(ID3D10Device * device, wchar_t * filePath, int bitmapWidth, int bitmapHeight, int x, int y)
 {
 }
