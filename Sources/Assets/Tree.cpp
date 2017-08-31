@@ -1,9 +1,5 @@
 #include <Sources/Assets/Tree.h>
 
-void Tree::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
-{
-}
-
 void Tree::Load(ID3D10Device * device, wchar_t * filePath, int bitmapWidth, int bitmapHeight, int x, int y)
 {
 	m_Bitmap.Initialize(device, filePath, bitmapWidth, bitmapHeight);

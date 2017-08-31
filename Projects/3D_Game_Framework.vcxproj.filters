@@ -167,6 +167,15 @@
     <ClCompile Include="..\Sources\Level\GameOverLevel.cpp">
       <Filter>소스 파일\Assets\Levels</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Assets\House.cpp">
+      <Filter>소스 파일\Assets\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Workshop.cpp">
+      <Filter>소스 파일\Assets\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Well.cpp">
+      <Filter>소스 파일\Assets\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Readme.md" />
@@ -294,6 +303,15 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Level\GameOverLevel.h">
       <Filter>소스 파일\Assets\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\House.h">
+      <Filter>소스 파일\Assets\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Workshop.h">
+      <Filter>소스 파일\Assets\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Well.h">
+      <Filter>소스 파일\Assets\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

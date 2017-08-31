@@ -6,7 +6,6 @@
 class IInteraction : public IRenderable {
 	// IRenderable을(를) 통해 상속됨
 public:
-	virtual void Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight) override = 0;
 	virtual void Load(ID3D10Device * device, wchar_t * filePath, int bitmapWidth, int bitmapHeight, int x, int y) = 0;
 	virtual void Release() override = 0;
 	virtual void Reset() override = 0;

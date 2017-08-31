@@ -17,7 +17,6 @@ private:
 public:
 	Deer();
 	// IInteraction을(를) 통해 상속됨
-	virtual void Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight) override;
 	virtual void Load(ID3D10Device * device, wchar_t * filePath, int bitmapWidth, int bitmapHeight, int x, int y) override;
 	virtual void Release() override;
 	virtual void Reset() override;
