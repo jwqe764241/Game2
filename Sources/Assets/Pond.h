@@ -4,11 +4,11 @@
 
 class Pond : public IInteraction {
 private:
-	GameBitmap m_Bitmap;
-	D3DXVECTOR2 m_Position;
+	GameBitmap Bitmap;
+	D3DXVECTOR2 Position;
 
-	int m_RequiredToolID = 3;
-	float coolDown = 0.0f;
+	int RequiredToolID = 3;
+	float CoolDown = 0.0f;
 
 public:
 	// IInteraction을(를) 통해 상속됨

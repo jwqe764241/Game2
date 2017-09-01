@@ -32,5 +32,5 @@ public:
 	virtual D3DXVECTOR2 GetPosition() const override;
 	virtual void SetPosition(const D3DXVECTOR2 pos) override;
 
-	GameBitmap m_Bitmap;
+	GameBitmap Bitmap;
 };

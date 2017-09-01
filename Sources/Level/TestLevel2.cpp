@@ -12,7 +12,7 @@ TestLevel2::~TestLevel2()
 
 bool TestLevel2::Load()
 {
-	m_RenderList.reserve(20);
+	RenderList.reserve(20);
 
 	
 

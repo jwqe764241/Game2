@@ -12,16 +12,16 @@ Potal::~Potal()
 
 void Potal::Initialize(RECT area, RECT dest)
 {
-	m_Area = area;
-	m_Dest = dest;
+	Area = area;
+	Dest = dest;
 }
 
 RECT Potal::GetArea() const
 {
-	return m_Area;
+	return Area;
 }
 
 RECT Potal::GetDestination() const
 {
-	return m_Dest;
+	return Dest;
 }

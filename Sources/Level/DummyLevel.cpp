@@ -12,22 +12,22 @@ DummyLevel::~DummyLevel()
 
 bool DummyLevel::Load()
 {
-	m_Camera.SetPosition(0.0f, 0.0f, -10.0f);
+	Camera.SetPosition(0.0f, 0.0f, -10.0f);
 	
-	m_BackgroundBitmap.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/DummyLevel.png", 1920, 1080);
+	LevelBitmap.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/DummyLevel.png", 1920, 1080);
 	
-	m_BackButton.Load(CGameApp::GetInstance().GetDevice(), 300, 150);
-	m_BackButton.SetPosition(D3DXVECTOR2{ 1520, 900 });
-	m_BackButton.Update(true);
+	MenuButton.Load(CGameApp::GetInstance().GetDevice(), 300, 150);
+	MenuButton.SetPosition(D3DXVECTOR2{ 1520, 900 });
+	MenuButton.Update(true);
 
 	return true;
 }
 
 void DummyLevel::Unload()
 {
-	m_BackgroundBitmap.Release();
+	LevelBitmap.Release();
 
-	m_BackButton.Release();
+	MenuButton.Release();
 }
 
 void DummyLevel::Update(float dt)
@@ -54,15 +54,15 @@ bool DummyLevel::Render(ID3D10Device * device, int screenWidth, int screenHeight
 	D3DXMATRIX worldMatrix = CGameApp::GetInstance().GetWorldMatrix();
 	D3DXMATRIX orthMatrix = CGameApp::GetInstance().GetorthogonalMatrix();
 
-	m_Camera.Render();
+	Camera.Render();
 
-	m_BackgroundBitmap.Render(device, screenWidth, screenHeight, 0, 0);
-	instance.Render(device, m_BackgroundBitmap.GetIndexCount(), worldMatrix,
-		m_Camera.GetViewMatrix(), orthMatrix, m_BackgroundBitmap.GetTexture());
+	LevelBitmap.Render(device, screenWidth, screenHeight, 0, 0);
+	instance.Render(device, LevelBitmap.GetIndexCount(), worldMatrix,
+		Camera.GetViewMatrix(), orthMatrix, LevelBitmap.GetTexture());
 
-	m_BackButton.Render(device, screenWidth, screenHeight);
-	instance.Render(device, m_BackButton.GetIndexCount(), worldMatrix,
-		m_Camera.GetViewMatrix(), orthMatrix, m_BackButton.GetTexture());
+	MenuButton.Render(device, screenWidth, screenHeight);
+	instance.Render(device, MenuButton.GetIndexCount(), worldMatrix,
+		Camera.GetViewMatrix(), orthMatrix, MenuButton.GetTexture());
 
 	return true;
 }

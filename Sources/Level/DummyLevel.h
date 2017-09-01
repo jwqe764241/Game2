@@ -11,10 +11,10 @@
 
 class DummyLevel : public ILevel{
 private:
-	CGameCamera m_Camera;
-	GameBitmap m_BackgroundBitmap;
+	GameBitmap LevelBitmap;
+	CGameCamera Camera;
 
-	Button m_BackButton;
+	Button MenuButton;
 
 public:
 	DummyLevel();

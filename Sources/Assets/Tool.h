@@ -21,9 +21,9 @@ static const ToolResourceElement g_ToolList[g_PreDefinedToolAmount]{
 
 class Tool : public GameBitmap {
 private:
-	wchar_t* m_ToolName;
-	int m_ToolID;
-	POINT m_Pos;
+	wchar_t* ToolName;
+	int ToolID;
+	POINT Position;
 
 private:
 	bool UpdateBuffers(ID3D10Device *device, int screenWidth, int screenHeight, int posX, int posY);

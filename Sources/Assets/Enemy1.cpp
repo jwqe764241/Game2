@@ -1,6 +1,6 @@
 #include <Sources/Assets/Enemy1.h>
 
-Enemy1::Enemy1() : m_Sprite(15.0f, 1.0f, true), m_ResourcePath(L"../Resources/sprite.bmp")
+Enemy1::Enemy1() : Sprite(15.0f, 1.0f, true), ResourcePath(L"../Resources/sprite.bmp")
 {
 
 }
@@ -12,17 +12,17 @@ Enemy1::~Enemy1()
 
 void Enemy1::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
 {
-	m_Pos.x = 0;
-	m_Pos.y = 0;
-	m_Health = 100;
-	m_Sprite.Initialize(device, m_ResourcePath, bitmapWidth, bitmapHeight, 4);
-	//m_Sprite.SetLooping(false);
-	m_Sprite.SetMotion(2);
+	Position.x = 0;
+	Position.y = 0;
+	Health = 100;
+	Sprite.Initialize(device, ResourcePath, bitmapWidth, bitmapHeight, 4);
+	//Sprite.SetLooping(false);
+	Sprite.SetMotion(2);
 }
 
 void Enemy1::Release()
 {
-	m_Sprite.Release();
+	Sprite.Release();
 }
 
 void Enemy1::Reset()
@@ -32,37 +32,37 @@ void Enemy1::Reset()
 
 void Enemy1::Update(float dt)
 {
-	m_Sprite.Update(dt);
+	Sprite.Update(dt);
 }
 
 void Enemy1::Render(ID3D10Device * device, int screenWidth, int screenHeight)
 {
-	m_Sprite.Render(device, screenWidth, screenHeight, m_Pos.x, m_Pos.y);
+	Sprite.Render(device, screenWidth, screenHeight, Position.x, Position.y);
 }
 
 int Enemy1::GetIndexCount()
 {
-	return m_Sprite.GetIndexCount();
+	return Sprite.GetIndexCount();
 }
 
 ID3D10ShaderResourceView * Enemy1::GetTexture()
 {
-	return m_Sprite.GetTexture();
+	return Sprite.GetTexture();
 }
 
 D3DXVECTOR2 Enemy1::GetPosition() const
 {
-	return m_Pos;
+	return Position;
 }
 
 void Enemy1::SetPosition(const D3DXVECTOR2 pos)
 {
-	m_Pos = pos;
+	Position = pos;
 }
 
 GameSprite * Enemy1::GetSprite()
 {
-	return &m_Sprite;
+	return &Sprite;
 }
 
 
@@ -73,8 +73,8 @@ void Enemy1::Idle()
 
 void Enemy1::Move(D3DXVECTOR2 target)
 {
-	m_Pos.x = target.x;
-	m_Pos.y = target.y;
+	Position.x = target.x;
+	Position.y = target.y;
 }
 
 void Enemy1::Attack(void ** target)
@@ -84,24 +84,24 @@ void Enemy1::Attack(void ** target)
 
 void Enemy1::Damage(int damage)
 {
-	if (m_Health - damage <= 0)
+	if (Health - damage <= 0)
 	{
-		m_Health = 0;
+		Health = 0;
 	}
 	else
 	{
-		m_Health -= damage;
+		Health -= damage;
 	}
 }
 
 void Enemy1::Die()
 {
-	m_Health = 0;
+	Health = 0;
 }
 
 bool Enemy1::isDied()
 {
-	if (m_Health <= 0)
+	if (Health <= 0)
 	{
 		return true;
 	}

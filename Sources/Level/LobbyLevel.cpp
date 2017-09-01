@@ -14,29 +14,29 @@ bool LobbyLevel::Load()
 {
 	for (int i = 0; i < 5; i++)
 	{
-		m_button[i].Load(CGameApp::GetInstance().GetDevice(), 300, 150);
-		m_button[i].SetPosition(button_pos[i]);
+		MenuButtons[i].Load(CGameApp::GetInstance().GetDevice(), 300, 150);
+		MenuButtons[i].SetPosition(button_pos[i]);
 	}
 
-	m_Camera.SetPosition(0, 0, -10.0f);
+	Camera.SetPosition(0, 0, -10.0f);
 
-	currSelection = 0;
+	CurrentSelection = 0;
 
-	m_button[currSelection].Update(true);
+	MenuButtons[CurrentSelection].Update(true);
 
-	m_BackgroundBitmap.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/MainMenu.jpg", 1920, 1080);
+	LevelBitmap.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/MainMenu.jpg", 1920, 1080);
 
 	return true;
 }
 
 void LobbyLevel::Unload()
 {
-	for (auto button : m_button)
+	for (auto button : MenuButtons)
 	{
 		button.Release();
 	}
 
-	m_BackgroundBitmap.Release();
+	LevelBitmap.Release();
 }
 
 void LobbyLevel::Update(float dt)
@@ -63,21 +63,21 @@ void LobbyLevel::Update(float dt)
 		return;
 	}
 
-	if (upStatus && (currSelection > 0))
+	if (upStatus && (CurrentSelection > 0))
 	{
-		m_button[currSelection].Update(false);
-		m_button[--currSelection].Update(true);
+		MenuButtons[CurrentSelection].Update(false);
+		MenuButtons[--CurrentSelection].Update(true);
 		upStatus = false;
 	}
-	else if (downStatus && (currSelection < 4))
+	else if (downStatus && (CurrentSelection < 4))
 	{
-		m_button[currSelection].Update(false);
-		m_button[++currSelection].Update(true);
+		MenuButtons[CurrentSelection].Update(false);
+		MenuButtons[++CurrentSelection].Update(true);
 		downStatus = false;
 	}
 	else if (spaceStatus)
 	{
-		switch (currSelection)
+		switch (CurrentSelection)
 		{
 		case ID_GAMESTART:
 			{
@@ -116,18 +116,18 @@ bool LobbyLevel::Render(ID3D10Device * device, int screenWidth, int screenHeight
 	D3DXMATRIX worldMatrix = CGameApp::GetInstance().GetWorldMatrix();
 	D3DXMATRIX orthMatrix = CGameApp::GetInstance().GetorthogonalMatrix();
 
-	m_Camera.Render();
+	Camera.Render();
 
-	m_BackgroundBitmap.Render(device, screenWidth, screenHeight, 0, 0);
-	instance.Render(device, m_BackgroundBitmap.GetIndexCount(), worldMatrix,
-		m_Camera.GetViewMatrix(), orthMatrix, m_BackgroundBitmap.GetTexture());
+	LevelBitmap.Render(device, screenWidth, screenHeight, 0, 0);
+	instance.Render(device, LevelBitmap.GetIndexCount(), worldMatrix,
+		Camera.GetViewMatrix(), orthMatrix, LevelBitmap.GetTexture());
 
-	for (auto& button : m_button)
+	for (auto& button : MenuButtons)
 	{
 		button.Render(device, screenWidth, screenHeight);
 
 		instance.Render(device, button.GetIndexCount(), worldMatrix,
-			m_Camera.GetViewMatrix(), orthMatrix, button.GetTexture());
+			Camera.GetViewMatrix(), orthMatrix, button.GetTexture());
 	}
 
 	return true;

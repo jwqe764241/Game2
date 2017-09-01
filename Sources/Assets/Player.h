@@ -14,20 +14,21 @@
 class Player : public ICharacter
 {
 private:
-	wchar_t* m_ResourcePath;
+	wchar_t* ResourcePath;
 
-	int m_Health;
-	int m_WaterValue;
-	int m_FoodValue;
-	int m_SleepValue;
-	D3DXVECTOR2 m_Pos;
-	GameSprite m_Sprite;
+	GameSprite Sprite;
+	D3DXVECTOR2 Position;
 
-	bool isSetPositionLimit;
-	RECT m_PositionLimit;
+	bool IsSetPositionLimit;
+	RECT PositionLimit;
 
-	std::vector<Tool *> m_ToolSink;
-	std::vector<Item *> m_ItemSink;
+	std::vector<Tool *> ToolSink;
+	std::vector<Item *> ItemSink;
+
+	int Health;
+	int WaterValue;
+	int FoodValue;
+	int SleepValue;
 
 public:
 	Player();

@@ -12,7 +12,7 @@ void SpriteAsset::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
 {
 	m_PosX = 20;
 	m_PosY = 20;
-	m_Object.Initialize(device, m_ResourcePath, bitmapWidth, bitmapHeight, 4);
+	m_Object.Initialize(device, ResourcePath, bitmapWidth, bitmapHeight, 4);
 }
 
 void SpriteAsset::Release()

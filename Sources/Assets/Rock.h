@@ -8,13 +8,13 @@
 
 class Rock : public IInteraction{
 private:
-	GameBitmap m_Bitmap;
-	D3DXVECTOR2 m_Position;
+	GameBitmap Bitmap;
+	D3DXVECTOR2 Position;
 
-	int m_RequiredToolID = 1;
-	int m_ItemIDCanGet = 6;
+	int RequiredToolID = 1;
+	int ItemIDCanGet = 6;
 
-	float coolDown = 0.0f;
+	float CoolDown = 0.0f;
 
 public:
 	// IInteraction을(를) 통해 상속됨

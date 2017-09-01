@@ -28,11 +28,11 @@ private:
 	};
 
 private:
-	GameBitmap m_BackgroundBitmap;
-	CGameCamera m_Camera;
+	GameBitmap LevelBitmap;
+	CGameCamera Camera;
 
-	Button m_button[5];
-	int currSelection;
+	Button MenuButtons[5];
+	int CurrentSelection;
 
 public:
 	LobbyLevel();

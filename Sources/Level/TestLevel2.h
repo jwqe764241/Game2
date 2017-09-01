@@ -7,7 +7,7 @@
 
 class TestLevel2 : public ILevel{
 private:
-	std::vector<IRenderable*> m_RenderList;
+	std::vector<IRenderable*> RenderList;
 
 public:
 	TestLevel2();

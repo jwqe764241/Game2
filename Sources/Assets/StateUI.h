@@ -23,9 +23,9 @@ static const POINT ItemRenderPosition[g_PreDefinedItemAmount]
 
 class StateUI {
 private:
-	StateBar stateBar[5];
-	std::vector<Tool *>* m_ToolList;
-	std::vector<Item *>* m_ItemList;
+	StateBar UIStateBar[5];
+	std::vector<Tool *>* ToolList;
+	std::vector<Item *>* ItemList;
 
 	GameTextWriter writer_48size;
 	GameTextWriter writer_25size;

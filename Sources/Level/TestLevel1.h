@@ -66,20 +66,20 @@ private:
 	};
 
 private:
-	std::vector<Tool *> m_Tools;
-	std::vector<ICharacter *> m_ActorList;
-	std::vector<IInteraction *> m_EnvironmentList;
-	std::vector<Deer *> m_DeerList;
+	std::vector<Tool *> ToolList;
+	std::vector<ICharacter *> ActorList;
+	std::vector<IInteraction *> EnvironmentList;
+	std::vector<Deer *> DeerList;
 
-	GameBitmap m_LevelBitmap;
-	GameBitmap m_Cursor;
-	CGameCamera m_Camera;
+	GameBitmap LevelBitmap;
+	GameBitmap Cursor;
+	CGameCamera Camera;
 
-	RECT m_LevelSize;
+	RECT LevelSize;
 
-	Player* m_Player;
+	Player* GamePlayer;
 
-	StateUI m_PlayerUI;
+	StateUI PlayerUI;
 
 public:
 	TestLevel1();

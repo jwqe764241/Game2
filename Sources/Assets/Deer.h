@@ -5,14 +5,14 @@
 
 class Deer : public IInteraction {
 private:
-	GameSprite m_Sprite;
-	D3DXVECTOR2 m_Position;
+	GameSprite Sprite;
+	D3DXVECTOR2 Position;
 
-	int m_RequiredToolID = 4;
-	int m_ItemIDCanGet[2] = { 4, 5 };
+	int RequiredToolID = 4;
+	int ItemIDCanGet[2] = { 4, 5 };
 
-	int m_Health = 4;
-	float coolDown = 0.0f;
+	int Health = 4;
+	float CoolDown = 0.0f;
 
 public:
 	Deer();

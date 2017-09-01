@@ -7,7 +7,7 @@
 
 class SpriteAsset : public IRenderable
 {
-	wchar_t* m_ResourcePath = L"../Resources/sprite.bmp";
+	wchar_t* ResourcePath = L"../Resources/sprite.bmp";
 
 	GameSprite m_Object;
 

@@ -10,7 +10,7 @@ int GetPos(T& container, U& value_to_find)
 	return std::distance(container.begin(), std::find_if(container.begin(), container.end(), [&value_to_find](const U* p) { return *p == value_to_find; }));
 }
 
-Player::Player() : m_Sprite(15.0f, 1.0f, true), m_ResourcePath(L"../Resources/sprite.bmp")
+Player::Player() : Sprite(15.0f, 1.0f, true), ResourcePath(L"../Resources/sprite.bmp")
 {
 
 }
@@ -22,40 +22,40 @@ Player::~Player()
 
 void Player::AddTool(Tool * pTool)
 {
-	m_ToolSink.push_back(pTool);
+	ToolSink.push_back(pTool);
 }
 
 void Player::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
 {
-	m_ItemSink.reserve(10);
+	ItemSink.reserve(10);
 
-	m_Pos.x = 0;
-	m_Pos.y = 0;
-	m_Health = 100;
-	m_Sprite.Initialize(device, m_ResourcePath, bitmapWidth, bitmapHeight, 4);
-	m_Sprite.SetLooping(false);
-	m_Sprite.SetMotion(2);
-	isSetPositionLimit = false;
+	Position.x = 0;
+	Position.y = 0;
+	Health = 100;
+	Sprite.Initialize(device, ResourcePath, bitmapWidth, bitmapHeight, 4);
+	Sprite.SetLooping(false);
+	Sprite.SetMotion(2);
+	IsSetPositionLimit = false;
 	
-	m_WaterValue = 100;
-	m_FoodValue = 100;
-	m_SleepValue = 100;
+	WaterValue = 100;
+	FoodValue = 100;
+	SleepValue = 100;
 
 	for (int i = 0; i < g_PreDefinedItemAmount; ++i)
 	{
-		m_ItemSink.push_back(new Item(i, g_ItemResourcePathList[i].item_name));
-		m_ItemSink[i]->Initialize(device, g_ItemResourcePathList[i].resource_path, 50, 50);
+		ItemSink.push_back(new Item(i, g_ItemResourcePathList[i].item_name));
+		ItemSink[i]->Initialize(device, g_ItemResourcePathList[i].resource_path, 50, 50);
 	}
 }
 
 void Player::Release()
 {
-	for (auto& target : m_ToolSink)
+	for (auto& target : ToolSink)
 	{
 		Utils::Release(&target);
 	}
 
-	m_Sprite.Release();
+	Sprite.Release();
 }
 
 void Player::Reset()
@@ -71,17 +71,17 @@ void Player::Update(float dt)
 
 	if (waterCoolDown >= 3.0f)
 	{
-		m_WaterValue -= 1;
+		WaterValue -= 1;
 		waterCoolDown = 0.0f;
 	}
 	if (foodCoolDown >= 4.0f) 
 	{
-		m_FoodValue -= 1;
+		FoodValue -= 1;
 		foodCoolDown = 0.0f;
 	}
 	if (sleepCoolDown >= 5.0f)
 	{
-		m_SleepValue -= 1;
+		SleepValue -= 1;
 		sleepCoolDown = 0.0f;
 	}
 
@@ -92,27 +92,27 @@ void Player::Update(float dt)
 	if (input.IsPressed(VK_RIGHT))
 	{
 		x += 1.0f;
-		m_Sprite.SetMotion(3);
+		Sprite.SetMotion(3);
 	}
 	else if (input.IsPressed(VK_LEFT))
 	{
 		x -= 1.0f;
-		m_Sprite.SetMotion(1);
+		Sprite.SetMotion(1);
 	}
 	else if (input.IsPressed(VK_UP))
 	{
 		y -= 1.0f;
-		m_Sprite.SetMotion(0);
+		Sprite.SetMotion(0);
 	}
 	else if (input.IsPressed(VK_DOWN))
 	{
 		y += 1.0f;
-		m_Sprite.SetMotion(2);
+		Sprite.SetMotion(2);
 	}
 	else
 	{
-		m_Sprite.SetLooping(false);
-		m_Sprite.Update(dt);
+		Sprite.SetLooping(false);
+		Sprite.Update(dt);
 		return;
 	}
 
@@ -122,27 +122,27 @@ void Player::Update(float dt)
 		speed *= dt;
 		x *= speed / length;
 		y *= speed / length;
-		if (isSetPositionLimit)
+		if (IsSetPositionLimit)
 		{
-			if (m_Pos.x + x >= m_PositionLimit.left && (m_Pos.x + x) + m_Sprite.GetFrameWidth() <= m_PositionLimit.right)
+			if (Position.x + x >= PositionLimit.left && (Position.x + x) + Sprite.GetFrameWidth() <= PositionLimit.right)
 			{
-				m_Pos.x += x;
+				Position.x += x;
 			}
 
-			if (m_Pos.y + y >= m_PositionLimit.top && (m_Pos.y + y) + m_Sprite.GetFrameHeight() <= m_PositionLimit.bottom)
+			if (Position.y + y >= PositionLimit.top && (Position.y + y) + Sprite.GetFrameHeight() <= PositionLimit.bottom)
 			{
-				m_Pos.y += y;
+				Position.y += y;
 			}
 		}
 		else
 		{
-			m_Pos.x += x;
-			m_Pos.y += y;
+			Position.x += x;
+			Position.y += y;
 		}
 	}
 
-	m_Sprite.SetLooping(true);
-	m_Sprite.Update(dt);
+	Sprite.SetLooping(true);
+	Sprite.Update(dt);
 }
 
 void Player::Update(float dt, CGameCamera* pCamera)
@@ -169,7 +169,7 @@ void Player::Update(float dt, CGameCamera* pCamera)
 		return;
 	}
 
-	if (m_Pos.x < targetPoint.x)
+	if (Position.x < targetPoint.x)
 	{
 		x += 1.0f;
 	}
@@ -178,7 +178,7 @@ void Player::Update(float dt, CGameCamera* pCamera)
 		x -= 1.0f;
 	}
 
-	if (m_Pos.y < targetPoint.y)
+	if (Position.y < targetPoint.y)
 	{
 		y += 1.0f;
 	}
@@ -191,12 +191,12 @@ void Player::Update(float dt, CGameCamera* pCamera)
 
 	if (length > 0) {
 
-		if ((m_Pos.x >= (targetPoint.x - 1.0f)) && (m_Pos.x <= (targetPoint.x + 1.0f)))
+		if ((Position.x >= (targetPoint.x - 1.0f)) && (Position.x <= (targetPoint.x + 1.0f)))
 		{
-			if ((m_Pos.y >= (targetPoint.y - 1.0f)) && (m_Pos.y <= (targetPoint.y + 1.0f)))
+			if ((Position.y >= (targetPoint.y - 1.0f)) && (Position.y <= (targetPoint.y + 1.0f)))
 			{
 				isWalking = false;
-				m_Sprite.SetLooping(false);
+				Sprite.SetLooping(false);
 				return;
 			}
 		}
@@ -205,45 +205,45 @@ void Player::Update(float dt, CGameCamera* pCamera)
 		x *= speed / length;
 		y *= speed / length;
 
-		if (isSetPositionLimit)
+		if (IsSetPositionLimit)
 		{
-			if (m_Pos.x >= m_PositionLimit.left && m_Pos.x + m_Sprite.GetFrameWidth() / 2 <= m_PositionLimit.right)
+			if (Position.x >= PositionLimit.left && Position.x + Sprite.GetFrameWidth() / 2 <= PositionLimit.right)
 			{
-				m_Pos.x += x;
+				Position.x += x;
 			}
 
-			if (m_Pos.y >= m_PositionLimit.top && m_Pos.y + m_Sprite.GetFrameHeight() / 2 <= m_PositionLimit.bottom)
+			if (Position.y >= PositionLimit.top && Position.y + Sprite.GetFrameHeight() / 2 <= PositionLimit.bottom)
 			{
-				m_Pos.y += y;
+				Position.y += y;
 			}
 		}
 		else
 		{
-			m_Pos.x += x;
-			m_Pos.y += y;
+			Position.x += x;
+			Position.y += y;
 		}
 
 	}
 
-	m_Sprite.SetLooping(true);
-	m_Sprite.Update(dt);
+	Sprite.SetLooping(true);
+	Sprite.Update(dt);
 }
 
 void Player::Render(ID3D10Device * device, int screenWidth, int screenHeight)
 {
-	m_Sprite.Render(device, screenWidth, screenHeight, m_Pos.x, m_Pos.y);
+	Sprite.Render(device, screenWidth, screenHeight, Position.x, Position.y);
 }
 
 void Player::Idle()
 {
-	m_Sprite.SetLooping(false);
+	Sprite.SetLooping(false);
 }
 
 //어디다가 쓰지..
 void Player::Move(D3DXVECTOR2 target)
 {
-	m_Pos.x = target.x;
-	m_Pos.y = target.y;
+	Position.x = target.x;
+	Position.y = target.y;
 }
 
 void Player::Attack(void ** target)
@@ -253,24 +253,24 @@ void Player::Attack(void ** target)
 
 void Player::Damage(int damage)
 {
-	if (m_Health - damage <= 0)
+	if (Health - damage <= 0)
 	{
-		m_Health = 0;
+		Health = 0;
 	}
 	else
 	{
-		m_Health -= damage;
+		Health -= damage;
 	}
 }
 
 void Player::Die()
 {
-	m_Health = 0;
+	Health = 0;
 }
 
 bool Player::isDied()
 {
-	if (m_Health <= 0)
+	if (Health <= 0)
 	{
 		return false;
 	}
@@ -279,32 +279,32 @@ bool Player::isDied()
 
 int Player::GetIndexCount()
 {
-	return m_Sprite.GetIndexCount();
+	return Sprite.GetIndexCount();
 }
 
 ID3D10ShaderResourceView* Player::GetTexture()
 {
-	return m_Sprite.GetTexture();
+	return Sprite.GetTexture();
 }
 
 D3DXVECTOR2 Player::GetPosition() const
 {
-	return m_Pos;
+	return Position;
 }
 
 void Player::SetPosition(const D3DXVECTOR2 pos)
 {
-	m_Pos = pos;
+	Position = pos;
 }
 
 std::vector<Tool *>& Player::GetToolList()
 {
-	return m_ToolSink;
+	return ToolSink;
 }
 
 std::vector<Item *>& Player::GetItemList()
 {
-	return m_ItemSink;
+	return ItemSink;
 }
 
 void Player::AddItem(int itemID, int amount)
@@ -313,9 +313,9 @@ void Player::AddItem(int itemID, int amount)
 
 	Item item(itemID, "Dummy");
 
-	int pos = GetPos(m_ItemSink, item);
+	int pos = GetPos(ItemSink, item);
 
-	m_ItemSink[pos]->AddAmount(amount);
+	ItemSink[pos]->AddAmount(amount);
 }
 
 bool Player::SubItem(int itemID, int amount)
@@ -324,9 +324,9 @@ bool Player::SubItem(int itemID, int amount)
 
 	Item item(itemID, "Dummy");
 
-	int pos = GetPos(m_ItemSink, item);
+	int pos = GetPos(ItemSink, item);
 
-	return m_ItemSink[pos]->SubAmount(amount);
+	return ItemSink[pos]->SubAmount(amount);
 }
 
 int Player::GetItemAmount(int itemID)
@@ -335,59 +335,59 @@ int Player::GetItemAmount(int itemID)
 
 	Item item(itemID, "Dummy");
 
-	int pos = GetPos(m_ItemSink, item);
+	int pos = GetPos(ItemSink, item);
 
-	return m_ItemSink[pos]->GetAmount();
+	return ItemSink[pos]->GetAmount();
 }
 
 GameSprite* Player::GetSprite()
 {
-	return &m_Sprite;
+	return &Sprite;
 }
 
 void Player::SetPositionLimit(const RECT* limitPos)
 {
 	if (limitPos == nullptr)
 	{
-		isSetPositionLimit = false;
-		m_PositionLimit = { 0 };
+		IsSetPositionLimit = false;
+		PositionLimit = { 0 };
 	}
 	else
 	{
-		isSetPositionLimit = true;
-		m_PositionLimit = (*limitPos);
+		IsSetPositionLimit = true;
+		PositionLimit = (*limitPos);
 	}
 }
 
 int Player::GetHealth() const
 {
-	return m_Health;
+	return Health;
 }
 
 int Player::GetWaterValue() const
 {
-	return m_WaterValue;
+	return WaterValue;
 }
 
 int Player::GetFoodValue() const
 {
-	return m_FoodValue;
+	return FoodValue;
 }
 
 int Player::GetSleepValue() const
 {
-	return m_SleepValue;
+	return SleepValue;
 }
 
 void Player::SetWaterValue(int value)
 {
 	if (value >= 100)
 	{
-		m_WaterValue = 100;
+		WaterValue = 100;
 	}
 	else
 	{
-		m_WaterValue = value;
+		WaterValue = value;
 	}
 }
 
@@ -395,11 +395,11 @@ void Player::SetFoodValue(int value)
 {
 	if (value >= 100)
 	{
-		m_FoodValue = 100;
+		FoodValue = 100;
 	}
 	else
 	{
-		m_FoodValue = value;
+		FoodValue = value;
 	}
 }
 
@@ -407,10 +407,10 @@ void Player::SetSleepValue(int value)
 {
 	if (value >= 100)
 	{
-		m_SleepValue = 100;
+		SleepValue = 100;
 	}
 	else
 	{
-		m_SleepValue = value;
+		SleepValue = value;
 	}
 }

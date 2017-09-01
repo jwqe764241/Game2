@@ -7,11 +7,11 @@
 
 class Enemy1 : public ICharacter{
 private:
-	wchar_t* m_ResourcePath;
+	wchar_t* ResourcePath;
 
-	int m_Health;
-	D3DXVECTOR2 m_Pos;
-	GameSprite m_Sprite;
+	int Health;
+	D3DXVECTOR2 Position;
+	GameSprite Sprite;
 
 public:
 	Enemy1();

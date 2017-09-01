@@ -6,7 +6,7 @@ bool operator== (const Item& lhs, const Item& rhs)
 }
 
 Item::Item(int itemID, std::string itemName)
-	: m_ItemID(itemID), m_ItemName(itemName)
+	: ItemID(itemID), ItemName(itemName)
 {
 }
 
@@ -21,7 +21,7 @@ bool Item::Initialize(ID3D10Device * device, wchar_t * filePath, int bitmapWidth
 		return false;
 	}
 	
-	m_Amount = 0;
+	Amount = 0;
 
 	return true;
 }
@@ -118,25 +118,25 @@ void Item::Release()
 
 void Item::AddAmount(int amount)
 {
-	m_Amount += amount;
+	Amount += amount;
 }
 
 bool Item::SubAmount(int amount)
 {
-	if ((m_Amount - amount) < 0)
+	if ((Amount - amount) < 0)
 	{
 		return false;
 	}
 	else
 	{
-		m_Amount -= amount;
+		Amount -= amount;
 		return true;
 	}
 }
 
 int Item::GetAmount()
 {
-	return m_Amount;
+	return Amount;
 }
 
 ID3D10ShaderResourceView* Item::GetTexture()
@@ -146,10 +146,10 @@ ID3D10ShaderResourceView* Item::GetTexture()
 
 int Item::GetID() const
 {
-	return m_ItemID;
+	return ItemID;
 }
 
 std::string Item::GetItemName() const
 {
-	return m_ItemName;
+	return ItemName;
 }

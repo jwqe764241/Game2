@@ -2,13 +2,13 @@
 
 bool operator==(const Tool& lhs, const Tool& rhs)
 {
-	return lhs.m_ToolID == rhs.m_ToolID;
+	return lhs.ToolID == rhs.ToolID;
 }
 
 Tool::Tool(wchar_t* toolName, int toolID)
 {
-	m_ToolName = toolName;
-	m_ToolID = toolID;
+	ToolName = toolName;
+	ToolID = toolID;
 }
 
 Tool::~Tool() 
@@ -19,14 +19,14 @@ Tool::~Tool()
 void Tool::Initialize(ID3D10Device* device, wchar_t* filePath, int bitmapWidth, int bitmapHeight, POINT pos)
 {
 	GameBitmap::Initialize(device, filePath, bitmapWidth, bitmapHeight);
-	m_Pos = pos;
+	Position = pos;
 }
 
 bool Tool::Render(ID3D10Device* device, int screenWidth, int screenHeight)
 {
 	bool result;
 
-	result = UpdateBuffers(device, screenWidth, screenHeight, m_Pos.x, m_Pos.y);
+	result = UpdateBuffers(device, screenWidth, screenHeight, Position.x, Position.y);
 	if (!result)
 	{
 		return false;
@@ -140,15 +140,15 @@ int Tool::GetIndexCount()
 
 wchar_t* Tool::GetToolName() const
 {
-	return m_ToolName;
+	return ToolName;
 }
 
 int Tool::GetToolID() const
 {
-	return m_ToolID;
+	return ToolID;
 }
 
 POINT Tool::GetPosition() const
 {
-	return m_Pos;
+	return Position;
 }

@@ -26,13 +26,12 @@ static const ItemResourceElement g_ItemResourcePathList[g_PreDefinedItemAmount]
 	{ "Rope", L"../Resources/items/rope.png" }
 };
 
-
 class Item : public GameBitmap{
 private:
-	int m_Amount;
+	int Amount;
 
-	int m_ItemID;
-	std::string m_ItemName;
+	int ItemID;
+	std::string ItemName;
 public:
 	Item() = delete;
 	Item(int itemID, std::string itemName);

@@ -4,8 +4,8 @@
 
 class Potal{
 private:
-	RECT m_Area;
-	RECT m_Dest;
+	RECT Area;
+	RECT Dest;
 
 public:
 	Potal();

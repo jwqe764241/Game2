@@ -5,13 +5,13 @@
 
 class Tree : public IInteraction {
 private:
-	GameBitmap m_Bitmap;
-	D3DXVECTOR2 m_Position;
+	GameBitmap Bitmap;
+	D3DXVECTOR2 Position;
 
-	int m_RequiredToolID = 4;
-	int m_ItemIDCanGet[4] = {0 ,1, 2, 3};
+	int RequiredToolID = 4;
+	int ItemIDCanGet[4] = {0 ,1, 2, 3};
 
-	float coolDown = 0.0f;
+	float CoolDown = 0.0f;
 
 public:
 	// IInteraction을(를) 통해 상속됨
