@@ -14,14 +14,15 @@
 	공용자원으로 놓고 프로시저에서 값을 업데이트 하면서 입력값을 얻는다.
 */
 
-class GameInput2 {
+class GameInput2 
+{
 private:
-	unsigned char m_KeyboardState[256];
-	POINT m_MousePosition;
+	unsigned char KeyboardState[256];
+	POINT MousePosition;
 
 public:
 	GameInput2();
-	~GameInput2();
+	virtual ~GameInput2();
 	
 	static GameInput2& GetInstance();
 
@@ -40,5 +41,6 @@ public:
 	void UpdateMousePosition(POINT pos);
 
 	bool IsPressed(int keycode) const;
+	bool IsReleased(int keycode) const;
 	POINT GetMousePosition() const;
 };

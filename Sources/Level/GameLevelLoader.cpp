@@ -1,21 +1,26 @@
 #include <Sources/Level/GameLevelLoader.h>
 
 
-CGameLevelLoader::CGameLevelLoader() : m_CurrentLevel(nullptr)
+CGameLevelLoader::CGameLevelLoader() : CurrentLevel(nullptr)
 {
+	/*m_PreLoadedLevel.insert(std::pair<int, ILevel*>(LevelID::LEVEL_MAIN, new LobbyLevel()));
+	m_PreLoadedLevel.insert(std::pair<int, ILevel*>(LevelID::LEVEL_DUMMY, new DummyLevel()));
+	m_PreLoadedLevel.insert(std::pair<int, ILevel*>(LevelID::LEVEL_TEST1, new TestLevel1()));
 
+	for (auto& level : m_PreLoadedLevel)
+	{
+		level.second->Load();
+	}*/
 }
-
-//CGameLevelLoader::CGameLevelLoader(ILevel* pLevel)
-//{
-//	if (pLevel) 
-//	{
-//		m_CurrentLevel = pLevel;
-//	}
-//}
 
 CGameLevelLoader::~CGameLevelLoader()
 {
+	/*for (auto& level : m_PreLoadedLevel)
+	{
+		delete level.second;
+		level.second = nullptr;
+	}*/
+
 	UnloadLevel();
 }
 
@@ -30,8 +35,8 @@ bool CGameLevelLoader::LoadLevel(ILevel* level)
 {
 	if (level)
 	{
-		m_CurrentLevel = level;
-		if (!m_CurrentLevel->Load())
+		CurrentLevel = level;
+		if (!CurrentLevel->Load())
 		{
 			return false;
 		}
@@ -45,13 +50,17 @@ bool CGameLevelLoader::LoadLevel(ILevel* level)
 	}
 }
 
+//void CGameLevelLoader::LoadLevel(LevelID id)
+//{
+//	CurrentLevel = m_PreLoadedLevel.find(id)->second;
+//}
+
 void CGameLevelLoader::UnloadLevel()
 {
-	if (m_CurrentLevel) 
+	if (CurrentLevel) 
 	{
-		m_CurrentLevel->Unload();
-		delete m_CurrentLevel;
-		m_CurrentLevel = nullptr;
+		delete CurrentLevel;
+		CurrentLevel = nullptr;
 	}
 }
 
@@ -74,19 +83,25 @@ bool CGameLevelLoader::ChangeLevel(ILevel* level)
 	}
 }
 
+//void CGameLevelLoader::ChangeLevel(LevelID id)
+//{
+//	UnloadLevel();
+//	LoadLevel(id);
+//}
+
 void CGameLevelLoader::UpdateLevel(float dt)
 {
-	if (m_CurrentLevel)
+	if (CurrentLevel)
 	{
-		m_CurrentLevel->Update(dt);
+		CurrentLevel->Update(dt);
 	}
 }
 
-bool CGameLevelLoader::RenderLevel(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)
+bool CGameLevelLoader::RenderLevel(ID3D10Device* device, int screenWidth, int screenHeight)
 {
-	if (m_CurrentLevel)
+	if (CurrentLevel)
 	{
-		if (!m_CurrentLevel->Render(deviceContext, screenWidth, screenHeight))
+		if (!CurrentLevel->Render(device, screenWidth, screenHeight))
 		{
 			return false;
 		}

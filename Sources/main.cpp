@@ -9,7 +9,7 @@
 //#define new new(_CLIENT_BLOCK,__FILE__, __LINE__)
 #endif
 
-#define _COMMAND_OPEN_CONSOLE
+//#define _COMMAND_OPEN_CONSOLE
 
 #if defined(_MBCS)
 
@@ -37,10 +37,10 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 	#endif
 
 	//게임 인스턴스 생성 및 시작
-	CGameApp::GetInstance().Initialize(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 800, 600, 1000.0f, 0.1f);
+	CGameApp::GetInstance().Initialize(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 1920, 1080, 1000.0f, 0.1f);
 	//CGameApp * pGameApp = new CGameApp(hInstance, L"TEST", L"WND_CLASS_TEST", nCmdShow, 800, 600, 1000.0f, 0.1f);
 	CGameApp::GetInstance().Launch();
-	CGameApp::GetInstance().Release();
+	//CGameApp::GetInstance().Release();
 
 	#if defined(_COMMAND_OPEN_CONSOLE)
 		system("pause");

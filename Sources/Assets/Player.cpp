@@ -1,6 +1,16 @@
 #include <Sources/Assets/Player.h>
 
-Player::Player() : m_Sprite(15.0f, 1.0f, true), m_ResourcePath(L"../Resources/sprite.bmp")
+static float waterCoolDown = 0.0f;
+static float foodCoolDown = 0.0f;
+static float sleepCoolDown = 0.0f;
+
+template<typename T, typename U>
+int GetPos(T& container, U& value_to_find)
+{
+	return std::distance(container.begin(), std::find_if(container.begin(), container.end(), [&value_to_find](const U* p) { return *p == value_to_find; }));
+}
+
+Player::Player() : Sprite(15.0f, 1.0f, true), ResourcePath(L"../Resources/sprite.bmp")
 {
 
 }
@@ -10,20 +20,42 @@ Player::~Player()
 
 }
 
-void Player::Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight)
+void Player::AddTool(Tool * pTool)
 {
-	m_Pos.x = 0;
-	m_Pos.y = 0;
-	m_Health = 100;
-	m_Sprite.Initialize(device, m_ResourcePath, bitmapWidth, bitmapHeight, 4);
-	m_Sprite.SetLooping(false);
-	m_Sprite.SetMotion(2);
-	isSetPositionLimit = false;
+	ToolSink.push_back(pTool);
+}
+
+void Player::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
+{
+	ItemSink.reserve(10);
+
+	Position.x = 0;
+	Position.y = 0;
+	Health = 100;
+	Sprite.Initialize(device, ResourcePath, bitmapWidth, bitmapHeight, 4);
+	Sprite.SetLooping(false);
+	Sprite.SetMotion(2);
+	IsSetPositionLimit = false;
+	
+	WaterValue = 100;
+	FoodValue = 100;
+	SleepValue = 100;
+
+	for (int i = 0; i < g_PreDefinedItemAmount; ++i)
+	{
+		ItemSink.push_back(new Item(i, g_ItemResourcePathList[i].item_name));
+		ItemSink[i]->Initialize(device, g_ItemResourcePathList[i].resource_path, 50, 50);
+	}
 }
 
 void Player::Release()
 {
-	m_Sprite.Release();
+	for (auto& target : ToolSink)
+	{
+		Utils::Release(&target);
+	}
+
+	Sprite.Release();
 }
 
 void Player::Reset()
@@ -33,53 +65,54 @@ void Player::Reset()
 
 void Player::Update(float dt)
 {
+	waterCoolDown += dt;
+	foodCoolDown += dt;
+	sleepCoolDown += dt;
+
+	if (waterCoolDown >= 3.0f)
+	{
+		WaterValue -= 1;
+		waterCoolDown = 0.0f;
+	}
+	if (foodCoolDown >= 4.0f) 
+	{
+		FoodValue -= 1;
+		foodCoolDown = 0.0f;
+	}
+	if (sleepCoolDown >= 5.0f)
+	{
+		SleepValue -= 1;
+		sleepCoolDown = 0.0f;
+	}
+
 	GameInput2& input = GameInput2::GetInstance();
 	float x = 0.0f, y = 0.0f;
-	float speed = 150.0f;
-	
-	/*
-	if (input.IsPressed(0x57)) 
-	{
-		m_Sprite.SetMotion(0);
-		y -= 1;
-	}
-	else if (input.IsPressed(0x41))
-	{
-		m_Sprite.SetMotion(1);
-		x -= 1;
-	}
-	else if (input.IsPressed(0x53))
-	{
-		m_Sprite.SetMotion(2);
-		y += 1;
-	}
-	else if (input.IsPressed(0x44))
-	{
-		m_Sprite.SetMotion(3);
-		x += 1;
-	}
-	else
-	{
-		m_Sprite.SetLooping(false);
-		m_Sprite.Update(dt);
-		return;
-	}
-	*/
+	float speed = 350.0f;
 
 	if (input.IsPressed(VK_RIGHT))
 	{
 		x += 1.0f;
-		m_Sprite.SetMotion(3);
+		Sprite.SetMotion(3);
 	}
 	else if (input.IsPressed(VK_LEFT))
 	{
 		x -= 1.0f;
-		m_Sprite.SetMotion(1);
+		Sprite.SetMotion(1);
+	}
+	else if (input.IsPressed(VK_UP))
+	{
+		y -= 1.0f;
+		Sprite.SetMotion(0);
+	}
+	else if (input.IsPressed(VK_DOWN))
+	{
+		y += 1.0f;
+		Sprite.SetMotion(2);
 	}
 	else
 	{
-		m_Sprite.SetLooping(false);
-		m_Sprite.Update(dt);
+		Sprite.SetLooping(false);
+		Sprite.Update(dt);
 		return;
 	}
 
@@ -89,56 +122,54 @@ void Player::Update(float dt)
 		speed *= dt;
 		x *= speed / length;
 		y *= speed / length;
-		if (isSetPositionLimit)
+		if (IsSetPositionLimit)
 		{
-			if (m_Pos.x + x >= m_PositionLimit.left && (m_Pos.x + x) + m_Sprite.GetFrameWidth() <= m_PositionLimit.right)
+			if (Position.x + x >= PositionLimit.left && (Position.x + x) + Sprite.GetFrameWidth() <= PositionLimit.right)
 			{
-				m_Pos.x += x;
+				Position.x += x;
 			}
 
-			if (m_Pos.y + y >= m_PositionLimit.top && (m_Pos.y + y) + m_Sprite.GetFrameHeight() <= m_PositionLimit.bottom)
+			if (Position.y + y >= PositionLimit.top && (Position.y + y) + Sprite.GetFrameHeight() <= PositionLimit.bottom)
 			{
-				m_Pos.y += y;
+				Position.y += y;
 			}
 		}
 		else
 		{
-			m_Pos.x += x;
-			m_Pos.y += y;
+			Position.x += x;
+			Position.y += y;
 		}
 	}
 
-	m_Sprite.SetLooping(true);
-	m_Sprite.Update(dt);
+	Sprite.SetLooping(true);
+	Sprite.Update(dt);
 }
 
 void Player::Update(float dt, CGameCamera* pCamera)
 //해당 업데이트는 마우스 클릭 시 해당 마우스 좌표로 이동하게 하는 시뮬레이션 함수임
 {
 	static bool isWalking = false;
-	static float targetX = 0.0f, targetY = 0.0f;
+	static POINT targetPoint{ 0.0f, 0.0f };
 
 	float x = 0.0f, y = 0.0f;
-	float speed = 150.0f;
+	float speed = 350.0f;
 
 	if (GameInput2::GetInstance().IsPressed(VK_LBUTTON))
 	{
-		/*
-		그냥 저냥 테스트일 뿐
-		이런 상황을 위하여 DirectInput으로 구현된 GameInput을
-		프로시저에서 처리하는 클래스로 다시 구현해야 할
-		필요가 있음
-		*/
-
-		POINT po = GameInput2::GetInstance().GetMousePosition();
+		POINT mousePos = GameInput2::GetInstance().GetMousePosition();
 		D3DXVECTOR3 cameraPos = pCamera->GetPosition();
 		//Move(D3DXVECTOR2{ po.x + cameraPos.x, po.y - cameraPos.y});
-		targetX = po.x + cameraPos.x - 32;
-		targetY = po.y - cameraPos.y - 32;
+		targetPoint.x = mousePos.x + cameraPos.x - 32;
+		targetPoint.y = mousePos.y - cameraPos.y - 32;
 		isWalking = true;
 	}
 	
-	if (m_Pos.x < targetX)
+	if (!isWalking)
+	{
+		return;
+	}
+
+	if (Position.x < targetPoint.x)
 	{
 		x += 1.0f;
 	}
@@ -147,7 +178,7 @@ void Player::Update(float dt, CGameCamera* pCamera)
 		x -= 1.0f;
 	}
 
-	if (m_Pos.y < targetY)
+	if (Position.y < targetPoint.y)
 	{
 		y += 1.0f;
 	}
@@ -160,12 +191,12 @@ void Player::Update(float dt, CGameCamera* pCamera)
 
 	if (length > 0) {
 
-		if ((m_Pos.x >= (targetX - 1.0f)) && (m_Pos.x <= (targetX + 1.0f)))
+		if ((Position.x >= (targetPoint.x - 1.0f)) && (Position.x <= (targetPoint.x + 1.0f)))
 		{
-			if ((m_Pos.y >= (targetY - 5.0f)) && (m_Pos.y <= (targetY + 5.0f)))
+			if ((Position.y >= (targetPoint.y - 1.0f)) && (Position.y <= (targetPoint.y + 1.0f)))
 			{
 				isWalking = false;
-				m_Sprite.SetLooping(false);
+				Sprite.SetLooping(false);
 				return;
 			}
 		}
@@ -173,45 +204,46 @@ void Player::Update(float dt, CGameCamera* pCamera)
 		speed *= dt;
 		x *= speed / length;
 		y *= speed / length;
-		if (isSetPositionLimit)
+
+		if (IsSetPositionLimit)
 		{
-			if (m_Pos.x + x >= m_PositionLimit.left && (m_Pos.x + x) + m_Sprite.GetFrameWidth() <= m_PositionLimit.right)
+			if (Position.x >= PositionLimit.left && Position.x + Sprite.GetFrameWidth() / 2 <= PositionLimit.right)
 			{
-				m_Pos.x += x;
+				Position.x += x;
 			}
 
-			if (m_Pos.y + y >= m_PositionLimit.top && (m_Pos.y + y) + m_Sprite.GetFrameHeight() <= m_PositionLimit.bottom)
+			if (Position.y >= PositionLimit.top && Position.y + Sprite.GetFrameHeight() / 2 <= PositionLimit.bottom)
 			{
-				m_Pos.y += y;
+				Position.y += y;
 			}
 		}
 		else
 		{
-			m_Pos.x += x;
-			m_Pos.y += y;
+			Position.x += x;
+			Position.y += y;
 		}
 
 	}
 
-	m_Sprite.SetLooping(true);
-	m_Sprite.Update(dt);
+	Sprite.SetLooping(true);
+	Sprite.Update(dt);
 }
 
-void Player::Render(ID3D11DeviceContext * deviceContext, int screenWidth, int screenHeight)
+void Player::Render(ID3D10Device * device, int screenWidth, int screenHeight)
 {
-	m_Sprite.Render(deviceContext, screenWidth, screenHeight, m_Pos.x, m_Pos.y);
+	Sprite.Render(device, screenWidth, screenHeight, Position.x, Position.y);
 }
 
 void Player::Idle()
 {
-	m_Sprite.SetLooping(false);
+	Sprite.SetLooping(false);
 }
 
 //어디다가 쓰지..
 void Player::Move(D3DXVECTOR2 target)
 {
-	m_Pos.x = target.x;
-	m_Pos.y = target.y;
+	Position.x = target.x;
+	Position.y = target.y;
 }
 
 void Player::Attack(void ** target)
@@ -221,24 +253,24 @@ void Player::Attack(void ** target)
 
 void Player::Damage(int damage)
 {
-	if (m_Health - damage <= 0)
+	if (Health - damage <= 0)
 	{
-		m_Health = 0;
+		Health = 0;
 	}
 	else
 	{
-		m_Health -= damage;
+		Health -= damage;
 	}
 }
 
 void Player::Die()
 {
-	m_Health = 0;
+	Health = 0;
 }
 
 bool Player::isDied()
 {
-	if (m_Health <= 0)
+	if (Health <= 0)
 	{
 		return false;
 	}
@@ -247,39 +279,138 @@ bool Player::isDied()
 
 int Player::GetIndexCount()
 {
-	return m_Sprite.GetIndexCount();
+	return Sprite.GetIndexCount();
 }
 
-ID3D11ShaderResourceView* Player::GetTexture()
+ID3D10ShaderResourceView* Player::GetTexture()
 {
-	return m_Sprite.GetTexture();
+	return Sprite.GetTexture();
 }
 
 D3DXVECTOR2 Player::GetPosition() const
 {
-	return m_Pos;
+	return Position;
 }
 
 void Player::SetPosition(const D3DXVECTOR2 pos)
 {
-	m_Pos = pos;
+	Position = pos;
+}
+
+std::vector<Tool *>& Player::GetToolList()
+{
+	return ToolSink;
+}
+
+std::vector<Item *>& Player::GetItemList()
+{
+	return ItemSink;
+}
+
+void Player::AddItem(int itemID, int amount)
+{
+	//함수로 묶기
+
+	Item item(itemID, "Dummy");
+
+	int pos = GetPos(ItemSink, item);
+
+	ItemSink[pos]->AddAmount(amount);
+}
+
+bool Player::SubItem(int itemID, int amount)
+{
+	//함수로 묶기
+
+	Item item(itemID, "Dummy");
+
+	int pos = GetPos(ItemSink, item);
+
+	return ItemSink[pos]->SubAmount(amount);
+}
+
+int Player::GetItemAmount(int itemID)
+{
+	//함수로 묶기
+
+	Item item(itemID, "Dummy");
+
+	int pos = GetPos(ItemSink, item);
+
+	return ItemSink[pos]->GetAmount();
 }
 
 GameSprite* Player::GetSprite()
 {
-	return &m_Sprite;
+	return &Sprite;
 }
 
 void Player::SetPositionLimit(const RECT* limitPos)
 {
 	if (limitPos == nullptr)
 	{
-		isSetPositionLimit = false;
-		m_PositionLimit = { 0 };
+		IsSetPositionLimit = false;
+		PositionLimit = { 0 };
 	}
 	else
 	{
-		isSetPositionLimit = true;
-		m_PositionLimit = (*limitPos);
+		IsSetPositionLimit = true;
+		PositionLimit = (*limitPos);
+	}
+}
+
+int Player::GetHealth() const
+{
+	return Health;
+}
+
+int Player::GetWaterValue() const
+{
+	return WaterValue;
+}
+
+int Player::GetFoodValue() const
+{
+	return FoodValue;
+}
+
+int Player::GetSleepValue() const
+{
+	return SleepValue;
+}
+
+void Player::SetWaterValue(int value)
+{
+	if (value >= 100)
+	{
+		WaterValue = 100;
+	}
+	else
+	{
+		WaterValue = value;
+	}
+}
+
+void Player::SetFoodValue(int value)
+{
+	if (value >= 100)
+	{
+		FoodValue = 100;
+	}
+	else
+	{
+		FoodValue = value;
+	}
+}
+
+void Player::SetSleepValue(int value)
+{
+	if (value >= 100)
+	{
+		SleepValue = 100;
+	}
+	else
+	{
+		SleepValue = value;
 	}
 }

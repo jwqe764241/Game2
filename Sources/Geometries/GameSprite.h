@@ -1,7 +1,6 @@
 #pragma once
 
-#include <d3d11.h>
-#include <D3DX10math.h>
+#include <d3d10_1.h>
 
 #include "Sources\Shaders\GameTexture.h"
 #include "Sources\Geometries\GameBitmap.h"
@@ -9,13 +8,32 @@
 
 class GameSprite : public GameBitmap
 {
+private:
+	float CurrentFrame;
+	float PreviousFrame;
+	float MaxFrames;
+	float AnimationSpeed;
+	float CurrentSpeed;
+	float FramePerSecond;
+
+	float NumOfMotions;
+	float CurrentMotion;
+
+	float FrameWidth;
+	float FrameHeight;
+
+	bool IsLooping;
+
+protected:
+	void UpdateBuffers(ID3D10Device *device);
+
 public:
 	GameSprite(float framesPerSecond, float animationSpeed = 1.0f, bool isLooping = false);
 	virtual ~GameSprite();
 
-	void Initialize(ID3D11Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight, float numberOfMotions);
+	void Initialize(ID3D10Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight, float numberOfMotions);
 	void Update(float dt);
-	void Render(ID3D11DeviceContext* context, int screenWidth, int screenHeight, float posX, float posY);
+	void Render(ID3D10Device* device, int screenWidth, int screenHeight, float posX, float posY);
 
 	void SetMotion(float index);
 	void SetLooping(bool condition);
@@ -27,23 +45,4 @@ public:
 	float GetMotionNumber() const;
 	float GetFrameWidth() const;
 	float GetFrameHeight() const;
-
-protected:
-	void UpdateBuffers(ID3D11DeviceContext *deviceContext);
-
-private:
-	float m_currentFrame;
-	float m_previousFrame;
-	float m_maxFrames;
-	float m_animationSpeed;
-	float m_currentSpeed;
-	float m_framesPerSecond;
-
-	float m_numOfMotions;
-	float m_currentMotion;
-
-	float m_frameWidth;
-	float m_frameHeight;
-
-	bool m_isLooping;
 };

@@ -24,4 +24,6 @@ public:
 	virtual void Die()              = 0;
 
 	virtual bool isDied() = 0;
+
+	virtual GameSprite* GetSprite() = 0;
 };

@@ -7,62 +7,63 @@ TestLevel1::TestLevel1()
 
 TestLevel1::~TestLevel1()
 {
-
+	Unload();
 }
 
 bool TestLevel1::Load()
 {
-	m_EnvironmentList.reserve(20);
-	m_ActorList.reserve(20);
+	WINDOWSIZE size = CGameApp::GetInstance().GetWindowSize();
 
-	m_LevelSize.top = 0;
-	m_LevelSize.bottom = 1000;
-	m_LevelSize.left = 0;
-	m_LevelSize.right = 1000;
+	EnvironmentList.reserve(20);
+	ActorList.reserve(20);
+	ToolList.reserve(6);
+	DeerList.reserve(10);
 
-	/*
-		테스트 전용으로 덤불 에셋 10개 추가
-	*/
+	LevelBitmap.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/background.png", 7680, 4320);
+	LevelSize.top = 0;
+	LevelSize.bottom = 4320;
+	LevelSize.left = 0;
+	LevelSize.right = 7680;
 
-	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
-	m_EnvironmentList.push_back(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_TESTASSET, 32, 32));
+	//플레이어 생성
+	GamePlayer = dynamic_cast<Player*>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_PLAYER, 576, 256));
+	GamePlayer->SetPositionLimit(&LevelSize);
+	GamePlayer->SetPosition({ 1920 / 2, 1080 / 2 });
 
-	for (int i = 0; i < 10; ++i)
+	Camera.SetPosition(0.0f, 0.0f, -10.0f);
+
+	Cursor.Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/cursor.dds", 50, 50);
+	PlayerUI.Initialize(CGameApp::GetInstance().GetDevice(), &GamePlayer->GetToolList(), &GamePlayer->GetItemList());
+
+	for (int i = 0; i < g_PreDefinedToolAmount; ++i)
 	{
-		m_EnvironmentList[i]->SetPosition(m_PosList[i]);
+		ToolList.push_back(new Tool(g_ToolList[i].tool_name, i));
+		ToolList[i]->Initialize(CGameApp::GetInstance().GetDevice(), g_ToolList[i].resource_path, 50, 50, toolsPosition[i]);
 	}
-	/*
-		캐스트는 옳은 방법이 아닌 것 같다; -> 뭐래냐? 나 미친거니.. 이 캐스팅은 봐주자...
-		어떻게 다른 방법이 있으랴 
-	*/
-	m_ActorList.push_back(dynamic_cast<ICharacter *>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_ENEMY1, 576, 256)));
-	m_ActorList.push_back(dynamic_cast<ICharacter *>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_ENEMY1, 576, 256)));
-	m_ActorList.push_back(dynamic_cast<ICharacter *>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_ENEMY1, 576, 256)));
-	m_ActorList.push_back(dynamic_cast<ICharacter *>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_ENEMY1, 576, 256)));
-	m_ActorList.push_back(dynamic_cast<ICharacter *>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_ENEMY1, 576, 256)));
+
+	for (int i = 0; i < 8; ++i)
+	{
+		if (i >= 0 && i <= 2)
+		{
+			EnvironmentList.push_back(new Rock());
+		}
+		else if (i == 3)
+		{
+			EnvironmentList.push_back(new Pond());
+		}
+		else if (i >= 4 && i <= 7)
+		{
+			EnvironmentList.push_back(new Tree());
+		}
+
+		EnvironmentList[i]->Load(CGameApp::GetInstance().GetDevice(), environmentList[i].filePath, environmentList[i].width, environmentList[i].height, environmentList[i].x, environmentList[i].y);
+	}
 
 	for (int i = 0; i < 5; ++i)
 	{
-		m_ActorList[i]->SetPosition(m_SpawnPoint[i]);
+		DeerList.push_back(new Deer());
+		DeerList[i]->Load(CGameApp::GetInstance().GetDevice(), L"../Resources/deer.png", 96, 128, deerPosition[i].x, deerPosition[i].y);
 	}
-
-	//플레이어 생성
-	m_Player = dynamic_cast<Player*>(CGameAssetLoader::GetInstance().LoadAsset(ID_ASSET_PLAYER, 576, 256));
-	//m_Camera.SetPosition(0.0f, 0.0f, -1.0f);
-
-	WindowSize size = CGameApp::GetInstance().GetWindowSize();
-	m_Camera.SetPosition(m_LevelSize.left,
-		(m_Player->GetPosition().y - size.height + m_Player->GetSprite()->GetFrameHeight() + 50) * -1, -10.0f);
-	
-	m_Player->SetPositionLimit(&m_LevelSize);
 
 	onStart();
 
@@ -71,101 +72,199 @@ bool TestLevel1::Load()
 
 void TestLevel1::Unload()
 {
-	for (auto target : m_EnvironmentList)
-	{
-		target->Release();
-	}
+	LevelBitmap.Release();
+	Cursor.Release();
 
-	for (auto target : m_ActorList)
-	{
-		target->Release();
-	}
-	
-	Utils::Release(&m_Player);
+	ReleaseList(EnvironmentList);
+	ReleaseList(ActorList);
+	ReleaseList(ToolList);
+	ReleaseList(DeerList);
+
+	Utils::Release(&GamePlayer);
 }
 
 void TestLevel1::Update(float dt)
 {
-	for (auto target : m_EnvironmentList)
+	for (auto& target : ActorList)
 	{
 		target->Update(dt);
 	}
 
-	//for (auto target : m_ActorList)
-	//{
-	//	target->Update(dt);
-	//}
-
-	/*
-		스페이스바 누를 시에 카메라 트레킹
-		위치 기준은 Player가 화면 중앙에 오도록 함
-	*/
-	//GameInput 버전
-	//if (GameInput::GetInstance().IsKeyPressed(DIK_SPACE))
-	//{
-	//	D3DXVECTOR2 pos = m_Player->GetPosition();
-	//	float width  = CGameApp::GetInstance().GetWindowSize().width;
-	//	float height = CGameApp::GetInstance().GetWindowSize().height;
-
-	//	m_Camera.SetPosition(pos.x - ((width / 2) - m_Player->GetSprite()->GetFrameWidth()), 
-	//		(pos.y - ((height / 2) - m_Player->GetSprite()->GetFrameHeight())) * -1 , -10.0f);
-	//}
-
-	//GameInput2 버전
-
-	D3DXVECTOR2 pos = m_Player->GetPosition();
-	WindowSize size = CGameApp::GetInstance().GetWindowSize();
+	D3DXVECTOR2 pos = GamePlayer->GetPosition();
+	WINDOWSIZE size = CGameApp::GetInstance().GetWindowSize();
 	float halfWidth = size.width / 2;
-	if (pos.x + m_Player->GetSprite()->GetFrameWidth() >= (halfWidth) && pos.x <= m_LevelSize.right - (halfWidth))
+	float halfHeight = size.height / 2;
+	//고치기
+
+	int xOffset = pos.x / 1920;
+	int yOffset = pos.y / 1080;
+
+	Camera.SetPosition(cameraPosX[xOffset], cameraPosY[yOffset], -10.f);
+
+	for (auto itor = EnvironmentList.begin(); itor != EnvironmentList.end(); ++itor)
 	{
-		m_Camera.SetPosition(pos.x - ((size.width / 2) - m_Player->GetSprite()->GetFrameWidth()), 
-			(pos.y - size.height + m_Player->GetSprite()->GetFrameHeight() + 50) * -1 , -10.0f);
+		(*itor)->Update(dt);
+
+		if (GameInput2::GetInstance().IsPressed(VK_SPACE))
+		{
+			if ((*itor)->CheckCollision(GamePlayer) && (*itor)->CheckTool(GamePlayer)) {
+				(*itor)->OnAction(GamePlayer, dt);
+				break;
+			}
+		}
+		else
+		{
+			(*itor)->RefreshCooldown();
+		}
 	}
 
-	m_Player->Update(dt);
+	for (auto itor = DeerList.begin(); itor != DeerList.end(); ++itor)
+	{
+		(*itor)->Update(dt);
 
+		if (GameInput2::GetInstance().IsPressed(VK_SPACE))
+		{
+
+			if ((*itor)->CheckCollision(GamePlayer) && (*itor)->CheckTool(GamePlayer)) {
+				(*itor)->OnAction(GamePlayer, dt);
+				break;
+			}
+		}
+		else
+		{
+			(*itor)->RefreshCooldown();
+		}
+	}
+
+	for (auto itor = ToolList.begin(); itor != ToolList.end();)
+	{
+		bool collisionResult = Utils::CheckCollision(
+			Utils::RECT_F{ pos.x, pos.y, pos.x + GamePlayer->GetSprite()->GetFrameWidth(), pos.y + GamePlayer->GetSprite()->GetFrameHeight() },
+			Utils::RECT_F{ static_cast<float>((*itor)->GetPosition().x), static_cast<float>((*itor)->GetPosition().y),
+			static_cast<float>((*itor)->GetPosition().x) + 50, static_cast<float>((*itor)->GetPosition().y) + 50 }
+		);
+
+		if (collisionResult)
+		{
+			if (itor != ToolList.end())
+			{
+				GamePlayer->AddTool((*itor));
+				itor = ToolList.erase(itor);
+
+				break;
+			}
+		}
+		
+		++itor;
+	}
+
+	GamePlayer->Update(dt);
+	PlayerUI.Update(GamePlayer->GetHealth(),
+		GamePlayer->GetWaterValue(),
+		GamePlayer->GetFoodValue(),
+		GamePlayer->GetSleepValue());
+
+	int overCondition = 0;
+
+	if (GamePlayer->GetHealth() <= 0)
+	{
+		overCondition++;
+	}
+	if (GamePlayer->GetWaterValue() <= 0)
+	{
+		overCondition++;
+	}
+	if (GamePlayer->GetFoodValue() <= 0)
+	{
+		overCondition++;
+	}
+	if (GamePlayer->GetSleepValue() <= 0)
+	{
+		overCondition++;
+	}
+
+	if (overCondition >= 2)
+	{
+		onGameOver();
+	}
 }
 
-bool TestLevel1::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)
+bool TestLevel1::Render(ID3D10Device* device, int screenWidth, int screenHeight)
 {
-	m_Camera.Render();
+	TextureShader& instance = TextureShader::GetInstance();
+	D3DXMATRIX worldMatrix  = CGameApp::GetInstance().GetWorldMatrix();
+	D3DXMATRIX orthMatrix   = CGameApp::GetInstance().GetorthogonalMatrix();
+	WINDOWSIZE size         = CGameApp::GetInstance().GetWindowSize();
+	D3DXVECTOR3 cameraPos   = Camera.GetPosition();
+	POINT pos               = GameInput2::GetInstance().GetMousePosition();
 
-	/*
-		테스트 전용이므로 플레이어 먼저 렌더
-	*/
-	m_Player->Render(deviceContext, screenWidth, screenHeight);
-	TextureShader::GetInstance().Render(deviceContext, m_Player->GetIndexCount(), CGameApp::GetInstance().GetWorldMatrix(), m_Camera.GetViewMatrix(),
-		CGameApp::GetInstance().GetorthogonalMatrix(), m_Player->GetTexture());
+	Camera.Render();
 
-	//for(auto target : m_ActorList)
-	//{
-	//	target->Render(deviceContext, screenWidth, screenHeight);
-
-	//	TextureShader::GetInstance().Render(deviceContext, target->GetIndexCount(), CGameApp::GetInstance().GetWorldMatrix(), m_Camera.GetViewMatrix(),
-	//		CGameApp::GetInstance().GetorthogonalMatrix(), target->GetTexture());
-	//}
+	LevelBitmap.Render(device, screenWidth, screenHeight, 0, 0);
+	instance.Render(device, LevelBitmap.GetIndexCount(), worldMatrix, 
+		Camera.GetViewMatrix(), orthMatrix, LevelBitmap.GetTexture());
 
 	/*
 		렌더 리스트에 등록된 스프라이트 렌더
 	*/
-	for (auto target : m_EnvironmentList)
-	{
-		target->Render(deviceContext, screenWidth, screenHeight);
+	RenderList(EnvironmentList, device, worldMatrix, orthMatrix, instance, screenWidth, screenHeight);
 
-		TextureShader::GetInstance().Render(deviceContext, target->GetIndexCount(), CGameApp::GetInstance().GetWorldMatrix(), m_Camera.GetViewMatrix(),
-			CGameApp::GetInstance().GetorthogonalMatrix(), target->GetTexture());
-	}
+	RenderList(DeerList, device, worldMatrix, orthMatrix, instance, screenWidth, screenHeight);
 
+	GamePlayer->Render(device, screenWidth, screenHeight);
+	instance.Render(device, GamePlayer->GetIndexCount(), worldMatrix,
+		Camera.GetViewMatrix(), orthMatrix, GamePlayer->GetTexture());
+
+	RenderList(ToolList, device, worldMatrix, orthMatrix, instance, screenWidth, screenHeight);
+
+	PlayerUI.Render(device, screenWidth, screenHeight, worldMatrix, Camera.GetViewMatrix(),
+		orthMatrix, cameraPos, instance);
+
+	Cursor.Render(device, size.width, size.height, pos.x + cameraPos.x, pos.y - cameraPos.y);
+
+	instance.Render(device, Cursor.GetIndexCount(), worldMatrix, 
+		Camera.GetViewMatrix(), orthMatrix, Cursor.GetTexture());
 
 	return true;
 }
 
 void TestLevel1::onStart()
 {
-
+	Tool* spoon = new Tool(L"spoon", 5);
+	spoon->Initialize(CGameApp::GetInstance().GetDevice(), L"../Resources/tools/spoon.png", 50, 50, toolsPosition[0]);
+	GamePlayer->AddTool(spoon);
 }
 
 void TestLevel1::onEnd()
 {
 
+}
+
+void TestLevel1::onGameOver()
+{
+	CGameLevelLoader::GetInstance().ChangeLevel(new GameOverLevel());
+}
+
+
+
+
+template<typename T>
+void TestLevel1::ReleaseList(std::vector<T *>& list)
+{
+	for(T*& ptr : list)
+	{
+		Utils::Release(&ptr);
+	}
+}
+
+template<typename T>
+void TestLevel1::RenderList(std::vector<T *>& list, ID3D10Device* device, D3DXMATRIX worldMatrix, D3DXMATRIX projectionMatrix, TextureShader& shaderInstance, int screenWidth, int screenHeight)
+{
+	for(T*& ptr : list)
+	{
+		ptr->Render(device, screenWidth, screenHeight);
+
+		shaderInstance.Render(device, ptr->GetIndexCount(), worldMatrix,
+			Camera.GetViewMatrix(), projectionMatrix, ptr->GetTexture());
+	}
 }

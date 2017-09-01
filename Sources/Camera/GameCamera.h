@@ -1,8 +1,14 @@
 #pragma once
 
-#include <D3DX10math.h>
+#include <d3dx10math.h>
 
-class CGameCamera {
+class CGameCamera 
+{
+private:
+	D3DXVECTOR3 Position;
+	D3DXVECTOR3 Rotation;
+	D3DXMATRIX ViewMatrix;
+
 public:
 	CGameCamera();
 	~CGameCamera();
@@ -23,9 +29,4 @@ public:
 	void Render();
 	//뷰 행렬 가져오기
 	D3DXMATRIX& GetViewMatrix();
-
-private:
-	D3DXVECTOR3 m_Position;
-	D3DXVECTOR3 m_Rotation;
-	D3DXMATRIX m_ViewMatrix;	
 };

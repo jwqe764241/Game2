@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
-#include <D3DX11.h>
-#include <D3D11.h>
+#include <d3d10_1.h>
 
 namespace GameColors {
 	constexpr FLOAT RED[4]     = {1.0f, 0.0f, 0.0f, 1.0f};
@@ -42,11 +41,34 @@ namespace GameColors {
 //}
 
 namespace Utils {
+
+	struct _RECT_F {
+		float left;
+		float top;
+		float right;
+		float bottom;
+	};
+
+	using RECT_F = _RECT_F;
+
 	template <typename T>
 	void Release(T ** pTy) {
 		if ((*pTy)) {
 			(*pTy)->Release();
 			(*pTy) = nullptr;
 		}
+	}
+
+	static bool CheckCollision(RECT_F rect1, RECT_F rect2)
+	{
+		if ((rect1.right > rect2.left) && (rect1.left < rect2.right)) 
+		{
+			if ((rect1.bottom > rect2.top) && (rect1.top < rect2.bottom)) 
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

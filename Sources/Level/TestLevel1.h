@@ -1,60 +1,85 @@
 #pragma once
 
 #include <vector>
+#include <algorithm>
 #include <Sources/GameApp.h>
-
 #include <Sources/GameDefs.h>
 #include <Sources/GameAssetLoader.h>
 #include <Sources/Camera/GameCamera.h>
 #include <Sources/Input/GameInput2.h>
-#include <Sources/Interface/IRenderable.h>
+#include <Sources/Assets/StateUI.h>
 #include <Sources/Interface/ILevel.h>
+#include <Sources/Assets/Tool.h>
 
-/*
-	일단 리스트 2개이고, for문 2개지만 아마 어떻게 해결 할 방법이 있을 것이다 ㅋㅋ...
-	맘에 안들긴 함
+#include <Sources/Assets/Rock.h>
+#include <Sources/Assets/Pond.h>
+#include <Sources/Assets/Tree.h>
+#include <Sources/Assets/Deer.h>
 
-	렌더 우선순위를 어떻게 관리할 수 있나 생각중이긴 한데 (몇개 있긴 하다)
-	근데 이렇게 기능들을 추가해버리면 과연 거기가서 칠 수 있으련지
-*/
+#include <Sources/Level/GameOverLevel.h>
 
-using EnvironmentList = std::vector<IRenderable *>;
-using ActorList = std::vector<ICharacter *>;
 
-class TestLevel1 : public ILevel{
+struct environmentElement
+{
+	wchar_t * filePath;
+	float width;
+	float height;
+	int x;
+	int y;
+};
+
+class TestLevel1 : public ILevel {
 private:
-	/*
-		풀 같은 것들
-	*/
-	EnvironmentList m_EnvironmentList;
-	/*
-		몬스터 같은 것들
-	*/
-	ActorList m_ActorList;
-	Player* m_Player;
-	CGameCamera m_Camera;
-
-	const D3DXVECTOR2 m_PosList[10] = {
-		{ 30, 50 },
-		{ 60, 400 },
-		{ 100, 50 },
-		{ 300, 60 },
-		{ 700, 500 },
-		{ 550, 300 },
-		{ 340, 400 },
-		{ 200, 350 },
-		{ 200, 500 },
-		{ 30, 500 },
-	};
-	const D3DXVECTOR2 m_SpawnPoint[5] = {
-		{200, 0},
-		{700, 500},
-		{500, 40},
-		{300, 300},
-		{700, 500}
+	const int cameraPosX[4] = {
+		0, 1920, 3840, 5760
 	};
 
-	RECT m_LevelSize;
+	const int cameraPosY[4] = {
+		0, -1080, -2160, -3240
+	};
+
+	const POINT toolsPosition[5] = {
+		{3500, 2500},
+		{1500, 100},
+		{7300, 4000},
+		{300, 4000},
+		{6300, 1000}
+	};
+	
+	const environmentElement environmentList[8] = {
+		{ L"../Resources/Rock1.png", 171, 97, 1600, 100},
+		{ L"../Resources/Rock2.png", 171, 125, 1700, 200},
+		{ L"../Resources/Rock3.png", 165, 121, 1700, 300},
+		{ L"../Resources/pond.png", 788, 277, 6300, 100 },
+		{ L"../Resources/Tree.png", 1000, 888, 6300, 1000 },
+		{ L"../Resources/Tree.png", 1000, 888, 6000, 825 },
+		{ L"../Resources/Tree.png", 1000, 888, 5200, 1200 },
+		{ L"../Resources/Tree.png", 1000, 888, 5800, 1500 },
+	};
+
+	const POINT deerPosition[5] = {
+		{4000, 2000},
+		{3900, 1750},
+		{4200, 1900},
+		{4150, 2150},
+		{4450, 2000}
+	};
+
+private:
+	std::vector<Tool *> ToolList;
+	std::vector<ICharacter *> ActorList;
+	std::vector<IInteraction *> EnvironmentList;
+	std::vector<Deer *> DeerList;
+
+	GameBitmap LevelBitmap;
+	GameBitmap Cursor;
+	CGameCamera Camera;
+
+	RECT LevelSize;
+
+	Player* GamePlayer;
+
+	StateUI PlayerUI;
 
 public:
 	TestLevel1();
@@ -63,8 +88,17 @@ public:
 	virtual bool Load() override;
 	virtual void Unload() override;
 	virtual void Update(float dt) override;
-	virtual bool Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight) override;
+	virtual bool Render(ID3D10Device* device, int screenWidth, int screenHeight) override;
 
 	virtual void onStart() override;
 	virtual void onEnd() override;
+	void onGameOver();
+
+
+	//템플릿
+	template<typename T>
+	void ReleaseList(std::vector<T *>& list);
+
+	template<typename T>
+	void RenderList(std::vector<T *>& list, ID3D10Device* device, D3DXMATRIX worldMatrix, D3DXMATRIX projectionMatrix, TextureShader& shaderInstance, int screenWidth, int screenHeight);
 };

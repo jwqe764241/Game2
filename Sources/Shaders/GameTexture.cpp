@@ -1,11 +1,6 @@
 #include "GameTexture.h"
 
-GameTexture::GameTexture() : m_Texture(nullptr)
-{
-
-}
-
-GameTexture::GameTexture(const GameTexture& other) : GameTexture()
+GameTexture::GameTexture() : Texture(nullptr)
 {
 
 }
@@ -15,13 +10,13 @@ GameTexture::~GameTexture()
 
 }
 
-bool GameTexture::Initialize(ID3D11Device* device, wchar_t* filePath)
+bool GameTexture::Initialize(ID3D10Device* device, wchar_t* filePath)
 {
 	GAME_ASSERT(device != nullptr && filePath != nullptr, "Arguments must not be nullptr");
 
 	HRESULT result;
 	
-	result = D3DX11CreateShaderResourceViewFromFile(device, filePath, NULL, NULL, &m_Texture, NULL);
+	result = D3DX10CreateShaderResourceViewFromFile(device, filePath, NULL, NULL, &Texture, NULL);
 	if (FAILED(result)) 
 	{
 		return false;
@@ -32,10 +27,10 @@ bool GameTexture::Initialize(ID3D11Device* device, wchar_t* filePath)
 
 void GameTexture::Release()
 {
-	Utils::Release(&m_Texture);
+	Utils::Release(&Texture);
 }
 
-ID3D11ShaderResourceView* GameTexture::GetTexture()
+ID3D10ShaderResourceView* GameTexture::GetTexture()
 {
-	return m_Texture;
+	return Texture;
 }

@@ -1,31 +1,30 @@
 #pragma once
 
-#include <D3D11.h>
+#include <d3d10_1.h>
 
 #include <Sources/Geometries/GameSprite.h>
-#include <Sources/Interface/IRenderable.h>
 #include <Sources/Interface/ICharacter.h>
 
 class Enemy1 : public ICharacter{
 private:
-	wchar_t* m_ResourcePath;
+	wchar_t* ResourcePath;
 
-	int m_Health;
-	D3DXVECTOR2 m_Pos;
-	GameSprite m_Sprite;
+	int Health;
+	D3DXVECTOR2 Position;
+	GameSprite Sprite;
 
 public:
 	Enemy1();
 	~Enemy1();
 
 	// IRenderable을(를) 통해 상속됨
-	virtual void Load(ID3D11Device * device, int bitmapWidth, int bitmapHeight) override;
+	virtual void Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight) override;
 	virtual void Release() override;
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
-	virtual void Render(ID3D11DeviceContext * deviceContext, int screenWidth, int screenHeight) override;
+	virtual void Render(ID3D10Device * device, int screenWidth, int screenHeight) override;
 	virtual int GetIndexCount() override;
-	virtual ID3D11ShaderResourceView * GetTexture() override;
+	virtual ID3D10ShaderResourceView * GetTexture() override;
 	virtual D3DXVECTOR2 GetPosition() const override;
 	virtual void SetPosition(const D3DXVECTOR2 pos) override;
 	virtual GameSprite * GetSprite() override;

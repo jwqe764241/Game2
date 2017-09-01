@@ -14,16 +14,16 @@ TestAsset::~TestAsset()
 
 }
 
-void TestAsset::Load(ID3D11Device* device, int bitmapWidth, int bitmapHeight)
+void TestAsset::Load(ID3D10Device* device, int bitmapWidth, int bitmapHeight)
 {
 	m_PosX = 0;
 	m_PosY = 0;
-	m_Bitmap.Initialize(device, filePath, bitmapWidth, bitmapHeight);
+	Bitmap.Initialize(device, filePath, bitmapWidth, bitmapHeight);
 }
 
 void TestAsset::Release()
 {
-	m_Bitmap.Release();
+	Bitmap.Release();
 }
 
 void TestAsset::Reset()
@@ -37,19 +37,19 @@ void TestAsset::Update(float dt)
 	//m_PosY += 1;
 }
 
-void TestAsset::Render(ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight)
+void TestAsset::Render(ID3D10Device* device, int screenWidth, int screenHeight)
 {
-	m_Bitmap.Render(deviceContext, screenWidth, screenHeight, m_PosX, m_PosY);
+	Bitmap.Render(device, screenWidth, screenHeight, m_PosX, m_PosY);
 }
 
 int TestAsset::GetIndexCount()
 {
-	return m_Bitmap.GetIndexCount();
+	return Bitmap.GetIndexCount();
 }
 
-ID3D11ShaderResourceView* TestAsset::GetTexture()
+ID3D10ShaderResourceView* TestAsset::GetTexture()
 {
-	return m_Bitmap.GetTexture();
+	return Bitmap.GetTexture();
 }
 
 D3DXVECTOR2 TestAsset::GetPosition() const
@@ -61,9 +61,4 @@ void TestAsset::SetPosition(const D3DXVECTOR2 pos)
 {
 	m_PosX = pos.x;
 	m_PosY = pos.y;
-}
-
-GameSprite* TestAsset::GetSprite()
-{
-	return nullptr;
 }
