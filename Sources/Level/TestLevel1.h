@@ -93,4 +93,12 @@ public:
 	virtual void onStart() override;
 	virtual void onEnd() override;
 	void onGameOver();
+
+
+	//≈€«√∏¥
+	template<typename T>
+	void ReleaseList(std::vector<T *>& list);
+
+	template<typename T>
+	void RenderList(std::vector<T *>& list, ID3D10Device* device, D3DXMATRIX worldMatrix, D3DXMATRIX projectionMatrix, TextureShader& shaderInstance, int screenWidth, int screenHeight);
 };

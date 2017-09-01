@@ -75,36 +75,16 @@ void TestLevel1::Unload()
 	LevelBitmap.Release();
 	Cursor.Release();
 
-	for (auto& target : EnvironmentList)
-	{
-		target->Release();
-	}
-
-	for (auto& target : ActorList)
-	{
-		target->Release();
-	}
-
-	for (auto& target : ToolList)
-	{
-		Utils::Release(&target);
-	}
-
-	for (auto& target : DeerList)
-	{
-		Utils::Release(&target);
-	}
+	ReleaseList(EnvironmentList);
+	ReleaseList(ActorList);
+	ReleaseList(ToolList);
+	ReleaseList(DeerList);
 
 	Utils::Release(&GamePlayer);
 }
 
 void TestLevel1::Update(float dt)
 {
-	for (auto& target : EnvironmentList)
-	{
-		target->Update(dt);
-	}
-
 	for (auto& target : ActorList)
 	{
 		target->Update(dt);
@@ -123,6 +103,8 @@ void TestLevel1::Update(float dt)
 
 	for (auto itor = EnvironmentList.begin(); itor != EnvironmentList.end(); ++itor)
 	{
+		(*itor)->Update(dt);
+
 		if (GameInput2::GetInstance().IsPressed(VK_SPACE))
 		{
 			if ((*itor)->CheckCollision(GamePlayer) && (*itor)->CheckTool(GamePlayer)) {
@@ -161,7 +143,6 @@ void TestLevel1::Update(float dt)
 			Utils::RECT_F{ static_cast<float>((*itor)->GetPosition().x), static_cast<float>((*itor)->GetPosition().y),
 			static_cast<float>((*itor)->GetPosition().x) + 50, static_cast<float>((*itor)->GetPosition().y) + 50 }
 		);
-
 
 		if (collisionResult)
 		{
@@ -226,33 +207,15 @@ bool TestLevel1::Render(ID3D10Device* device, int screenWidth, int screenHeight)
 	/*
 		렌더 리스트에 등록된 스프라이트 렌더
 	*/
-	for (auto& target : EnvironmentList)
-	{
-		target->Render(device, screenWidth, screenHeight);
+	RenderList(EnvironmentList, device, worldMatrix, orthMatrix, instance, screenWidth, screenHeight);
 
-		instance.Render(device, target->GetIndexCount(), worldMatrix, 
-			Camera.GetViewMatrix(), orthMatrix, target->GetTexture());
-	}
-
-	for (auto& target : DeerList)
-	{
-		target->Render(device, screenWidth, screenHeight);
-
-		instance.Render(device, target->GetIndexCount(), worldMatrix,
-			Camera.GetViewMatrix(), orthMatrix, target->GetTexture());
-	}
+	RenderList(DeerList, device, worldMatrix, orthMatrix, instance, screenWidth, screenHeight);
 
 	GamePlayer->Render(device, screenWidth, screenHeight);
 	instance.Render(device, GamePlayer->GetIndexCount(), worldMatrix,
 		Camera.GetViewMatrix(), orthMatrix, GamePlayer->GetTexture());
 
-	for (auto& target : ToolList)
-	{
-		target->Render(device, screenWidth, screenHeight);
-
-		instance.Render(device, target->GetIndexCount(), worldMatrix,
-			Camera.GetViewMatrix(), orthMatrix, target->GetTexture());
-	}
+	RenderList(ToolList, device, worldMatrix, orthMatrix, instance, screenWidth, screenHeight);
 
 	PlayerUI.Render(device, screenWidth, screenHeight, worldMatrix, Camera.GetViewMatrix(),
 		orthMatrix, cameraPos, instance);
@@ -280,4 +243,28 @@ void TestLevel1::onEnd()
 void TestLevel1::onGameOver()
 {
 	CGameLevelLoader::GetInstance().ChangeLevel(new GameOverLevel());
+}
+
+
+
+
+template<typename T>
+void TestLevel1::ReleaseList(std::vector<T *>& list)
+{
+	for(T*& ptr : list)
+	{
+		Utils::Release(&ptr);
+	}
+}
+
+template<typename T>
+void TestLevel1::RenderList(std::vector<T *>& list, ID3D10Device* device, D3DXMATRIX worldMatrix, D3DXMATRIX projectionMatrix, TextureShader& shaderInstance, int screenWidth, int screenHeight)
+{
+	for(T*& ptr : list)
+	{
+		ptr->Render(device, screenWidth, screenHeight);
+
+		shaderInstance.Render(device, ptr->GetIndexCount(), worldMatrix,
+			Camera.GetViewMatrix(), projectionMatrix, ptr->GetTexture());
+	}
 }
