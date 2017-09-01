@@ -12,7 +12,7 @@ TestLevel1::~TestLevel1()
 
 bool TestLevel1::Load()
 {
-	WindowSize size = CGameApp::GetInstance().GetWindowSize();
+	WINDOWSIZE size = CGameApp::GetInstance().GetWindowSize();
 
 	m_EnvironmentList.reserve(20);
 	m_ActorList.reserve(20);
@@ -111,7 +111,7 @@ void TestLevel1::Update(float dt)
 	}
 
 	D3DXVECTOR2 pos = m_Player->GetPosition();
-	WindowSize size = CGameApp::GetInstance().GetWindowSize();
+	WINDOWSIZE size = CGameApp::GetInstance().GetWindowSize();
 	float halfWidth = size.width / 2;
 	float halfHeight = size.height / 2;
 	//°íÄ¡±â
@@ -213,7 +213,7 @@ bool TestLevel1::Render(ID3D10Device* device, int screenWidth, int screenHeight)
 	TextureShader& instance = TextureShader::GetInstance();
 	D3DXMATRIX worldMatrix  = CGameApp::GetInstance().GetWorldMatrix();
 	D3DXMATRIX orthMatrix   = CGameApp::GetInstance().GetorthogonalMatrix();
-	WindowSize size         = CGameApp::GetInstance().GetWindowSize();
+	WINDOWSIZE size         = CGameApp::GetInstance().GetWindowSize();
 	D3DXVECTOR3 cameraPos   = m_Camera.GetPosition();
 	POINT pos               = GameInput2::GetInstance().GetMousePosition();
 

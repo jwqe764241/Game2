@@ -1,9 +1,9 @@
 #include "TextureShader.h"
 
 TextureShader::TextureShader() :
-	m_effect(nullptr), m_technique(nullptr), m_layout(nullptr),
-	m_worldMatrixPtr(nullptr), m_viewMatrixPtr(nullptr), m_projectionMatrixPtr(nullptr),
-	m_texturePtr(nullptr)
+	Effect(nullptr), EffectTechnique(nullptr), InputLayout(nullptr),
+	WorldMatrixPtr(nullptr), ViewMatrixPtr(nullptr), ProjectionMatrixPtr(nullptr),
+	TexturePtr(nullptr)
 {
 }
 
@@ -51,15 +51,15 @@ bool TextureShader::InitializeShader(ID3D10Device* device, HWND hwnd, wchar_t *f
 	ID3D10Blob *error = nullptr;
 
 	result = D3DX10CreateEffectFromFile(filePath, NULL, NULL, "fx_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, 
-		device, NULL, NULL, &m_effect, &error, NULL);
+		device, NULL, NULL, &Effect, &error, NULL);
 	if (FAILED(result)) 
 	{
 		HandlingError(error, hwnd, L"shader_error_out.txt", filePath, L"check shader_error_out.txt!");
 		return false;
 	}
 
-	m_technique = m_effect->GetTechniqueByName("TextureTechnique");
-	if (!m_technique)
+	EffectTechnique = Effect->GetTechniqueByName("TextureTechnique");
+	if (!EffectTechnique)
 	{
 		return false;
 	}
@@ -84,73 +84,37 @@ bool TextureShader::InitializeShader(ID3D10Device* device, HWND hwnd, wchar_t *f
 	int numElements = sizeof(polyLayout) / sizeof(polyLayout[0]);
 
 	D3D10_PASS_DESC passDesc;
-	m_technique->GetPassByIndex(0)->GetDesc(&passDesc);
+	EffectTechnique->GetPassByIndex(0)->GetDesc(&passDesc);
 
-	result = device->CreateInputLayout(polyLayout, numElements, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &m_layout);
+	result = device->CreateInputLayout(polyLayout, numElements, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &InputLayout);
 	if (FAILED(result)) 
 	{
 		MessageBox(hwnd, L"Cannot Create InputLayout", L"Error", MB_OK);
 		return false;
 	}
 
-	m_worldMatrixPtr = m_effect->GetVariableByName("worldMatrix")->AsMatrix();
-	m_viewMatrixPtr = m_effect->GetVariableByName("viewMatrix")->AsMatrix();
-	m_projectionMatrixPtr = m_effect->GetVariableByName("projectionMatrix")->AsMatrix();
+	WorldMatrixPtr = Effect->GetVariableByName("worldMatrix")->AsMatrix();
+	ViewMatrixPtr = Effect->GetVariableByName("viewMatrix")->AsMatrix();
+	ProjectionMatrixPtr = Effect->GetVariableByName("projectionMatrix")->AsMatrix();
 
-	m_texturePtr = m_effect->GetVariableByName("shaderTexture")->AsShaderResource();
-
-	/*D3D10_BUFFER_DESC matrixBufferDesc;
-		matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-		matrixBufferDesc.ByteWidth = sizeof(Matrix);
-		matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		matrixBufferDesc.MiscFlags = 0;
-		matrixBufferDesc.StructureByteStride = 0;
-
-	result = device->CreateBuffer(&matrixBufferDesc, NULL, &m_MatrixBuffer);
-	if (FAILED(result))
-	{
-		MessageBox(hwnd, L"Cannot Create Matrix Buffer", L"Error", MB_OK);
-		return false;
-	}
-
-	D3D11_SAMPLER_DESC samplerDesc;
-		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.MipLODBias = 0.0;
-		samplerDesc.MaxAnisotropy = 1;
-		samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-		samplerDesc.BorderColor[0] = 0;
-		samplerDesc.BorderColor[1] = 0;
-		samplerDesc.BorderColor[2] = 0;
-		samplerDesc.BorderColor[3] = 0;
-		samplerDesc.MinLOD = 0;
-		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	result = device->CreateSamplerState(&samplerDesc, &m_SampleState);
-	if (FAILED(result))
-	{
-		MessageBox(hwnd, L"Cannot Create Sampler State", L"Error", MB_OK);
-		return false;
-	}*/
+	TexturePtr = Effect->GetVariableByName("shaderTexture")->AsShaderResource();
 
 	return true;
 }
 
 void TextureShader::ReleaseShader()
 {
-	Utils::Release(&m_effect);
-	Utils::Release(&m_layout);
+	Utils::Release(&Effect);
+	Utils::Release(&InputLayout);
 
-	m_technique           = 0;
-	m_worldMatrixPtr      = 0;
-	m_viewMatrixPtr       = 0;
-	m_projectionMatrixPtr = 0;
-	m_texturePtr          = 0;
+	EffectTechnique           = 0;
+	WorldMatrixPtr      = 0;
+	ViewMatrixPtr       = 0;
+	ProjectionMatrixPtr = 0;
+	TexturePtr          = 0;
 }
 
-void TextureShader::HandlingError(ID3D10Blob *error, HWND hwnd, wchar_t *outFileName, wchar_t *text, wchar_t *caption)
+void TextureShader::HandlingError(ID3D10Blob* error, HWND hwnd, wchar_t* outFileName, wchar_t* text, wchar_t* caption)
 {
 	if (error) 
 	{
@@ -173,33 +137,11 @@ void TextureShader::HandlingError(ID3D10Blob *error, HWND hwnd, wchar_t *outFile
 
 bool TextureShader::SetParameters(D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D10ShaderResourceView *texture)
 {
-	/*HRESULT result;
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	
-	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
-	D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
-	D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
+	WorldMatrixPtr->SetMatrix(reinterpret_cast<float *>(&worldMatrix));
+	ViewMatrixPtr->SetMatrix(reinterpret_cast<float *>(&viewMatrix));
+	ProjectionMatrixPtr->SetMatrix(reinterpret_cast<float *>(&projectionMatrix));
 
-	result = deviceContext->Map(m_MatrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	Matrix* pData = reinterpret_cast<Matrix*>(mappedResource.pData);
-	pData->world = worldMatrix;
-	pData->view = viewMatrix;
-	pData->projection = projectionMatrix;
-
-	deviceContext->Unmap(m_MatrixBuffer, 0);
-	deviceContext->VSSetConstantBuffers(0, 1, &m_MatrixBuffer);
-	deviceContext->PSSetShaderResources(0, 1, &texture);*/
-
-	m_worldMatrixPtr->SetMatrix(reinterpret_cast<float *>(&worldMatrix));
-	m_viewMatrixPtr->SetMatrix(reinterpret_cast<float *>(&viewMatrix));
-	m_projectionMatrixPtr->SetMatrix(reinterpret_cast<float *>(&projectionMatrix));
-
-	m_texturePtr->SetResource(texture);
+	TexturePtr->SetResource(texture);
 
 	return true;
 }
@@ -208,13 +150,13 @@ void TextureShader::RenderShader(ID3D10Device* device, int indexCount)
 {
 	D3D10_TECHNIQUE_DESC techniqueDesc;
 
-	device->IASetInputLayout(m_layout);
+	device->IASetInputLayout(InputLayout);
 
-	m_technique->GetDesc(&techniqueDesc);
+	EffectTechnique->GetDesc(&techniqueDesc);
 
 	for (int i = 0; i<techniqueDesc.Passes; ++i)
 	{
-		m_technique->GetPassByIndex(i)->Apply(0);
+		EffectTechnique->GetPassByIndex(i)->Apply(0);
 		device->DrawIndexed(indexCount, 0, 0);
 	}
 

@@ -1,9 +1,18 @@
 #include <Sources/Geometries/StateBar.h>
 
+StateBar::StateBar()
+{
+}
+
+StateBar::~StateBar()
+{
+	Release();
+}
+
 void StateBar::Initialize(ID3D10Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight, int maxValue, int curValue)
 {
-	this->maxValue = maxValue;
-	this->curValue = curValue;
+	MaximumValue = maxValue;
+	CurrentValue = curValue;
 
 	GameBitmap::Initialize(device, filePath, bitmapWidth, bitmapHeight);
 }
@@ -48,7 +57,7 @@ bool StateBar::UpdateBuffers(ID3D10Device *device, int screenWidth, int screenHe
 	m_prevPosY = posY;
 
 	rect.left = static_cast<float>((screenWidth / 2) * -1) + static_cast<float>(posX);
-	rect.right = rect.left + static_cast<float>(2 * curValue);
+	rect.right = rect.left + static_cast<float>(2 * CurrentValue);
 	rect.top = static_cast<float>(screenHeight / 2) - static_cast<float>(posY);
 	rect.bottom = rect.top - static_cast<float>(m_bitmapHeight);
 
@@ -102,16 +111,16 @@ void StateBar::Release()
 
 void StateBar::SetValue(int value)
 {
-	if (value >= maxValue)
+	if (value >= MaximumValue)
 	{
-		curValue = maxValue;
+		CurrentValue = MaximumValue;
 	}
 	else if (value <= 0)
 	{
-		curValue = 0;
+		CurrentValue = 0;
 	}
 	else
 	{
-		curValue = value;
+		CurrentValue = value;
 	}
 }

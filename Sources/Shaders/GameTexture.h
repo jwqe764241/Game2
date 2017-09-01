@@ -6,16 +6,16 @@
 #include <Sources/Utils/error.h>
 #include <Sources/GameDefs.h>
 
-class GameTexture{
+class GameTexture
+{
+private:
+	ID3D10ShaderResourceView* Texture;
+
 public:
 	GameTexture();
-	GameTexture(const GameTexture& other);
-	~GameTexture();
+	virtual ~GameTexture();
 
 	bool Initialize(ID3D10Device* device, wchar_t* filePath);
 	void Release();
 	ID3D10ShaderResourceView* GetTexture();
-
-	ID3D10ShaderResourceView* m_Texture;
-
 };

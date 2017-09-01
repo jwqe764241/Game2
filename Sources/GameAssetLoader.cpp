@@ -19,24 +19,24 @@ CGameAssetLoader& CGameAssetLoader::GetInstance()
 
 void CGameAssetLoader::Initialize(ID3D10Device* device, int* screenWidth, int* screenHeight)
 {
-	m_AllocList.reserve(50);
-	m_DeviceRef = device;
-	m_ScreenWidthRef = screenWidth;
-	m_ScreenHeightRef = screenHeight;
+	AllocationList.reserve(50);
+	DeviceRef = device;
+	ScreenWidthRef = screenWidth;
+	ScreenHeightRef = screenHeight;
 }
 
 void CGameAssetLoader::Release()
 {
-	for (auto allocTarget : m_AllocList)
+	for (auto allocTarget : AllocationList)
 	{
 		Utils::Release(&allocTarget);
 	}
 }
 
-TargetInterface* CGameAssetLoader::LoadAsset(int id, int bitmapWidth, int bitmapHeight)
+IRenderable* CGameAssetLoader::LoadAsset(int id, int bitmapWidth, int bitmapHeight)
 {
 
-	TargetInterface* asset = nullptr;
+	IRenderable* asset = nullptr;
 
 	switch (id)
 	{
@@ -53,23 +53,8 @@ TargetInterface* CGameAssetLoader::LoadAsset(int id, int bitmapWidth, int bitmap
 		asset = new Enemy1();
 	}
 
-	asset->Load(m_DeviceRef, bitmapWidth, bitmapHeight);
-	m_AllocList.push_back(asset);
+	asset->Load(DeviceRef, bitmapWidth, bitmapHeight);
+	AllocationList.push_back(asset);
 
 	return asset;
 }
-
-//TargetInterface* CGameAssetLoader::GetAsset(std::string id)
-//{
-//	return m_AssetMap.find(id)->second;
-//}
-//
-//void CGameAssetLoader::ClearMap()
-//{
-//	for (auto itor = m_AssetMap.begin(); itor != m_AssetMap.end(); itor++)
-//	{
-//		delete itor->second;
-//	}
-//
-//	m_AssetMap.clear();
-//}

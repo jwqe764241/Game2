@@ -5,10 +5,8 @@
 #include <Sources/Interface/ILevel.h>
 
 
-class CGameLevelLoader {
-private:
-	ILevel* m_CurrentLevel;
-	//std::map<int, ILevel*> m_PreLoadedLevel;
+class CGameLevelLoader 
+{
 public:
 	enum LevelID {
 		LEVEL_MAIN,
@@ -16,10 +14,14 @@ public:
 		LEVEL_TEST1
 	};
 
+private:
+	ILevel* CurrentLevel;
+	//std::map<int, ILevel*> m_PreLoadedLevel;
+
 public:
 	CGameLevelLoader();
 	CGameLevelLoader(CGameLevelLoader&) = delete;
-	~CGameLevelLoader();
+	virtual ~CGameLevelLoader();
 
 	static CGameLevelLoader& GetInstance();
 

@@ -1,88 +1,88 @@
 #include <Sources/GameTimer.h>
 
-CGameTimer::CGameTimer()
-	: m_dSecPerCount(0.0), m_dDeltaTime(-1.0), m_BaseTime(0), m_PausedTime(0),
-	m_StopTime(0), m_PrevTime(0), m_CurTime(0), m_IsStopped(false)
+GameTimer::GameTimer()
+	: SecPerCount(0.0), DeltaTime(-1.0), BaseTime(0), PausedTime(0),
+	StopTime(0), PrevTime(0), CurTime(0), IsStopped(false)
 {
 	__int64 countPerSec;
 	QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER *>(&countPerSec));
-	m_dSecPerCount = 1.0 / static_cast<double>(countPerSec);
+	SecPerCount = 1.0 / static_cast<double>(countPerSec);
 }
 
 
-float CGameTimer::TotalTime()
+float GameTimer::GetTotalTime()
 {
-	if (m_IsStopped) 
+	if (IsStopped) 
 	{
-		return ((m_StopTime - m_PausedTime) - m_BaseTime) * m_dSecPerCount;
+		return ((StopTime - PausedTime) - BaseTime) * SecPerCount;
 	}
 	else 
 	{
-		return ((m_CurTime - m_PausedTime) - m_BaseTime) * m_dSecPerCount;
+		return ((CurTime - PausedTime) - BaseTime) * SecPerCount;
 	}
 }
 
-float CGameTimer::DeltaTime()
+float GameTimer::GetDeltaTime()
 {
-	return m_dDeltaTime;
+	return DeltaTime;
 }
 
 
-void CGameTimer::Reset()
+void GameTimer::Reset()
 {
 	__int64 curTime;
 	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER *>(&curTime));
 
-	m_BaseTime  = curTime;
-	m_PrevTime  = curTime;
-	m_StopTime  = 0;
-	m_IsStopped = false;
+	BaseTime  = curTime;
+	PrevTime  = curTime;
+	StopTime  = 0;
+	IsStopped = false;
 }
 
-void CGameTimer::Start()
+void GameTimer::Start()
 {
 	__int64 startTime;
 	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER *>(&startTime));
 
-	if (m_IsStopped) 
+	if (IsStopped) 
 	{
-		m_PausedTime += (startTime - m_StopTime);
-		m_PrevTime = startTime;
-		m_StopTime = 0;
-		m_IsStopped = false;
+		PausedTime += (startTime - StopTime);
+		PrevTime = startTime;
+		StopTime = 0;
+		IsStopped = false;
 	}
 }
 
-void CGameTimer::Stop()
+void GameTimer::Stop()
 {
-	if (!m_IsStopped) 
+	if (!IsStopped) 
 	{
 		__int64 curTime;
 		QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER *>(&curTime));
 
-		m_StopTime = curTime;
-		m_IsStopped = true;
+		StopTime = curTime;
+		IsStopped = true;
 	}
 }
 
-void CGameTimer::Tick()
+void GameTimer::Tick()
 {
-	if (m_IsStopped) 
+	if (IsStopped) 
 	{
-		m_dDeltaTime = 0.0;
+		DeltaTime = 0.0;
 		return;
 	}
 
 	__int64 curTime;
 	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER *>(&curTime));
-	m_CurTime = curTime;
+	CurTime = curTime;
 
-	m_dDeltaTime = (m_CurTime - m_PrevTime) * m_dSecPerCount;
+	DeltaTime = (CurTime - PrevTime) * SecPerCount;
 	
-	m_PrevTime = m_CurTime;
+	PrevTime = CurTime;
 
-	if (m_dDeltaTime < 0.0) 
+	if (DeltaTime < 0.0) 
 	{
-		m_dDeltaTime = 0.0;
+		DeltaTime = 0.0;
 	}
 }

@@ -36,16 +36,16 @@ struct _AdapterInfo {
 };
 
 struct _AppInfo {
-	ID3D10Device			*pD3D10Device;
-	ID3D10RenderTargetView	*pD3D10RenderView;
-	IDXGISwapChain			*pSwapChain;
-	ID3D10RenderTargetView	*pRenderTargetView;
-	ID3D10Texture2D			*pBackBuffer;
-	ID3D10DepthStencilState *pDepthStencilState;
-	ID3D10DepthStencilState *pDepthDisableStencilState;
-	ID3D10DepthStencilView	*pDepthStencilView;
-	ID3D10RasterizerState	*pRasterizeState;
-	ID3D10BlendState		*pBlendState;
+	ID3D10Device*			pD3D10Device;
+	ID3D10RenderTargetView*	pD3D10RenderView;
+	IDXGISwapChain*			pSwapChain;
+	ID3D10RenderTargetView*	pRenderTargetView;
+	ID3D10Texture2D*		pBackBuffer;
+	ID3D10DepthStencilState*pDepthStencilState;
+	ID3D10DepthStencilState*pDepthDisableStencilState;
+	ID3D10DepthStencilView*	pDepthStencilView;
+	ID3D10RasterizerState*	pRasterizeState;
+	ID3D10BlendState*		pBlendState;
 };
 
 struct _AppMatrix {
@@ -56,50 +56,53 @@ struct _AppMatrix {
 
 using AdapterInfo = _AdapterInfo;
 using AppInfo     = _AppInfo;
-using WindowSize  = _WindowSize;
+using WINDOWSIZE  = _WindowSize;
 using Matrix      = _AppMatrix;
 
-class CGameApp{
-
+class CGameApp
+{
 private:
 	//--Components
-	AppInfo		m_AppInfo;
-	CGameTimer	m_GameTimer;
-	Matrix		m_Matrix;
-	std::vector <IDXGIAdapter*> m_vAdapters;
-	std::vector <IDXGIOutput *> m_vAdaptersOutputs;
+	AppInfo		AppComponents;
+	GameTimer	GameTimer;
+	Matrix		GameMatrices;
+	std::vector <IDXGIAdapter*> AdaptersList;
+	std::vector <IDXGIOutput*> AdaptersOutputsList;
 	//Compoenents--
 
 	//--Settings
 	//D3D_DRIVER_TYPE		m_DriverType   = D3D_DRIVER_TYPE_HARDWARE;
 	//D3D_FEATURE_LEVEL	m_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
 	//UINT				m_SDKVersion = D3D10_SDK_VERSION;
-	UINT				m_MultiSampleQualityLevel = 0;
+	UINT				MultiSampleQualityLevel = 0;
 
-	bool m_isVsync    = false;
-	bool m_isWindowed = false;
-	float m_screenDepth;
-	float m_screenNear;
+	bool IsVsync    = false;
+	bool IsWindowed = false;
+	float ScreenDepth;
+	float ScreenNear;
 	//Settings--
 
 	//--Window Val
-	HWND		m_hWnd;
-	HINSTANCE	m_hInstance;
-	wchar_t		*m_FrameTitle;
-	wchar_t		*m_WndClassName;
-	int			m_CmdShow;
-	WindowSize  m_WindowSize;
+	HWND		HWnd;
+	HINSTANCE	HInstance;
+	wchar_t*	FrameTitle;
+	wchar_t*	WndClassName;
+	int			CmdShow;
+	WINDOWSIZE  Windowsize;
 	//Window Val--
 
 	//--Info Val
-	std::vector<AdapterInfo> m_vAdapterInfoList;
+	std::vector<AdapterInfo> AdapterInfoList;
 	//Info Val--
 private:
 	void CalculateFrameStatus();
 	void LoadAssets();
 
 public:
-	bool Initialize(HINSTANCE hInstance, wchar_t * frameTitle, wchar_t * wndClassName, int nCmdShow, int width, int height, float screenDepth, float screenNear);
+	CGameApp();
+	virtual ~CGameApp();
+
+	bool Initialize(HINSTANCE hInstance, wchar_t* frameTitle, wchar_t* wndClassName, int nCmdShow, int width, int height, float screenDepth, float screenNear);
 	void Release();
 	void Launch();
 	void Update();
@@ -115,7 +118,7 @@ public:
 	D3DXMATRIX& GetWorldMatrix();
 	D3DXMATRIX& GetorthogonalMatrix();
 
-	WindowSize GetWindowSize() const;
+	WINDOWSIZE GetWindowSize() const;
 	HWND GetHWND() const;
 	ID3D10Device* GetDevice() const;
 	
@@ -125,9 +128,4 @@ public:
 	const AppInfo* GetAppInfo() const;
 
 	static CGameApp& GetInstance();
-	
-public:
-	CGameApp();
-	~CGameApp();
-
 };

@@ -12,7 +12,6 @@ Item::Item(int itemID, std::string itemName)
 
 Item::~Item()
 {
-
 }
 
 bool Item::Initialize(ID3D10Device * device, wchar_t * filePath, int bitmapWidth, int bitmapHeight)
@@ -64,7 +63,7 @@ bool Item::UpdateBuffers(ID3D10Device* device, int screenWidth, int screenHeight
 	//}
 
 	m_prevPosX = posX;
-	m_prevPosY = posY;\
+	m_prevPosY = posY;
 
 	rect.left = static_cast<float>((screenWidth / 2) * -1) + static_cast<float>(posX);
 	rect.right = rect.left + static_cast<float>(m_bitmapWidth);

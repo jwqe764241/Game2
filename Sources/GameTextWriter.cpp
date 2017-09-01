@@ -27,13 +27,13 @@ bool GameTextWriter::Initialize(ID3D10Device* pDevice, int height, int width)
 		fontDesc.PitchAndFamily = 0;
 		wcscpy_s(fontDesc.FaceName, TEXT("¸¼Àº °íµñ"));
 
-	result = D3DX10CreateFontIndirect(pDevice, &fontDesc, &m_pFont);
+	result = D3DX10CreateFontIndirect(pDevice, &fontDesc, &Font);
 	if (FAILED(result))
 	{
 		return false;
 	}
 
-	result = D3DX10CreateSprite(pDevice, sizeof(pDevice), &m_pSprite);
+	result = D3DX10CreateSprite(pDevice, sizeof(pDevice), &Sprite);
 	if (FAILED(result))
 	{
 		return false;
@@ -42,11 +42,11 @@ bool GameTextWriter::Initialize(ID3D10Device* pDevice, int height, int width)
 	return true;
 }
 
-void GameTextWriter::DrawString(wchar_t * string, RECT rect, UINT format, D3DXCOLOR color)
+void GameTextWriter::DrawString(wchar_t* string, RECT rect, UINT format, D3DXCOLOR color)
 {
-	m_pSprite->Begin(D3DX10_SPRITE_SAVE_STATE);
+	Sprite->Begin(D3DX10_SPRITE_SAVE_STATE);
 
-	m_pFont->DrawTextW(nullptr, string, -1, &rect, format, color);
+	Font->DrawTextW(nullptr, string, -1, &rect, format, color);
 
-	m_pSprite->End();
+	Sprite->End();
 }

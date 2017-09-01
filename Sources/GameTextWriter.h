@@ -4,15 +4,16 @@
 #include <D3DX10.h>
 #include <cstring>
 
-class GameTextWriter{
+class GameTextWriter
+{
 private:
-	ID3DX10Font* m_pFont;
-	ID3DX10Sprite* m_pSprite;
+	ID3DX10Font* Font;
+	ID3DX10Sprite* Sprite;
 
 public:
 	GameTextWriter();
-	~GameTextWriter();
+	virtual ~GameTextWriter();
 
-	bool Initialize(ID3D10Device * pDevice, int height, int width);
-	void DrawString(wchar_t * string, RECT rect, UINT format, D3DXCOLOR color);
+	bool Initialize(ID3D10Device* pDevice, int height, int width);
+	void DrawString(wchar_t* string, RECT rect, UINT format, D3DXCOLOR color);
 };

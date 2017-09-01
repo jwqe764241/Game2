@@ -2,39 +2,28 @@
 
 #include <Windows.h>
 
-class CGameTimer{
+class GameTimer
+{
 private:
-	////Not Used
-	//struct _TIME_ELEMENTS {
-	//	__int64 m_BaseTime;
-	//	__int64 m_PausedTime;
-	//	__int64 m_StopTime;
-	//	__int64 m_PrevTime;
-	//	__int64 m_CurTime;
-	//};
-	//using TIME_ELEMENTS = _TIME_ELEMENTS;
-	////---------------
+	double SecPerCount;
+	double DeltaTime;
+
+	__int64 BaseTime;
+	__int64 PausedTime;
+	__int64 StopTime;
+	__int64 PrevTime;
+	__int64 CurTime;
+
+	bool IsStopped;
 
 public:
-	CGameTimer();
+	GameTimer();
 
-	float TotalTime();
-	float DeltaTime();
+	float GetTotalTime();
+	float GetDeltaTime();
 
 	void Reset();
 	void Start();
 	void Stop();
 	void Tick();
-
-private:
-	double m_dSecPerCount;
-	double m_dDeltaTime;
-
-	__int64 m_BaseTime;
-	__int64 m_PausedTime;
-	__int64 m_StopTime;
-	__int64 m_PrevTime;
-	__int64 m_CurTime;
-
-	bool m_IsStopped;
 };

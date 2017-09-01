@@ -7,7 +7,7 @@ GameBitmap::GameBitmap() : m_vertexBuffer(nullptr), m_indexBuffer(nullptr), m_Te
 
 GameBitmap::~GameBitmap()
 {
-
+	Release();
 }
 
 bool GameBitmap::Initialize(ID3D10Device *device, wchar_t *filePath, int bitmapWidth, int bitmapHeight) 
@@ -270,8 +270,8 @@ void GameBitmap::ReleaseTexture()
 {
 	if (m_Texture)
 	{
-		//m_Texture->Release();
-		//m_Texture = nullptr;
+		//Texture->Release();
+		//Texture = nullptr;
 		Utils::Release(&m_Texture);
 		delete m_Texture;
 	}

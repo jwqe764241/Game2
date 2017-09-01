@@ -17,34 +17,24 @@ enum AssetID {
 	ID_ASSET_ENEMY1
 };
 
-//TODO: 확실해 지면 해당 것으로 수정하기
-using TargetInterface = IRenderable;
+class CGameAssetLoader 
+{
+private:
+	std::vector<IRenderable*> AllocationList;
 
-class CGameAssetLoader {
-	//변경될 수 있으므로 
+	ID3D10Device* DeviceRef;
+
+	int* ScreenWidthRef;
+	int* ScreenHeightRef;
+
 public:
 	CGameAssetLoader();
-	~CGameAssetLoader();
+	virtual ~CGameAssetLoader();
 	
 	static CGameAssetLoader& GetInstance();
 	void Initialize(ID3D10Device* device, int* screenWidth, int* screenHeight);
 	void Release();
 
 	//에셋 불러온 후 Map에 저장
-	TargetInterface* LoadAsset(int id, int bitmapWidth, int bitmapHeight);
-	//TargetInterface* GetAsset(std::string id);
-
-private:
-	//void ClearMap();
-
-private:
-	//ICharacter가 맞는가...
-	/*std::map<std::string, TargetInterface*> m_AssetMap;*/
-
-	std::vector<TargetInterface *> m_AllocList;
-
-	ID3D10Device * m_DeviceRef;
-
-	int* m_ScreenWidthRef;
-	int* m_ScreenHeightRef;	
+	IRenderable* LoadAsset(int id, int bitmapWidth, int bitmapHeight);
 };

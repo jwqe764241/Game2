@@ -20,20 +20,18 @@ struct _BitmapSize
 using VertexType = _VertexType;
 using BitmapSize = _BitmapSize;
 
-class GameBitmap {
-public:
-	GameBitmap();
-	GameBitmap(GameBitmap& other);
-	~GameBitmap();
+class GameBitmap 
+{
+protected:
+	ID3D10Buffer *m_vertexBuffer, *m_indexBuffer;
+	int m_vertexCount, m_indexCount;
+	GameTexture *m_Texture;
 
-	bool Initialize(ID3D10Device *device, wchar_t* filePath, int bitmapWidth, int bitmapHeight);
-	void Release();
-	bool Render(ID3D10Device *device, int screenWidth, int screenHeight, int posX, int posY);
+	int m_bitmapWidth, m_bitmapHeight;
+	int m_prevPosX, m_prevPosY;
 
-	int GetIndexCount();
-	ID3D10ShaderResourceView* GetTexture();
+	VertexType* m_vertices;
 
-	BitmapSize GetBitmapSize() const;
 protected:
 	VertexType* GetVertices();
 
@@ -46,13 +44,16 @@ private:
 	bool LoadTexture(ID3D10Device *device, wchar_t *filePath);
 	void ReleaseTexture();
 
-protected:
-	ID3D10Buffer *m_vertexBuffer, *m_indexBuffer;
-	int m_vertexCount, m_indexCount;
-	GameTexture *m_Texture;
+public:
+	GameBitmap();
+	virtual ~GameBitmap();
 
-	int m_bitmapWidth, m_bitmapHeight;
-	int m_prevPosX   , m_prevPosY;
+	bool Initialize(ID3D10Device *device, wchar_t* filePath, int bitmapWidth, int bitmapHeight);
+	void Release();
+	bool Render(ID3D10Device *device, int screenWidth, int screenHeight, int posX, int posY);
 
-	VertexType* m_vertices;
+	int GetIndexCount();
+	ID3D10ShaderResourceView* GetTexture();
+
+	BitmapSize GetBitmapSize() const;
 };

@@ -10,25 +10,20 @@ Button::~Button()
 	Release();
 }
 
-void Button::Load(ID3D10Device * device, int bitmapWidth, int bitmapHeight)
+void Button::Load(ID3D10Device* device, int bitmapWidth, int bitmapHeight)
 {
-	m_statusBitmap[0] = new GameBitmap();
-	m_statusBitmap[1] = new GameBitmap();
-	
-	m_statusBitmap[0]->Initialize(device, L"../Resources/Button_NotSelected.png", bitmapWidth, bitmapHeight);
-	m_statusBitmap[1]->Initialize(device, L"../Resources/Button_Selected.png", bitmapWidth, bitmapHeight);
+	StatusBitmaps[0].Initialize(device, L"../Resources/Button_NotSelected.png", bitmapWidth, bitmapHeight);
+	StatusBitmaps[1].Initialize(device, L"../Resources/Button_Selected.png", bitmapWidth, bitmapHeight);
 
-	m_pCurrBitmap = m_statusBitmap[0];
+	CurrentBitmap = &StatusBitmaps[0];
 
-	m_pos = { 0, 0 };
+	Position = { 0, 0 };
 }
 
 void Button::Release()
 {
-	for (auto target : m_statusBitmap)
-	{
-		Utils::Release(&target);
-	}
+	StatusBitmaps[0].Release();
+	StatusBitmaps[1].Release();
 }
 
 void Button::Reset()
@@ -42,30 +37,30 @@ void Button::Update(float dt)
 
 void Button::Update(bool selected)
 {
-	m_pCurrBitmap = m_statusBitmap[selected];
+	CurrentBitmap = &StatusBitmaps[selected];
 }
 
-void Button::Render(ID3D10Device * device, int screenWidth, int screenHeight)
+void Button::Render(ID3D10Device* device, int screenWidth, int screenHeight)
 {
-	m_pCurrBitmap->Render(device, screenWidth, screenHeight, m_pos.x, m_pos.y);
+	CurrentBitmap->Render(device, screenWidth, screenHeight, Position.x, Position.y);
 }
 
 int Button::GetIndexCount()
 {
-	return m_pCurrBitmap->GetIndexCount();
+	return CurrentBitmap->GetIndexCount();
 }
 
-ID3D10ShaderResourceView * Button::GetTexture()
+ID3D10ShaderResourceView* Button::GetTexture()
 {
-	return m_pCurrBitmap->GetTexture();
+	return CurrentBitmap->GetTexture();
 }
 
 D3DXVECTOR2 Button::GetPosition() const
 {
-	return m_pos;
+	return Position;
 }
 
 void Button::SetPosition(const D3DXVECTOR2 pos)
 {
-	m_pos = pos;
+	Position = pos;
 }
