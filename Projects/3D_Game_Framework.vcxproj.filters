@@ -45,19 +45,8 @@
     <Filter Include="소스 파일\Assets\Levels">
       <UniqueIdentifier>{6fe70bce-8112-4617-b3e3-ee70d4259f17}</UniqueIdentifier>
     </Filter>
-<<<<<<< HEAD
-    <Filter Include="소스 파일\Assets\Player">
-      <UniqueIdentifier>{9b48e7e8-1ace-4cc1-b0a1-89ded03e3035}</UniqueIdentifier>
-    </Filter>
-<<<<<<< HEAD
-    <Filter Include="소스 파일\Objects">
-      <UniqueIdentifier>{fe66be1f-f207-4a7b-8654-6fb33ad42bf0}</UniqueIdentifier>
-=======
-=======
->>>>>>> Game-Type-1
     <Filter Include="소스 파일\Assets\Enemy">
       <UniqueIdentifier>{1a3712a0-9ab2-42c1-97f7-1d4199939cdf}</UniqueIdentifier>
->>>>>>> 1.0
     </Filter>
     <Filter Include="소스 파일\Assets\Objects">
       <UniqueIdentifier>{ac6ed141-940b-4bb0-b3ba-ad2cead3873f}</UniqueIdentifier>
@@ -70,6 +59,9 @@
     </Filter>
     <Filter Include="소스 파일\Assets\Objects\Player">
       <UniqueIdentifier>{9b48e7e8-1ace-4cc1-b0a1-89ded03e3035}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engines\Sound">
+      <UniqueIdentifier>{2c85a100-f1a3-452c-b7c9-1aee1669f766}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -133,59 +125,17 @@
     <ClCompile Include="..\Sources\Input\GameInput2.cpp">
       <Filter>소스 파일\Engines\Input</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Rock.cpp">
-      <Filter>소스 파일\Assets\Objects</Filter>
+    <ClCompile Include="..\Sources\GameSettings.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\GUI\Button.cpp">
-      <Filter>소스 파일\UI</Filter>
+    <ClCompile Include="..\Sources\GameWindow.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Level\LobbyLevel.cpp">
-      <Filter>소스 파일\Assets\Levels</Filter>
+    <ClCompile Include="..\Sources\Shaders\ColorShader.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Level\DummyLevel.cpp">
-      <Filter>소스 파일\Assets\Levels</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Level\IslandLevel1.cpp">
-      <Filter>소스 파일\Assets\Levels</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Geometries\StateBar.cpp">
-      <Filter>소스 파일\Engines\Geometries</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Tool.cpp">
-      <Filter>소스 파일\Assets\Objects\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\StateUI.cpp">
-      <Filter>소스 파일\Assets\Objects\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\GameTextWriter.cpp">
-      <Filter>소스 파일\Engines\Text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Item.cpp">
-      <Filter>소스 파일\Assets\Objects\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Potal.cpp">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Pond.cpp">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Tree.cpp">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Deer.cpp">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Level\GameOverLevel.cpp">
-      <Filter>소스 파일\Assets\Levels</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\House.cpp">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Workshop.cpp">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Well.cpp">
-      <Filter>소스 파일\Assets\Objects</Filter>
+    <ClCompile Include="..\Sources\Sound\GameSound.cpp">
+      <Filter>소스 파일\Engines\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -261,86 +211,21 @@
     <ClInclude Include="..\Sources\Assets\SpriteAsset.h">
       <Filter>소스 파일\Assets\Test</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="..\Sources\Objects\ICharacter.h">
-      <Filter>소스 파일\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Objects\IRenderable.h">
-      <Filter>소스 파일\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Objects\Player.h">
-      <Filter>소스 파일\Objects</Filter>
-=======
     <ClInclude Include="..\Sources\Assets\Enemy1.h">
       <Filter>소스 파일\Assets\Enemy</Filter>
->>>>>>> 1.0
     </ClInclude>
     <ClInclude Include="..\Sources\Input\GameInput2.h">
       <Filter>소스 파일\Engines\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Rock.h">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\GUI\Button.h">
-      <Filter>소스 파일\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Level\LobbyLevel.h">
-      <Filter>소스 파일\Assets\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Level\DummyLevel.h">
-      <Filter>소스 파일\Assets\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Level\IslandLevel1.h">
-      <Filter>소스 파일\Assets\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Potal.h">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Geometries\StateBar.h">
-      <Filter>소스 파일\Engines\Geometries</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Tool.h">
-      <Filter>소스 파일\Assets\Objects\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\StateUI.h">
-      <Filter>소스 파일\Assets\Objects\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\GameTextWriter.h">
-      <Filter>소스 파일\Engines\Text</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Item.h">
-      <Filter>소스 파일\Assets\Objects\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Interface\IInteraction.h">
-      <Filter>소스 파일\Assets\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Pond.h">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Tree.h">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Deer.h">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Level\GameOverLevel.h">
-      <Filter>소스 파일\Assets\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\House.h">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Workshop.h">
-      <Filter>소스 파일\Assets\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Well.h">
-      <Filter>소스 파일\Assets\Objects</Filter>
+    <ClInclude Include="..\Sources\GameSettings.h" />
+    <ClInclude Include="..\Sources\GameWindow.h" />
+    <ClInclude Include="..\Sources\Shaders\ColorShader.h" />
+    <ClInclude Include="..\Sources\Sound\GameSound.h">
+      <Filter>소스 파일\Engines\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Sources\Shaders\texture_vs.vs">
-      <Filter>소스 파일\Engines\shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Sources\Shaders\texture.fx">
       <Filter>소스 파일\Engines\shaders</Filter>
     </FxCompile>
   </ItemGroup>
