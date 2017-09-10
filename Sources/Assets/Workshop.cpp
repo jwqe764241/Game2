@@ -56,7 +56,6 @@ void Workshop::OnAction(Player * player, float dt)
 
 	if (CoolDown >= 1.5f)
 	{
-
 		RefreshCooldown();
 	}
 }

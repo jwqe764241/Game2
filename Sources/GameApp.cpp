@@ -100,7 +100,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 CGameApp::CGameApp()
-	: AppComponents({nullptr}), AdaptersList(), ScreenDepth(0.0f), ScreenNear(0.0f),
+	: AdaptersList(), ScreenDepth(0.0f), ScreenNear(0.0f),
 	HInstance(NULL), FrameTitle(nullptr), WndClassName(nullptr), CmdShow(NULL)
 {
 }
@@ -146,11 +146,14 @@ bool CGameApp::Initialize(HINSTANCE hInstance, wchar_t* frameTitle, wchar_t* wnd
 		Windowsize.height = height;
 	}
 
+	DWORD wndFlags = \
+		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
+
 	HWnd = CreateWindowEx(
-		WS_EX_APPWINDOW,
+		WS_OVERLAPPED,
 		WndClassName,
 		FrameTitle,
-		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX,
+		WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		Windowsize.width,
@@ -159,9 +162,6 @@ bool CGameApp::Initialize(HINSTANCE hInstance, wchar_t* frameTitle, wchar_t* wnd
 		NULL,
 		HInstance,
 		this);
-
-	SetWindowLongPtr(HWnd, 0, reinterpret_cast<LONG_PTR>(this));
-
 
 	//팩토리 생성
 	IDXGIFactory* l_pFactory = nullptr;
@@ -204,14 +204,14 @@ bool CGameApp::Initialize(HINSTANCE hInstance, wchar_t* frameTitle, wchar_t* wnd
 	ZeroMemory(l_pModeList, sizeof(DXGI_MODE_DESC) * l_uiModes);
 	AdaptersOutputsList[0]->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &l_uiModes, l_pModeList);
 
-	std::cout << "-----------------------가능한 디스플레이 모드-----------------------" << std::endl;
+	/*std::cout << "-----------------------가능한 디스플레이 모드-----------------------" << std::endl;
 	for (int i = 0; i < l_uiModes; i++)
 	{
 		std::cout << "\n" << i << ". 해상도 (width X height)" << l_pModeList[i].Width << "X" << l_pModeList[i].Height << std::endl;
 		std::cout << "픽셀 포맷 : " << l_pModeList[i].Format << std::endl;
 		std::cout << "보고율 : " << l_pModeList[i].RefreshRate.Denominator << "/" << l_pModeList[i].RefreshRate.Numerator << std::endl;
 	}
-	std::cout << "----------------------------------------------------------------" << std::endl;
+	std::cout << "----------------------------------------------------------------" << std::endl;*/
 
 
 	//현재 윈도우와 맞는 디스플레이 모드에서 보고율 구하기
@@ -233,7 +233,7 @@ bool CGameApp::Initialize(HINSTANCE hInstance, wchar_t* frameTitle, wchar_t* wnd
 
 		AdapterInfo adapterInfo;
 		adapterInfo.Description = l_pAdapterDesc.Description;
-		adapterInfo.ID = l_pAdapterDesc.AdapterLuid;
+		adapterInfo.ID          = l_pAdapterDesc.AdapterLuid;
 
 		AdapterInfoList.push_back(adapterInfo);
 	}
@@ -242,31 +242,32 @@ bool CGameApp::Initialize(HINSTANCE hInstance, wchar_t* frameTitle, wchar_t* wnd
 	delete[] l_pModeList;
 	Utils::Release(&l_pFactory);
 
+	//더블버퍼링 버퍼 설정
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
 	ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
-	swapChainDesc.BufferDesc.Width = Windowsize.width;
-	swapChainDesc.BufferDesc.Height = Windowsize.height;
-	swapChainDesc.BufferDesc.RefreshRate.Numerator = l_iNumerator;
+	swapChainDesc.BufferDesc.Width                   = Windowsize.width;
+	swapChainDesc.BufferDesc.Height                  = Windowsize.height;
+	swapChainDesc.BufferDesc.RefreshRate.Numerator   = l_iNumerator;
 	swapChainDesc.BufferDesc.RefreshRate.Denominator = l_iDenominator;
-	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	swapChainDesc.BufferDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferDesc.ScanlineOrdering        = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	swapChainDesc.BufferDesc.Scaling                 = DXGI_MODE_SCALING_UNSPECIFIED;
 	if (MultiSampleQualityLevel)
 	{
-		swapChainDesc.SampleDesc.Count = 4;
+		swapChainDesc.SampleDesc.Count   = 4;
 		swapChainDesc.SampleDesc.Quality = MultiSampleQualityLevel - 1;
 	}
 	else
 	{
-		swapChainDesc.SampleDesc.Count = 1;
+		swapChainDesc.SampleDesc.Count   = 1;
 		swapChainDesc.SampleDesc.Quality = 0;
 	}
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.BufferCount = 1;
+	swapChainDesc.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.BufferCount  = 1;
 	swapChainDesc.OutputWindow = HWnd;
-	swapChainDesc.Windowed = true;
-	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	swapChainDesc.Flags = 0;
+	swapChainDesc.Windowed     = true;
+	swapChainDesc.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
+	swapChainDesc.Flags        = 0;
 
 	D3D10CreateDeviceAndSwapChain(NULL, D3D10_DRIVER_TYPE_HARDWARE, 0, 0, D3D10_SDK_VERSION,
 		&swapChainDesc, &AppComponents.pSwapChain, &AppComponents.pD3D10Device);
@@ -292,7 +293,6 @@ void CGameApp::Release()
 	Utils::Release(&AppComponents.pBackBuffer);
 	Utils::Release(&AppComponents.pRenderTargetView);
 	Utils::Release(&AppComponents.pSwapChain);
-	Utils::Release(&AppComponents.pD3D10RenderView);
 	Utils::Release(&AppComponents.pD3D10Device);
 
 	for (auto& adapter : AdaptersList)
@@ -368,13 +368,13 @@ void CGameApp::Launch()
 
 		AppComponents.pD3D10Device->ClearDepthStencilView(AppComponents.pDepthStencilView, D3D10_CLEAR_DEPTH, 1.0f, 0);
 
+		POINT pos = GameInput2::GetInstance().GetMousePosition();
+
 		Update();
 		if (!Render())
 		{
 			//Error...
 		}
-
-		POINT pos = GameInput2::GetInstance().GetMousePosition();
 
 		AppComponents.pSwapChain->Present(0, 0);
 
@@ -408,6 +408,7 @@ void CGameApp::onResize()
 	GAME_ASSERT(AppComponents.pD3D10Device, "D3D11Device is nullptr");
 	GAME_ASSERT(AppComponents.pSwapChain, "SwapChain is nullptr");
 
+
 	//재할당 전 해제
 	Utils::Release(&AppComponents.pRenderTargetView);
 	Utils::Release(&AppComponents.pDepthStencilView);
@@ -426,6 +427,7 @@ void CGameApp::onResize()
 
 	//깊이 버퍼 재설정
 	D3D10_TEXTURE2D_DESC depthBufferDesc;
+	ZeroMemory(&depthBufferDesc, sizeof(D3D10_TEXTURE2D_DESC));
 		depthBufferDesc.Width     = Windowsize.width;
 		depthBufferDesc.Height    = Windowsize.height;
 		depthBufferDesc.MipLevels = 1;
@@ -450,14 +452,14 @@ void CGameApp::onResize()
 	//
 	D3D10_BLEND_DESC blendStateDesc;
 	ZeroMemory(&blendStateDesc, sizeof(D3D10_BLEND_DESC));
-		blendStateDesc.AlphaToCoverageEnable = FALSE;
-		blendStateDesc.BlendEnable[0] = TRUE;
-		blendStateDesc.SrcBlend = D3D10_BLEND_SRC_ALPHA;
-		blendStateDesc.DestBlend = D3D10_BLEND_INV_SRC_ALPHA;
-		blendStateDesc.BlendOp = D3D10_BLEND_OP_ADD;
-		blendStateDesc.SrcBlendAlpha = D3D10_BLEND_ZERO;
-		blendStateDesc.DestBlendAlpha = D3D10_BLEND_ZERO;
-		blendStateDesc.BlendOpAlpha = D3D10_BLEND_OP_ADD;
+		blendStateDesc.AlphaToCoverageEnable    = FALSE;
+		blendStateDesc.BlendEnable[0]           = TRUE;
+		blendStateDesc.SrcBlend                 = D3D10_BLEND_SRC_ALPHA;
+		blendStateDesc.DestBlend                = D3D10_BLEND_INV_SRC_ALPHA;
+		blendStateDesc.BlendOp                  = D3D10_BLEND_OP_ADD;
+		blendStateDesc.SrcBlendAlpha            = D3D10_BLEND_ZERO;
+		blendStateDesc.DestBlendAlpha           = D3D10_BLEND_ZERO;
+		blendStateDesc.BlendOpAlpha             = D3D10_BLEND_OP_ADD;
 		blendStateDesc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
 	AppComponents.pD3D10Device->CreateBlendState(&blendStateDesc, &AppComponents.pBlendState);
 	AppComponents.pD3D10Device->OMSetBlendState(AppComponents.pBlendState, NULL, 0xFFFFFF);

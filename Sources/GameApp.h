@@ -4,6 +4,7 @@
 #include <windowsx.h>
 #include <d3d10_1.h>
 #include <D3DX10.h>
+#include <DXUT.h>
 #include <vector>
 #include <d3dx10math.h>
 
@@ -37,9 +38,8 @@ struct _AdapterInfo {
 
 struct _AppInfo {
 	ID3D10Device*			pD3D10Device;
-	ID3D10RenderTargetView*	pD3D10RenderView;
-	IDXGISwapChain*			pSwapChain;
 	ID3D10RenderTargetView*	pRenderTargetView;
+	IDXGISwapChain*			pSwapChain;
 	ID3D10Texture2D*		pBackBuffer;
 	ID3D10DepthStencilState*pDepthStencilState;
 	ID3D10DepthStencilState*pDepthDisableStencilState;
@@ -63,7 +63,7 @@ class CGameApp
 {
 private:
 	//--Components
-	AppInfo		AppComponents;
+	AppInfo		AppComponents = {nullptr};
 	GameTimer	GameTimer;
 	Matrix		GameMatrices;
 	std::vector <IDXGIAdapter*> AdaptersList;
