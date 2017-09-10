@@ -50,7 +50,7 @@ bool TextureShader::InitializeShader(ID3D10Device* device, HWND hwnd, wchar_t *f
 	HRESULT result;
 	ID3D10Blob *error = nullptr;
 
-	result = D3DX10CreateEffectFromFile(filePath, NULL, NULL, "fx_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, 
+	result = D3DX10CreateEffectFromFile(filePath, NULL, NULL, "fx_4_0", D3D10_SHADER_IEEE_STRICTNESS, 0, 
 		device, NULL, NULL, &Effect, &error, NULL);
 	if (FAILED(result)) 
 	{

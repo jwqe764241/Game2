@@ -47,7 +47,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 		console::closeConsole(consoleBuff);
 	#endif
 
-	return 0;
+	return 0; 
 }
 
 #else

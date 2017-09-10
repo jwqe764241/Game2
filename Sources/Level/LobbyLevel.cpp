@@ -18,7 +18,7 @@ bool LobbyLevel::Load()
 		MenuButtons[i].SetPosition(button_pos[i]);
 	}
 
-	Camera.SetPosition(0, 0, -10.0f);
+	Camera.SetPosition(0, 0, -100.0f);
 
 	CurrentSelection = 0;
 
