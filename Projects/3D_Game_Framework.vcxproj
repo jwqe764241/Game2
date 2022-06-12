@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.gitignore" />
+    <None Include="..\Readme.md" />
+    <None Include="..\Sources\Shaders\texture_ps.ps" />
+    <None Include="..\Sources\Shaders\texture_vs.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\편집시 필수.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Sources\Assets\Deer.cpp" />
+    <ClCompile Include="..\Sources\Assets\Enemy1.cpp" />
+    <ClCompile Include="..\Sources\Assets\House.cpp" />
+    <ClCompile Include="..\Sources\Assets\Item.cpp" />
+    <ClCompile Include="..\Sources\Assets\Player.cpp" />
+    <ClCompile Include="..\Sources\Assets\Pond.cpp" />
+    <ClCompile Include="..\Sources\Assets\Potal.cpp" />
+    <ClCompile Include="..\Sources\Assets\Rock.cpp" />
+    <ClCompile Include="..\Sources\Assets\SpriteAsset.cpp" />
+    <ClCompile Include="..\Sources\Assets\StateUI.cpp" />
+    <ClCompile Include="..\Sources\Assets\TestAsset.cpp" />
+    <ClCompile Include="..\Sources\Assets\Tool.cpp" />
+    <ClCompile Include="..\Sources\Assets\Tree.cpp" />
+    <ClCompile Include="..\Sources\Assets\Well.cpp" />
+    <ClCompile Include="..\Sources\Assets\Workshop.cpp" />
+    <ClCompile Include="..\Sources\Camera\GameCamera.cpp" />
+    <ClCompile Include="..\Sources\GameApp.cpp" />
+    <ClCompile Include="..\Sources\GameAssetLoader.cpp" />
+    <ClCompile Include="..\Sources\GameSettings.cpp" />
+    <ClCompile Include="..\Sources\GameTextWriter.cpp" />
+    <ClCompile Include="..\Sources\GameTimer.cpp" />
+    <ClCompile Include="..\Sources\GameWindow.cpp" />
+    <ClCompile Include="..\Sources\Geometries\GameBitmap.cpp" />
+    <ClCompile Include="..\Sources\Geometries\GameSprite.cpp" />
+    <ClCompile Include="..\Sources\Geometries\StateBar.cpp" />
+    <ClCompile Include="..\Sources\GUI\Button.cpp" />
+    <ClCompile Include="..\Sources\Input\GameInput.cpp" />
+    <ClCompile Include="..\Sources\Input\GameInput2.cpp" />
+    <ClCompile Include="..\Sources\Level\DummyLevel.cpp" />
+    <ClCompile Include="..\Sources\Level\GameLevelLoader.cpp" />
+    <ClCompile Include="..\Sources\Level\GameOverLevel.cpp" />
+    <ClCompile Include="..\Sources\Level\IslandLevel1.cpp" />
+    <ClCompile Include="..\Sources\Level\LobbyLevel.cpp" />
+    <ClCompile Include="..\Sources\Level\TestLevel1.cpp" />
+    <ClCompile Include="..\Sources\Level\TestLevel2.cpp" />
+    <ClCompile Include="..\Sources\main.cpp" />
+    <ClCompile Include="..\Sources\Shaders\ColorShader.cpp" />
+    <ClCompile Include="..\Sources\Shaders\GameTexture.cpp" />
+    <ClCompile Include="..\Sources\Shaders\TextureShader.cpp" />
+    <ClCompile Include="..\Sources\Sound\GameSound.cpp" />
+    <ClCompile Include="..\Sources\Utils\console.cpp" />
+    <ClCompile Include="..\Sources\Utils\error.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Sources\Assets\Deer.h" />
+    <ClInclude Include="..\Sources\Assets\Enemy1.h" />
+    <ClInclude Include="..\Sources\Assets\House.h" />
+    <ClInclude Include="..\Sources\Assets\Item.h" />
+    <ClInclude Include="..\Sources\Assets\Player.h" />
+    <ClInclude Include="..\Sources\Assets\Pond.h" />
+    <ClInclude Include="..\Sources\Assets\Potal.h" />
+    <ClInclude Include="..\Sources\Assets\Rock.h" />
+    <ClInclude Include="..\Sources\Assets\SpriteAsset.h" />
+    <ClInclude Include="..\Sources\Assets\StateUI.h" />
+    <ClInclude Include="..\Sources\Assets\TestAsset.h" />
+    <ClInclude Include="..\Sources\Assets\Tool.h" />
+    <ClInclude Include="..\Sources\Assets\Tree.h" />
+    <ClInclude Include="..\Sources\Assets\Well.h" />
+    <ClInclude Include="..\Sources\Assets\Workshop.h" />
+    <ClInclude Include="..\Sources\Camera\GameCamera.h" />
+    <ClInclude Include="..\Sources\GameApp.h" />
+    <ClInclude Include="..\Sources\GameAssetLoader.h" />
+    <ClInclude Include="..\Sources\GameDefs.h" />
+    <ClInclude Include="..\Sources\GameSettings.h" />
+    <ClInclude Include="..\Sources\GameTextWriter.h" />
+    <ClInclude Include="..\Sources\GameTimer.h" />
+    <ClInclude Include="..\Sources\GameWindow.h" />
+    <ClInclude Include="..\Sources\Geometries\GameBitmap.h" />
+    <ClInclude Include="..\Sources\Geometries\GameSprite.h" />
+    <ClInclude Include="..\Sources\Geometries\StateBar.h" />
+    <ClInclude Include="..\Sources\GUI\Button.h" />
+    <ClInclude Include="..\Sources\Input\GameInput.h" />
+    <ClInclude Include="..\Sources\Input\GameInput2.h" />
+    <ClInclude Include="..\Sources\Interface\ICharacter.h" />
+    <ClInclude Include="..\Sources\Interface\IInteraction.h" />
+    <ClInclude Include="..\Sources\Interface\ILevel.h" />
+    <ClInclude Include="..\Sources\Interface\IRenderable.h" />
+    <ClInclude Include="..\Sources\Level\DummyLevel.h" />
+    <ClInclude Include="..\Sources\Level\GameLevelLoader.h" />
+    <ClInclude Include="..\Sources\Level\GameOverLevel.h" />
+    <ClInclude Include="..\Sources\Level\IslandLevel1.h" />
+    <ClInclude Include="..\Sources\Level\LobbyLevel.h" />
+    <ClInclude Include="..\Sources\Level\TestLevel1.h" />
+    <ClInclude Include="..\Sources\Level\TestLevel2.h" />
+    <ClInclude Include="..\Sources\Objects\IRenderable.h" />
+    <ClInclude Include="..\Sources\Shaders\ColorShader.h" />
+    <ClInclude Include="..\Sources\Shaders\GameTexture.h" />
+    <ClInclude Include="..\Sources\Shaders\TextureShader.h" />
+    <ClInclude Include="..\Sources\Sound\GameSound.h" />
+    <ClInclude Include="..\Sources\Utils\console.h" />
+    <ClInclude Include="..\Sources\Utils\error.h" />
+    <ClInclude Include="..\Sources\Utils\Release.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Sources\Shaders\texture.fx" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{71AD98D0-7119-4B0F-AB1F-13B41C6BB151}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>My3D_Game_Framework</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(SolutionDir)..\Objects\$(Configuration)\$(Platform)\</IntDir>
+    <OutDir>$(SolutionDir)..\Outputs\$(Configuration)\$(Platform)\</OutDir>
+    <TargetName>$(ProjectName)_$(Platform)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28February 2010%29\Include;..\;C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Samples\C++\DXUT\Core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d10.lib;d3dx10d.lib;D3DCompiler.lib;dxerr.lib;dxgi.lib;dxguid.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <FxCompile>
+      <EntryPointName>TexturePixelShader</EntryPointName>
+      <ShaderModel>5.0</ShaderModel>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
